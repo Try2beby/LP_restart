@@ -1,32 +1,38 @@
+#include <vector>
 
+const int M = 100, N = 100;
 
-const int MAX_ITER = 1e5;
-const double ETA = 1e-2;
-const double BETA = 1e-1;
+struct Iterates
+{
+    double z[M + N], z_hat[M + N], z_bar[M + N];
+    int n, t, count;
+};
 
-double PrimalDualStep(double z, double eta){
+struct Params
+{
+    double eta{1e-2}, beta{1e-1};
+    int max_iter{1e5};
+};
 
-    return 1,2;
+Iterates PrimalDualStep(Iterates z, Params p)
+{
+    Iterates tmp;
+    return tmp;
 }
 
 void PrimalDualMethods()
-{   
-    double z{0},z_hat{0},z_bar{0};
+{
+    std::vector<Iterates> IteratesList;
 
-    int n{0},count{0};
+    int n{0}, count{0};
     while (true)
-    {   
+    {
         int t{0};
         while (true)
-        {   
-            z,z_hat=PrimalDualStep(z,ETA);
-            z_bar=(t/(t+1))*z_bar+z_hat/(t+1);
+        {
+            z, z_hat = PrimalDualStep(z, ETA);
+            z_bar = (t / (t + 1)) * z_bar + z_hat / (t + 1);
             t++;
-
         }
-        
-        
     }
-
-    
 }
