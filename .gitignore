@@ -1,0 +1,13 @@
+# folders
+or-tools-stable
+source_julia
+FirstOrderLp_julia
+
+# configuration folder
+.vscode
+.vs/
+
+# files
+*.exe
+*.md
+image*
