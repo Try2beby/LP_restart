@@ -14,25 +14,29 @@ struct Params
     int max_iter{1e5};
 };
 
-Iterates PrimalDualStep(Iterates z, Params p)
+void PrimalDualStep(Iterates &z, Params p)
 {
-    Iterates tmp;
-    return tmp;
+}
+
+void update(Iterates &z)
+{
+    for (int i = 0; i < M + N; i++)
+    {
+        z.z_bar[i] = z.t / (z.t + 1) * z.z_hat[i] + 1 / (z.t + 1) * z.z_hat[i];
+    }
 }
 
 void PrimalDualMethods()
 {
     std::vector<Iterates> IteratesList;
+    Iterates z;
+    Params p;
 
-    int n{0}, count{0};
     while (true)
     {
-        int t{0};
         while (true)
         {
-            z, z_hat = PrimalDualStep(z, ETA);
-            z_bar = (t / (t + 1)) * z_bar + z_hat / (t + 1);
-            t++;
+            PrimalDualStep(z, p);
         }
     }
 }
