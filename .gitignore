@@ -4,6 +4,7 @@ source_julia
 FirstOrderLp_julia
 data/
 x64
+eigen3
 
 # configuration folder
 .vscode

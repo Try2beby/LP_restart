@@ -1,8 +1,11 @@
-// #include <vector>
-#include "gurobi_c++.h"
+#include <vector>
 #include <iostream>
 
-const int M = 100, N = 100;
+#include "gurobi_c++.h"
+#include "eigen3/eigen/core"
+#include "eigen3/eigen/sparsecore"
+
+const int M = 4150, N = 1820;
 
 struct Iterates
 {
@@ -17,7 +20,8 @@ struct Params
 };
 
 void PrimalDualStep(Iterates &z, Params p)
-{
+{   
+
 }
 
 void update(Iterates &z)
@@ -34,8 +38,6 @@ void PrimalDualMethods()
     Iterates z;
     Params p;
 
-    GRBEnv env = GRBEnv();
-
     while (true)
     {
         while (true)
@@ -49,28 +51,44 @@ void load_model()
 {
     GRBEnv env = GRBEnv();
     GRBModel model = GRBModel(env, "data/qap10.mps");
+    model.update();
 
     // Get the number of variables in the model.
     int numVars = model.get(GRB_IntAttr_NumVars);
 
     // Get the number of constraints in the model.
     int numConstraints = model.get(GRB_IntAttr_NumConstrs);
+    //std::cout << numConstraints << std::endl;
 
-    // Get the coefficients from the model.
-    double c[] = { model.get(GRB_DoubleAttr_Obj,model.getVars()) };
+    GRBVar *Vars = model.getVars();
+    GRBConstr* Constrs = model.getConstrs();
 
-    // Create a two-dimensional pointer to an array of double values to store the constraint matrix.
-    double** A = new double* [numConstraints];
-    for (int i = 0; i < numConstraints; i++) {
-        A[i] = new double[numVars];
+    // Get the object coefficients from the model.
+    //auto* c = model.get(GRB_DoubleAttr_Obj, model.getVars(), numVars);
+    Eigen::VectorXd c = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_Obj, Vars, numVars),numVars);
+    
+    // Get the matrix A, use sparse representation.
+    Eigen::SparseMatrix<double> A(numConstraints, numVars);
+    std::vector<Eigen::Triplet<double>> triplets;
+
+    for (int i = 0; i < numConstraints;i++) {
+        for (int j = 0; j < numVars;j++) {
+            double tmp = model.getCoeff(Constrs[i], Vars[j]);
+            if (tmp != 0.0) {
+                triplets.push_back(Eigen::Triplet<double>(i, j, tmp));
+            }
+        }
     }
 
-    // Get the constraint matrix from the model.
-    //model.get(GRB_DoubleAttr_A, A);
-
+    A.setFromTriplets(triplets.begin(), triplets.end());
+    std::cout << A.nonZeros()<<std::endl;
+    
     // Get the right-hand side vector from the model.
-    double b[] = { model.get(GRB_DoubleAttr_RHS) };
+    //auto* b = model.get(GRB_DoubleAttr_RHS, model.getConstrs(), numConstraints);
+    Eigen::VectorXd b = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_RHS, model.getConstrs(), numConstraints),numConstraints);
+
 }
+
 
 int main()
 {
