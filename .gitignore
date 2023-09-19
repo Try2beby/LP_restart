@@ -2,6 +2,8 @@
 or-tools-stable
 source_julia
 FirstOrderLp_julia
+data/
+x64
 
 # configuration folder
 .vscode
@@ -10,4 +12,8 @@ FirstOrderLp_julia
 # files
 *.exe
 *.md
-image*
+assets
+
+*.vcxproj*
+
+HP
