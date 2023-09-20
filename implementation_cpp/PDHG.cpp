@@ -133,17 +133,44 @@ void load_model(Params &p)
     p.A = A;
 }
 
+double compute_normalized_duality_gap(const Iterates& z, const Params& p)
+{   
+    int size_x = p.c.rows();
+    int size_y = p.b.rows();
 
+    auto x0=z.z.head(size_x);
+    auto y0=z.z.tail(size_y);
+
+    auto Ax = p.A * x0;
+    auto yTA = y0.transpose() * p.A;
+
+    double constant = p.c.transpose() * x0 - p.b.transpose() * y0;
+
+    GRBEnv env = GRBEnv();
+    GRBModel model = GRBModel(env);
+
+    // Create variables
+    GRBVar* x = model.addVars(size_x, GRB_CONTINUOUS);
+    GRBVar* y = new GRBVar[size_y];
+    for (int i = 0; i < size_y; i++) {
+		y[i] = model.addVar(-GRB_INFINITY, GRB_INFINITY, 0.0, GRB_CONTINUOUS);
+	}
+
+
+	return 0.0;
+}
 
 int main()
 {   
     Params p;
+    // test load_model
     /*load_model(p);
     std::cout << (p.A).nonZeros() << std::endl;*/
-    p.eta = 0.5;
+    // test QPmodel
+    /*p.eta = 0.5;
     Eigen::Matrix<double, M, 1> p1{2,-4};
     GRBModel model=QPmodel(p1,p,0);
-    std::cout << model.get(GRB_DoubleAttr_ObjVal) << std::endl;
-    //std::cout << p1.rows();
+    std::cout << model.get(GRB_DoubleAttr_ObjVal) << std::endl;*/
+    
     return 0;
 }
