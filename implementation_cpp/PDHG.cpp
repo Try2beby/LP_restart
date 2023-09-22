@@ -59,24 +59,26 @@ GRBModel QPmodel(const Eigen::Matrix<double,M,1> &p,const Params &params,const b
     GRBModel model = GRBModel(env);
 
     // Create variables
-    GRBVar* x=new GRBVar[p.rows()];
+    GRBVar* x;
     if (positive == true) {
         x = model.addVars(p.rows(), GRB_CONTINUOUS);
     }
     else {
+        x = new GRBVar[p.rows()];
         for (int i = 0; i < p.rows(); i++) {
 			x[i] = model.addVar(-GRB_INFINITY, GRB_INFINITY, 0.0, GRB_CONTINUOUS);
 		}
+        //x=model.addVars(-GRB_INFINITY, GRB_INFINITY,NULL,NULL,NULL,p.rows());
     }
 
     // Create objective 
-    GRBQuadExpr quadExpr = GRBQuadExpr();
-    for (int i = 0; i < p.rows(); i++) {
-        quadExpr.addTerm(p[i], x[i]);
-		quadExpr.addTerm(1.0 / (2 * params.eta),x[i],x[i]);
-	}
+    GRBQuadExpr objExpr = GRBQuadExpr();
+    Eigen::VectorXd x_quaCoeff = (1 / (2 * params.eta)) * Eigen::VectorXd::Ones(p.rows());
+    objExpr.addTerms(x_quaCoeff.data(), x, x, p.rows());
+    objExpr.addTerms(p.data(), x, p.rows());
+
     // Set objective
-    model.setObjective(quadExpr, GRB_MINIMIZE);
+    model.setObjective(objExpr, GRB_MINIMIZE);
     
     model.optimize();
     return model;
@@ -133,18 +135,22 @@ void load_model(Params &p)
     p.A = A;
 }
 
-double compute_normalized_duality_gap(const Iterates& z, const Params& p)
+double compute_normalized_duality_gap(const Eigen::VectorXd & z0, const Eigen::VectorXd& z1, const Params& p)
 {   
+    auto r = (z0 - z1).norm();
+
     int size_x = p.c.rows();
     int size_y = p.b.rows();
 
-    auto x0=z.z.head(size_x);
-    auto y0=z.z.tail(size_y);
+    Eigen::VectorXd x0=z0.head(size_x);
+    Eigen::VectorXd y0=z0.tail(size_y);
 
-    auto Ax = p.A * x0;
-    auto yTA = y0.transpose() * p.A;
+    Eigen::VectorXd y_coeff = p.b-p.A * x0;
+    Eigen::VectorXd x_coeff = y0.transpose() * p.A-p.c.transpose();
+     
+    double constant = (double)(p.c.transpose() * x0) - (double)(p.b.transpose() * y0);
 
-    double constant = p.c.transpose() * x0 - p.b.transpose() * y0;
+    //std::cout << y_coeff << x_coeff << constant << std::endl;
 
     GRBEnv env = GRBEnv();
     GRBModel model = GRBModel(env);
@@ -156,21 +162,62 @@ double compute_normalized_duality_gap(const Iterates& z, const Params& p)
 		y[i] = model.addVar(-GRB_INFINITY, GRB_INFINITY, 0.0, GRB_CONTINUOUS);
 	}
 
+    // Create objective
+    GRBLinExpr objExpr = GRBLinExpr();
+    objExpr.addTerms(y_coeff.data(), y, size_y);
+    objExpr.addTerms(x_coeff.data(), x, size_x);
+    objExpr += constant;
 
-	return 0.0;
+    // Set objective
+    model.setObjective(objExpr, GRB_MAXIMIZE);
+
+    // Create constraints
+    GRBQuadExpr ConstrExpr = GRBQuadExpr();
+    Eigen::VectorXd x_quaCoeff=Eigen::VectorXd::Ones(size_x);
+    Eigen::VectorXd y_quaCoeff=Eigen::VectorXd::Ones(size_y);
+    Eigen::VectorXd x_linCoeff = -2 * x0;
+    Eigen::VectorXd y_linCoeff = -2 * y0;
+    ConstrExpr.addTerms(x_quaCoeff.data(), x, x, size_x);
+    ConstrExpr.addTerms(y_quaCoeff.data(), y, y, size_y);
+    ConstrExpr.addTerms(x_linCoeff.data(), x, size_x);
+    ConstrExpr.addTerms(y_linCoeff.data(), y, size_y);
+    ConstrExpr += x0.squaredNorm() + y0.squaredNorm();
+
+    // Add constraints
+    model.addQConstr(ConstrExpr, GRB_LESS_EQUAL, r * r);
+
+    model.optimize();
+
+    /*std::cout<<model.get(GRB_DoubleAttr_ObjVal)<<std::endl;
+    std::cout<<x[0].get(GRB_DoubleAttr_X)<<std::endl;
+    std::cout<<y[0].get(GRB_DoubleAttr_X)<<std::endl;*/
+
+	return model.get(GRB_DoubleAttr_ObjVal) / r;
 }
 
 int main()
 {   
     Params p;
+
     // test load_model
     /*load_model(p);
     std::cout << (p.A).nonZeros() << std::endl;*/
+
     // test QPmodel
     /*p.eta = 0.5;
     Eigen::Matrix<double, M, 1> p1{2,-4};
     GRBModel model=QPmodel(p1,p,0);
     std::cout << model.get(GRB_DoubleAttr_ObjVal) << std::endl;*/
     
+    // test compute_normalized_duality_gap
+    Eigen::Vector2d z0(0, 0);
+    Eigen::Vector2d z1(1, 0);
+    p.b = Eigen::VectorXd::Ones(1);
+    p.c = -1 * Eigen::VectorXd::Ones(1);
+    Eigen::SparseMatrix<double> A(1, 1);
+    A.insert(0, 0) = 1;
+    p.A = A;
+    compute_normalized_duality_gap(z0, z1, p);
+
     return 0;
 }
