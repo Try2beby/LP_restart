@@ -6,88 +6,85 @@ using namespace std::chrono;
 
 #include "shared_functions.h"
 
-GRBModel QPmodel(const Eigen::VectorXd&, const Params&, const bool&);
+void PrimalDualStep(Iterates&, const Params&, std::vector<Iterates>&);
+double GetOptimalw(Params&);
+
+void PDHG(const Params& p)
+{
+	Iterates iter(p.c.rows(), p.b.rows());
+	std::vector<Iterates> IteratesList(p.max_iter, iter);
+	IteratesList[0] = iter; iter.count++;
+	while (true) {
+		PrimalDualStep(iter, p, IteratesList);
+		if (p.restart) AdaptiveRestarts(iter, p, IteratesList);
+		if (iter.count >= p.max_iter) break;
+	}
+}
 
 int main()
 {
-    using std::cout, std::endl;
-    Params p;
+	using std::cout, std::endl;
+	Params p;
+	p.set_verbose(true);
+	p.load_model("data/qap10.mps");
+	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
+	double sigma_max = std::sqrt(PowerIteration(AAT, 1));  // 1 for verbose
+	p.eta = 0.9 * sigma_max;
 
-    // test load_model
-    load_model(p);
-    cout << (p.A).nonZeros() << endl;
+	GetOptimalw(p);
 
-    // test QPmodel
-    /*p.eta = 0.5;
-    Eigen::Matrix<double, 2, 1> p1{2,-4};
-    GRBModel model=QPmodel(p1,p,0);
-    cout << model.get(GRB_DoubleAttr_ObjVal) << endl;*/
+	// test load_model
+	/*load_model(env, p);
+	cout << (p.A).nonZeros() << endl;*/
 
-    // test compute_normalized_duality_gap
-    /*Eigen::Vector2d z0(0, 0);
-    Eigen::Vector2d z1(1, 0);
-    p.b = Eigen::VectorXd::Ones(1);
-    p.c = -1 * Eigen::VectorXd::Ones(1);
-    Eigen::SparseMatrix<double> A(1, 1);
-    A.insert(0, 0) = 1;
-    p.A = A;
-    compute_normalized_duality_gap(z0, z1, p);*/
+	// test QPmodel
+	/*p.eta = 0.5;
+	Eigen::Matrix<double, 2, 1> p1{2,-4};
+	GRBModel model=QPmodel(p1,p,0);
+	cout << model.get(GRB_DoubleAttr_ObjVal) << endl;*/
 
+	// test compute_normalized_duality_gap
+	/*Eigen::Vector2d z0(0, 0);
+	Eigen::Vector2d z1(1, 0);
+	p.b = Eigen::VectorXd::Ones(1);
+	p.c = -1 * Eigen::VectorXd::Ones(1);
+	Eigen::SparseMatrix<double> A(1, 1);
+	A.insert(0, 0) = 1;
+	p.A = A;
+	compute_normalized_duality_gap(z0, z1, p);*/
 
-    return 0;
+	return 0;
 }
 
-void PrimalDualStep(Iterates& z, const Params& p)
+void PrimalDualStep(Iterates& iter, const Params& p, std::vector<Iterates>& IteratesList)
 {
+	if (p.verbose) std::cout << "iter: " << iter.count << std::endl;
+
+	Eigen::VectorXd x = iter.getx();
+	Eigen::VectorXd y = iter.gety();
+	Eigen::VectorXd x_linCoeff = p.c - p.A.transpose() * y - (1.0 / p.eta) * x;
+	Eigen::VectorXd x_new = (p.eta / p.w * x_linCoeff).cwiseMax(0);
+	Eigen::VectorXd y_linCoeff = -p.b + p.A * (2 * x_new - x) - (1.0 / p.eta) * y;
+	Eigen::VectorXd y_new = -p.eta * p.w * y_linCoeff;
+
+	iter.z << x_new, y_new;
+	iter.z_hat << x_new, y_new;
+	iter.update();
+	IteratesList[iter.count - 1] = iter;
 }
 
 
 // void PrimalDualMethods()
 //{
-//     Iterates z;
-//     Params p;
-//     std::vector<Iterates> IteratesList(p.max_iter);
-//
-//     while (true)
-//     {
-//         while (true)
-//         {
-//             PrimalDualStep(z, p);
-//         }
-//     }
 // }
 
-GRBModel QPmodel(const Eigen::VectorXd& p, const Params& params, const bool& positive)
+double GetOptimalw(Params& p)
 {
-    int size_x = p.rows();
-
-    GRBEnv env = GRBEnv();
-    GRBModel model = GRBModel(env);
-
-    // Create variables
-    GRBVar* x;
-    if (positive == true)
-    {
-        x = model.addVars(size_x, GRB_CONTINUOUS);
-    }
-    else
-    {
-        x = new GRBVar[size_x];
-        for (int i = 0; i < size_x; i++)
-        {
-            x[i] = model.addVar(-GRB_INFINITY, GRB_INFINITY, 0.0, GRB_CONTINUOUS);
-        }
-    }
-
-    // Create objective
-    GRBQuadExpr objExpr = GRBQuadExpr();
-    Eigen::VectorXd x_quaCoeff = (1 / (2 * params.eta)) * Eigen::VectorXd::Ones(p.rows());
-    objExpr.addTerms(x_quaCoeff.data(), x, x, p.rows());
-    objExpr.addTerms(p.data(), x, p.rows());
-
-    // Set objective
-    model.setObjective(objExpr, GRB_MINIMIZE);
-
-    model.optimize();
-    return model;
+	p.restart = false;
+	for (int i = 0; i < 1; i++)
+	{
+		p.w = std::pow(4, -5 + i);
+		PDHG(p);
+	}
+	return 0;
 }
