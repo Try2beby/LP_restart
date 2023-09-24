@@ -1,6 +1,6 @@
 #include "shared_functions.h"
 
-Iterates::Iterates(const int& Size_x, const int& Size_y) : n(0), t(0), count(0)
+Iterates::Iterates(const int& Size_x, const int& Size_y) : n(0), t(0), count(1)
 {
 	size_x = Size_x;
 	size_y = Size_y;
@@ -12,9 +12,17 @@ Iterates::Iterates(const int& Size_x, const int& Size_y) : n(0), t(0), count(0)
 
 void Iterates::update()
 {
-	z_bar = t * 1.0 / (t + 1) * z_hat + 1.0 / (t + 1) * z_hat;
+	z_bar = t * 1.0 / (t + 1) * z_bar + 1.0 / (t + 1) * z_hat;
 	t++;
 	count++;
+}
+
+void Iterates::restart()
+{
+	n++;
+	t = 0;
+	count++;
+	z = z_bar;
 }
 
 Eigen::VectorXd Iterates::getx() const
@@ -27,7 +35,30 @@ Eigen::VectorXd Iterates::gety() const
 	return z.tail(size_y);
 }
 
-Params::Params() : env(GRBEnv()), eta(1e-2), beta(1e-1), w(1), max_iter(static_cast<int>(5e3)), tau0(1), verbose(false), restart(true)
+RecordIterates::RecordIterates(const int& Size_x, const int& Size_y, const int& Size_record)
+	: end_idx(0)
+{
+	Iterates iter(Size_x, Size_y);
+	std::vector<Iterates> aIteratesList(Size_record, iter);
+	IteratesList = aIteratesList;
+}
+
+void RecordIterates::append(const Iterates& iter)
+{
+	IteratesList[end_idx] = iter;
+	end_idx++;
+}
+
+Iterates RecordIterates::operator[](const int& i) {
+	if (i < 0 || i >= end_idx) {
+		throw std::out_of_range("Index out of range");
+	}
+	return IteratesList[i];
+}
+
+Params::Params() : env(GRBEnv()), eta(1e-2), beta(1e-1), w(1),
+max_iter(static_cast<int>(5e3)), tau0(1), verbose(false), restart(true),
+record_every(30), print_every(100), evaluate_every(30)
 {
 	env.set(GRB_IntParam_OutputFlag, verbose);
 }
@@ -182,15 +213,27 @@ double compute_convergence_information(const Iterates& iter, const Params& p)
 {
 	Eigen::VectorXd x = iter.getx();
 	Eigen::VectorXd y = iter.gety();
-	Eigen::VectorXd kkt_error_vec;
+	Eigen::VectorXd kkt_error_vec(2 * x.rows() + 2 * y.rows() + 1);
 	kkt_error_vec << -x, p.A* x - p.b, p.b - p.A * x, p.A.transpose()* y - p.c,
 		p.c.transpose()* x - p.b.transpose() * y;
 
-	return kkt_error_vec.norm();
+	return (kkt_error_vec.cwiseMax(0)).norm();
 }
 
-void AdaptiveRestarts(Iterates& iter, const Params& p, std::vector<Iterates>& IteratesList)
+void print_iteration_information(const Iterates& iter, const Params& p)
 {
+	std::cout << "Iteration " << iter.count - 1 << ", ";
+	double kkt_error = compute_convergence_information(iter, p);
+	std::cout << "kkt_error: " << kkt_error << std::endl;
+	std::cout << "obj: " << p.c.dot(iter.getx()) + p.b.dot(iter.gety()) - iter.gety().transpose() * p.A * iter.getx() << std::endl;
+	std::cout << std::endl;
+}
+
+void AdaptiveRestarts(Iterates& iter, const Params& p,
+	RecordIterates& record, Cache& cache)
+{
+	if (p.restart == false) return;
+
 	bool restart = false;
 	if (iter.n == 0)
 	{
@@ -201,14 +244,12 @@ void AdaptiveRestarts(Iterates& iter, const Params& p, std::vector<Iterates>& It
 	}
 	else
 	{
-		// ||z^n,0-z_bar^n,t||
-		double r1 = (IteratesList[iter.count - iter.t - 1].z - iter.z_bar).norm();
-		int tau_n_minus_1 = IteratesList[iter.count - iter.t - 2].t;
+		// ||z_bar^n,t-z^n,0||
+		double r1 = (iter.z_bar - cache.z_cur_start).norm();
 		// ||z^n,0-z^n-1,0||
-		double r2 = (IteratesList[iter.count - iter.t - 1].z -
-			IteratesList[iter.count - iter.t - tau_n_minus_1 - 2].z).norm();
+		double r2 = (cache.z_cur_start - cache.z_prev_start).norm();
 		double duality_gap1 = compute_normalized_duality_gap(iter.z_bar, r1, p);
-		double duality_gap2 = compute_normalized_duality_gap(IteratesList[iter.count - iter.t - 1].z, r2, p);
+		double duality_gap2 = compute_normalized_duality_gap(cache.z_cur_start, r2, p);
 		if (duality_gap1 <= p.beta * duality_gap2)
 		{
 			restart = true;
@@ -217,11 +258,14 @@ void AdaptiveRestarts(Iterates& iter, const Params& p, std::vector<Iterates>& It
 
 	if (restart == true)
 	{
-		iter.t = 0;
-		iter.n++;
-		iter.count++;
-		iter.z = iter.z_bar;
-		IteratesList[iter.count - 1] = iter;
+		iter.restart();
+		cache.z_prev_start = cache.z_cur_start;
+		cache.z_cur_start = iter.z;
+
+		if ((iter.count - 1) % p.record_every == 0) record.append(iter);
+		if ((iter.count - 1) % p.print_every == 0) {
+			print_iteration_information(iter, p);
+		}
 	}
 
 }

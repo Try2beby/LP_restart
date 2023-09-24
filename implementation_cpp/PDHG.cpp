@@ -1,76 +1,70 @@
-#include <vector>
-#include <iostream>
-#include <chrono>
+#include "shared_functions.h"
 
 using namespace std::chrono;
 
-#include "shared_functions.h"
-
-void PrimalDualStep(Iterates&, const Params&, std::vector<Iterates>&);
+void PDHGStep(Iterates&, const Params&, RecordIterates&);
 double GetOptimalw(Params&);
-
-void PDHG(const Params& p)
-{
-	Iterates iter(p.c.rows(), p.b.rows());
-	std::vector<Iterates> IteratesList(p.max_iter, iter);
-	IteratesList[0] = iter; iter.count++;
-	while (true) {
-		PrimalDualStep(iter, p, IteratesList);
-		if (p.restart) AdaptiveRestarts(iter, p, IteratesList);
-		if (iter.count >= p.max_iter) break;
-	}
-}
+void PDHG(const Params&);
 
 int main()
 {
 	using std::cout, std::endl;
 	Params p;
-	p.set_verbose(true);
+	p.set_verbose(true); p.max_iter = 200; p.print_every = 10;
 	p.load_model("data/qap10.mps");
 	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
 	double sigma_max = std::sqrt(PowerIteration(AAT, 1));  // 1 for verbose
 	p.eta = 0.9 * sigma_max;
 
-	GetOptimalw(p);
-
-	// test load_model
-	/*load_model(env, p);
-	cout << (p.A).nonZeros() << endl;*/
-
-	// test QPmodel
-	/*p.eta = 0.5;
-	Eigen::Matrix<double, 2, 1> p1{2,-4};
-	GRBModel model=QPmodel(p1,p,0);
-	cout << model.get(GRB_DoubleAttr_ObjVal) << endl;*/
-
-	// test compute_normalized_duality_gap
-	/*Eigen::Vector2d z0(0, 0);
-	Eigen::Vector2d z1(1, 0);
-	p.b = Eigen::VectorXd::Ones(1);
-	p.c = -1 * Eigen::VectorXd::Ones(1);
-	Eigen::SparseMatrix<double> A(1, 1);
-	A.insert(0, 0) = 1;
-	p.A = A;
-	compute_normalized_duality_gap(z0, z1, p);*/
+	p.w = std::pow(4, 0); p.restart = false;
+	PDHG(p);
+	//GetOptimalw(p);
 
 	return 0;
 }
 
-void PrimalDualStep(Iterates& iter, const Params& p, std::vector<Iterates>& IteratesList)
+double GetOptimalw(Params& p)
 {
-	if (p.verbose) std::cout << "iter: " << iter.count << std::endl;
+	p.restart = false;
+	for (int i = 5; i < 6; i++)
+	{
+		p.w = std::pow(4, -5 + i);
+		PDHG(p);
+	}
+	return 0;
+}
 
+void PDHG(const Params& p)
+{
+	Iterates iter(p.c.rows(), p.b.rows());
+	RecordIterates record(p.c.rows(), p.b.rows(), p.max_iter / p.record_every + 2);
+	record.append(iter);
+	Cache cache;
+	cache.z_cur_start = iter.z;
+	while (true) {
+		PDHGStep(iter, p, record);
+		AdaptiveRestarts(iter, p, record, cache);
+		if (iter.count >= p.max_iter) break;
+	}
+}
+
+void PDHGStep(Iterates& iter, const Params& p, RecordIterates& record)
+{
 	Eigen::VectorXd x = iter.getx();
 	Eigen::VectorXd y = iter.gety();
-	Eigen::VectorXd x_linCoeff = p.c - p.A.transpose() * y - (1.0 / p.eta) * x;
-	Eigen::VectorXd x_new = (p.eta / p.w * x_linCoeff).cwiseMax(0);
-	Eigen::VectorXd y_linCoeff = -p.b + p.A * (2 * x_new - x) - (1.0 / p.eta) * y;
-	Eigen::VectorXd y_new = -p.eta * p.w * y_linCoeff;
+	double eta_x = p.eta * p.w;
+	double eta_y = p.eta / p.w;
+	Eigen::VectorXd x_new = (x - eta_x * (p.c - p.A.transpose() * y)).cwiseMax(0);
+	Eigen::VectorXd y_new = y - eta_y * (-p.b + p.A * (2 * x_new - x));
 
 	iter.z << x_new, y_new;
 	iter.z_hat << x_new, y_new;
 	iter.update();
-	IteratesList[iter.count - 1] = iter;
+
+	if ((iter.count - 1) % p.record_every == 0) record.append(iter);
+	if ((iter.count - 1) % p.print_every == 0) {
+		print_iteration_information(iter, p);
+	}
 }
 
 
@@ -78,13 +72,3 @@ void PrimalDualStep(Iterates& iter, const Params& p, std::vector<Iterates>& Iter
 //{
 // }
 
-double GetOptimalw(Params& p)
-{
-	p.restart = false;
-	for (int i = 0; i < 1; i++)
-	{
-		p.w = std::pow(4, -5 + i);
-		PDHG(p);
-	}
-	return 0;
-}
