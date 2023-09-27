@@ -40,12 +40,15 @@ RecordIterates::RecordIterates(const int& Size_x, const int& Size_y, const int& 
 {
 	Iterates iter(Size_x, Size_y);
 	std::vector<Iterates> aIteratesList(Size_record, iter);
+	std::vector<double> akkt_errorList(Size_record, 0);
 	IteratesList = aIteratesList;
+	kkt_errorList = akkt_errorList;
 }
 
-void RecordIterates::append(const Iterates& iter)
+void RecordIterates::append(const Iterates& iter, const Params& p)
 {
 	IteratesList[end_idx] = iter;
+	kkt_errorList[end_idx] = compute_convergence_information(iter, p);
 	end_idx++;
 }
 
@@ -56,23 +59,40 @@ Iterates RecordIterates::operator[](const int& i) {
 	return IteratesList[i];
 }
 
-Params::Params() : env(GRBEnv()), eta(1e-2), beta(1e-1), w(1),
+Params::Params() : env(GRBEnv()), eta(1e-1), beta(1e-1), w(1),
 max_iter(static_cast<int>(5e3)), tau0(1), verbose(false), restart(true),
 record_every(30), print_every(100), evaluate_every(30)
 {
 	env.set(GRB_IntParam_OutputFlag, verbose);
 }
 
-void Params::set_verbose(const bool& Verbose)
+void Params::set_verbose(const bool& Verbose, const bool& gbVerbose)
 {
 	verbose = Verbose;
-	env.set(GRB_IntParam_OutputFlag, verbose);
+	env.set(GRB_IntParam_OutputFlag, gbVerbose);
+}
+
+void Params::load_example()
+{
+	Eigen::VectorXd c_tmp(4);
+	c_tmp << -4, -3, 0, 0;
+	c = c_tmp;
+	Eigen::VectorXd b_tmp(2);
+	b_tmp << 4, 5;
+	b = b_tmp;
+	Eigen::SparseMatrix<double> A_tmp(2, 4);
+	A_tmp.insert(0, 0) = 1;
+	A_tmp.insert(0, 2) = 1;
+	A_tmp.insert(1, 0) = 1;
+	A_tmp.insert(1, 1) = 1;
+	A = A_tmp;
+	// solution is (4, 0, 0, 1)
 }
 
 void Params::load_model(const std::string& data)
 {
 	GRBModel model = GRBModel(env, data);
-	model.update();
+	//model.optimize();
 
 	// Get the number of variables in the model.
 	int numVars = model.get(GRB_IntAttr_NumVars);
@@ -226,6 +246,7 @@ void print_iteration_information(const Iterates& iter, const Params& p)
 	double kkt_error = compute_convergence_information(iter, p);
 	std::cout << "kkt_error: " << kkt_error << std::endl;
 	std::cout << "obj: " << p.c.dot(iter.getx()) + p.b.dot(iter.gety()) - iter.gety().transpose() * p.A * iter.getx() << std::endl;
+	std::cout << "norm of F(z): " << compute_F(iter.z, p).norm() << std::endl;
 	std::cout << std::endl;
 }
 
@@ -262,7 +283,7 @@ void AdaptiveRestarts(Iterates& iter, const Params& p,
 		cache.z_prev_start = cache.z_cur_start;
 		cache.z_cur_start = iter.z;
 
-		if ((iter.count - 1) % p.record_every == 0) record.append(iter);
+		if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
 		if ((iter.count - 1) % p.print_every == 0) {
 			print_iteration_information(iter, p);
 		}
@@ -275,7 +296,7 @@ double PowerIteration(const Eigen::SparseMatrix<double>& A, const bool& verbose 
 	int size = A.rows();
 	Eigen::VectorXd u = Eigen::VectorXd::Random(size);
 	Eigen::VectorXd y = Eigen::VectorXd::Zero(size);
-	double tol = 1e-6;
+	double tol = 1e-12;
 	int max_iter = 1000;
 	int iter = 0;
 	double lambda = 0;
@@ -300,4 +321,42 @@ double PowerIteration(const Eigen::SparseMatrix<double>& A, const bool& verbose 
 		}
 	}
 	return lambda;
+}
+
+Eigen::VectorXd compute_F(const Eigen::VectorXd& z, const Params& p)
+{
+	Eigen::VectorXd x = z.head(p.c.rows());
+	Eigen::VectorXd y = z.tail(p.b.rows());
+	Eigen::VectorXd F(p.c.rows() + p.b.rows());
+	Eigen::VectorXd nabla_xL = p.c - p.A.transpose() * y;
+	Eigen::VectorXd nabla_yL = p.A * x - p.b;
+
+	F << nabla_xL, -nabla_yL;
+	return F;
+}
+
+double GetOptimalw(Params& p, RecordIterates(*method)(const Params&))
+{
+	auto best_kkt_error = INFINITY;
+	double best_w = NULL;
+	p.restart = false;
+	std::vector<double> w_candidates;
+	for (int i = -5; i < 6; i++)
+	{
+		w_candidates.push_back(std::pow(4, i));
+	}
+	for (int i = 0; i < w_candidates.size(); i++)
+	{
+		p.w = w_candidates[i];
+		std::cout << "testing w=4^" << i - 5 << std::endl;
+		RecordIterates record = method(p);
+		double kkt_error = record.kkt_errorList[record.end_idx - 1];
+		if (kkt_error < best_kkt_error)
+		{
+			best_kkt_error = kkt_error;
+			best_w = p.w;
+		}
+	}
+	if (p.verbose) std::cout << "the optimal w is: " << best_w << std::endl;
+	return best_w;
 }
