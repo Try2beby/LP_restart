@@ -7,17 +7,16 @@ void EGM(const Params&);
 //{
 //	using std::cout, std::endl;
 //	Params p;
-//	p.set_verbose(true); p.max_iter = 1000; p.print_every = 10;
-//	//p.load_model("data/qap10.mps");
-//	p.load_example();
-//	/*cout << p.c << endl;
-//	cout << p.A << endl;
-//	cout << p.b << endl;*/
+//	p.set_verbose(true, false);
+//	p.max_iter = 5000;
+//	p.print_every = 100;
+//	p.load_model("data/nug08-3rd.mps");
 //	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
 //	double sigma_max = std::sqrt(PowerIteration(AAT, 1));  // 1 for verbose
 //	//p.eta = 0.9 * sigma_max;
+//	p.eta = 1e-1;
 //
-//	p.eta = 1e-2; p.restart = false;
+//	p.restart = false;
 //
 //	EGM(p);
 //
@@ -34,9 +33,10 @@ void EGM(const Params& p)
 	while (true) {
 		EGMStep(iter, p, record);
 		AdaptiveRestarts(iter, p, record, cache);
-		if (iter.count >= p.max_iter) break;
+		if (iter.count > p.max_iter) break;
 	}
-	std::cout << iter.z << std::endl;
+
+	//std::cout << iter.z << std::endl;
 }
 
 void EGMStep(Iterates& iter, const Params& p, RecordIterates& record)
@@ -50,6 +50,6 @@ void EGMStep(Iterates& iter, const Params& p, RecordIterates& record)
 
 	if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
 	if ((iter.count - 1) % p.print_every == 0) {
-		print_iteration_information(iter, p);
+		iter.print_iteration_information(p);
 	}
 }

@@ -8,6 +8,18 @@ Iterates::Iterates(const int& Size_x, const int& Size_y) : n(0), t(0), count(1)
 	z = Eigen::VectorXd::Zero(size_z);
 	z_hat = Eigen::VectorXd::Zero(size_z);
 	z_bar = Eigen::VectorXd::Zero(size_z);
+	this->use_ADMM = false;
+}
+
+Iterates::Iterates(const int& Repeat_x, const int& Size_x, const int& Size_y) : n(0), t(0), count(1)
+{
+	size_x = Size_x;
+	size_y = Size_y;
+	size_z = Repeat_x * size_x + size_y;
+	z = Eigen::VectorXd::Zero(size_z);
+	z_hat = Eigen::VectorXd::Zero(size_z);
+	z_bar = Eigen::VectorXd::Zero(size_z);
+	this->use_ADMM = true;
 }
 
 void Iterates::update()
@@ -25,6 +37,49 @@ void Iterates::restart()
 	z = z_bar;
 }
 
+double Iterates::compute_convergence_information(const Params& p) const
+{
+	Eigen::VectorXd y = gety();
+	//std::cout << use_ADMM << std::endl;
+	if (use_ADMM == false) {
+		Eigen::VectorXd x = getx();
+		Eigen::VectorXd kkt_error_vec(2 * size_x + 2 * size_y + 1);
+		kkt_error_vec << -x, p.A* x - p.b, p.b - p.A * x, p.A.transpose()* y - p.c,
+			p.c.transpose()* x - p.b.transpose() * y;
+
+		return (kkt_error_vec.cwiseMax(0)).norm();
+	}
+	else {
+		Eigen::VectorXd xU = getxU();
+		Eigen::VectorXd xV = getxV();
+		Eigen::VectorXd kkt_error_vec(3 * size_x + 2 * p.b.rows());
+		kkt_error_vec << -xV, p.A* xU - p.b, p.b - p.A * xU, xU - xV, xV - xU;
+
+		return (kkt_error_vec.cwiseMax(0)).norm();
+	}
+
+}
+
+void Iterates::print_iteration_information(const Params& p) const
+{
+	std::cout << "Iteration " << count - 1 << ", ";
+	double kkt_error = compute_convergence_information(p);
+	std::cout << "kkt_error: " << kkt_error << std::endl;
+	if (use_ADMM == false) {
+		Eigen::VectorXd x = getx();
+		Eigen::VectorXd y = gety();
+		std::cout << "obj: " << p.c.dot(x) + p.b.dot(y)
+			- y.transpose() * p.A * x << std::endl;
+	}
+	else {
+		Eigen::VectorXd xU = getxU();
+		Eigen::VectorXd xV = getxV();
+		Eigen::VectorXd y = gety();
+		std::cout << "obj: " << p.c.dot(xV) - y.dot(xU - xV) << std::endl;
+	}
+	std::cout << std::endl;
+}
+
 Eigen::VectorXd Iterates::getx() const
 {
 	return z.head(size_x);
@@ -35,6 +90,16 @@ Eigen::VectorXd Iterates::gety() const
 	return z.tail(size_y);
 }
 
+Eigen::VectorXd Iterates::getxU() const
+{
+	return z.head(size_x);
+}
+
+Eigen::VectorXd Iterates::getxV() const
+{
+	return z(Eigen::seq(size_x, 2 * size_x - 1));
+}
+
 RecordIterates::RecordIterates(const int& Size_x, const int& Size_y, const int& Size_record)
 	: end_idx(0)
 {
@@ -43,12 +108,24 @@ RecordIterates::RecordIterates(const int& Size_x, const int& Size_y, const int& 
 	std::vector<double> akkt_errorList(Size_record, 0);
 	IteratesList = aIteratesList;
 	kkt_errorList = akkt_errorList;
+	this->use_ADMM = false;
+}
+
+RecordIterates::RecordIterates(const int& Repeat_x, const int& Size_x, const int& Size_y, const int& Size_record)
+	: end_idx(0)
+{
+	Iterates iter(Repeat_x, Size_x, Size_y);
+	std::vector<Iterates> aIteratesList(Size_record, iter);
+	std::vector<double> akkt_errorList(Size_record, 0);
+	IteratesList = aIteratesList;
+	kkt_errorList = akkt_errorList;
+	this->use_ADMM = true;
 }
 
 void RecordIterates::append(const Iterates& iter, const Params& p)
 {
 	IteratesList[end_idx] = iter;
-	kkt_errorList[end_idx] = compute_convergence_information(iter, p);
+	kkt_errorList[end_idx] = iter.compute_convergence_information(p);
 	end_idx++;
 }
 
@@ -72,22 +149,22 @@ void Params::set_verbose(const bool& Verbose, const bool& gbVerbose)
 	env.set(GRB_IntParam_OutputFlag, gbVerbose);
 }
 
-void Params::load_example()
-{
-	Eigen::VectorXd c_tmp(4);
-	c_tmp << -4, -3, 0, 0;
-	c = c_tmp;
-	Eigen::VectorXd b_tmp(2);
-	b_tmp << 4, 5;
-	b = b_tmp;
-	Eigen::SparseMatrix<double> A_tmp(2, 4);
-	A_tmp.insert(0, 0) = 1;
-	A_tmp.insert(0, 2) = 1;
-	A_tmp.insert(1, 0) = 1;
-	A_tmp.insert(1, 1) = 1;
-	A = A_tmp;
-	// solution is (4, 0, 0, 1)
-}
+//void Params::load_example()
+//{
+//	Eigen::VectorXd c_tmp(4);
+//	c_tmp << -4, -3, 0, 0;
+//	c = c_tmp;
+//	Eigen::VectorXd b_tmp(2);
+//	b_tmp << 4, 5;
+//	b = b_tmp;
+//	Eigen::SparseMatrix<double> A_tmp(2, 4);
+//	A_tmp.insert(0, 0) = 1;
+//	A_tmp.insert(0, 2) = 1;
+//	A_tmp.insert(1, 0) = 1;
+//	A_tmp.insert(1, 1) = 1;
+//	A = A_tmp;
+//	// solution is (4, 1, 0, 0)
+//}
 
 void Params::load_model(const std::string& data)
 {
@@ -137,41 +214,7 @@ void Params::load_model(const std::string& data)
 	b = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_RHS, model.getConstrs(), numConstraints), numConstraints);
 }
 
-Eigen::VectorXd QPmodel(const Eigen::VectorXd& linCoeff, const Params& params, const double& eta, const bool& positive)
-{
-	int size_x = linCoeff.rows();
-
-	GRBModel model = GRBModel(params.env);
-
-	// Create variables
-	GRBVar* x;
-	if (positive == true)
-	{
-		x = model.addVars(size_x, GRB_CONTINUOUS);
-	}
-	else
-	{
-		x = new GRBVar[size_x];
-		for (int i = 0; i < size_x; i++)
-		{
-			x[i] = model.addVar(-GRB_INFINITY, GRB_INFINITY, 0.0, GRB_CONTINUOUS);
-		}
-	}
-
-	// Create objective
-	GRBQuadExpr objExpr = GRBQuadExpr();
-	Eigen::VectorXd x_quaCoeff = (1 / (2 * eta)) * Eigen::VectorXd::Ones(size_x);
-	objExpr.addTerms(x_quaCoeff.data(), x, x, size_x);
-	objExpr.addTerms(linCoeff.data(), x, size_x);
-
-	// Set objective
-	model.setObjective(objExpr, GRB_MINIMIZE);
-
-	model.optimize();
-	return Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_X, x, size_x), size_x);
-}
-
-double compute_normalized_duality_gap(const Eigen::VectorXd& z0, double& r, const Params& p)
+double compute_normalized_duality_gap(const Eigen::VectorXd& z0, const double& r, const Params& p)
 {
 	int size_x = p.c.rows();
 	int size_y = p.b.rows();
@@ -184,7 +227,7 @@ double compute_normalized_duality_gap(const Eigen::VectorXd& z0, double& r, cons
 
 	double constant = (double)(p.c.transpose() * x0) - (double)(p.b.transpose() * y0);
 
-	// std::cout << y_coeff << x_coeff << constant << std::endl;
+	//std::cout << y_coeff << x_coeff << constant << std::endl;
 
 	GRBModel model = GRBModel(p.env);
 
@@ -222,32 +265,11 @@ double compute_normalized_duality_gap(const Eigen::VectorXd& z0, double& r, cons
 
 	model.optimize();
 
-	/*std::cout<<model.get(GRB_DoubleAttr_ObjVal)<<std::endl;
-	std::cout<<x[0].get(GRB_DoubleAttr_X)<<std::endl;
-	std::cout<<y[0].get(GRB_DoubleAttr_X)<<std::endl;*/
+	/*std::cout << model.get(GRB_DoubleAttr_ObjVal) << std::endl;
+	std::cout << x[0].get(GRB_DoubleAttr_X) << std::endl;
+	std::cout << y[0].get(GRB_DoubleAttr_X) << std::endl;*/
 
 	return model.get(GRB_DoubleAttr_ObjVal) / r;
-}
-
-double compute_convergence_information(const Iterates& iter, const Params& p)
-{
-	Eigen::VectorXd x = iter.getx();
-	Eigen::VectorXd y = iter.gety();
-	Eigen::VectorXd kkt_error_vec(2 * x.rows() + 2 * y.rows() + 1);
-	kkt_error_vec << -x, p.A* x - p.b, p.b - p.A * x, p.A.transpose()* y - p.c,
-		p.c.transpose()* x - p.b.transpose() * y;
-
-	return (kkt_error_vec.cwiseMax(0)).norm();
-}
-
-void print_iteration_information(const Iterates& iter, const Params& p)
-{
-	std::cout << "Iteration " << iter.count - 1 << ", ";
-	double kkt_error = compute_convergence_information(iter, p);
-	std::cout << "kkt_error: " << kkt_error << std::endl;
-	std::cout << "obj: " << p.c.dot(iter.getx()) + p.b.dot(iter.gety()) - iter.gety().transpose() * p.A * iter.getx() << std::endl;
-	std::cout << "norm of F(z): " << compute_F(iter.z, p).norm() << std::endl;
-	std::cout << std::endl;
 }
 
 void AdaptiveRestarts(Iterates& iter, const Params& p,
@@ -284,9 +306,10 @@ void AdaptiveRestarts(Iterates& iter, const Params& p,
 		cache.z_cur_start = iter.z;
 
 		if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
-		if ((iter.count - 1) % p.print_every == 0) {
+		/*if ((iter.count - 1) % p.print_every == 0) {
 			print_iteration_information(iter, p);
-		}
+		}*/
+		iter.print_iteration_information(p);
 	}
 
 }
@@ -331,7 +354,7 @@ Eigen::VectorXd compute_F(const Eigen::VectorXd& z, const Params& p)
 	Eigen::VectorXd nabla_xL = p.c - p.A.transpose() * y;
 	Eigen::VectorXd nabla_yL = p.A * x - p.b;
 
-	F << nabla_xL, -nabla_yL;
+	F << nabla_xL, nabla_yL;
 	return F;
 }
 

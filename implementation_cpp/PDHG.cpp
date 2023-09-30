@@ -5,28 +5,28 @@ using namespace std::chrono;
 void PDHGStep(Iterates&, const Params&, RecordIterates&);
 RecordIterates PDHG(const Params&);
 
-int main()
-{
-	using std::cout, std::endl;
-	Params p;
-	p.set_verbose(true, false); p.max_iter = 50000; p.print_every = 100;
-	p.load_model("data/qap10.mps");
-	//p.load_example();
-	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
-	double sigma_max = std::sqrt(PowerIteration(AAT, 1));  // 1 for verbose
-	//p.eta = 0.9 * sigma_max;
-	p.eta = 1e-1;
-
-	cout << std::setprecision(9) << sigma_max << endl;
-	p.w = std::pow(4, 3); p.restart = true;
-
-	PDHG(p);
-	//double optimal_w = GetOptimalw(p, PDHG);
-
-	return 0;
-}
-
-
+//int main()
+//{
+//	using std::cout, std::endl;
+//	Params p;
+//	p.set_verbose(true, false);
+//	p.max_iter = 5000;
+//	p.print_every = 100;
+//	p.load_model("data/nug08-3rd.mps");
+//	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
+//	double sigma_max = std::sqrt(PowerIteration(AAT, 1)); // 1 for verbose
+//	// p.eta = 0.9 * sigma_max;
+//	p.eta = 1e-1;
+//
+//	cout << std::setprecision(9) << sigma_max << endl;
+//	p.w = std::pow(4, 2);
+//	p.restart = false;
+//
+//	PDHG(p);
+//	// double optimal_w = GetOptimalw(p, PDHG);
+//
+//	return 0;
+//}
 
 RecordIterates PDHG(const Params& p)
 {
@@ -35,12 +35,15 @@ RecordIterates PDHG(const Params& p)
 	record.append(iter, p);
 	Cache cache;
 	cache.z_cur_start = iter.z;
-	while (true) {
+	while (true)
+	{
 		PDHGStep(iter, p, record);
-		AdaptiveRestarts(iter, p, record, cache);
-		if (iter.count > p.max_iter) break;
+		if (iter.count % p.evaluate_every == 0)
+			AdaptiveRestarts(iter, p, record, cache);
+		if (iter.count > p.max_iter)
+			break;
 	}
-	//std::cout << iter.z << std::endl;
+	// std::cout << iter.z << std::endl;
 	return record;
 }
 
@@ -57,14 +60,14 @@ void PDHGStep(Iterates& iter, const Params& p, RecordIterates& record)
 	iter.z_hat << x_new, y_new;
 	iter.update();
 
-	if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
-	if ((iter.count - 1) % p.print_every == 0) {
-		print_iteration_information(iter, p);
+	if ((iter.count - 1) % p.record_every == 0)
+		record.append(iter, p);
+	if ((iter.count - 1) % p.print_every == 0)
+	{
+		iter.print_iteration_information(p);
 	}
 }
-
 
 // void PrimalDualMethods()
 //{
 // }
-

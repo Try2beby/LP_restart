@@ -1,7 +1,7 @@
 # folders
 or-tools-stable
 source_julia
-FirstOrderLp.ji
+FirstOrderLp.jl
 data/
 x64
 eigen3
