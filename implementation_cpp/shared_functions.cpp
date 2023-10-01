@@ -183,10 +183,6 @@ void Params::load_model(const std::string& data)
 
 	GRBVar* Vars = model.getVars();
 	GRBConstr* Constrs = model.getConstrs();
-	for (int i = 0; i < numConstraints; i++)
-	{
-		constrs.push_back(Constrs[i]);
-	}
 
 	// Get the object coefficients from the model.
 	c = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_Obj, Vars, numVars), numVars);

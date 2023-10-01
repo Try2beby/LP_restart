@@ -9,11 +9,17 @@ void ADMM(const Params& p)
 	cache.z_cur_start = iter.z;
 
 	std::vector<GRBModel> model;
-	generate_update_model(p, model);
+	//generate_update_model(p, model);
+	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
+	Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
+	solver.analyzePattern(AAT);
+	solver.factorize(AAT);
+	std::cout << "factorize done" << std::endl;
 
 	while (true)
 	{
-		ADMMStep(iter, p, record, model);
+		//ADMMStep(iter, p, record, model);
+		ADMMStep(iter, p, record, solver);
 		AdaptiveRestarts(iter, p, record, cache);
 		if (iter.count > p.max_iter)
 			break;
@@ -36,6 +42,37 @@ void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record, std::vect
 		iter.count + 1, p.print_every);
 	Eigen::VectorXd xV = update_x(p.c, -1.0,
 		xU - (1.0 / p.eta) * y_prev, p.eta, model[1], p.verbose, iter.count + 1, p.print_every);
+	Eigen::VectorXd y = y_prev - p.eta * (xU - xV);
+	iter.z_hat << xU, xV, y_prev - p.eta * (xU - xV_prev);
+	iter.z << xU, xV, y;
+
+	iter.update();
+
+	if ((iter.count - 1) % p.record_every == 0)
+		record.append(iter, p);
+	if ((iter.count - 1) % p.print_every == 0)
+	{
+		iter.print_iteration_information(p);
+	}
+}
+
+void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
+	Eigen::SparseLU<Eigen::SparseMatrix<double>>& solver)
+{
+	int size_x = p.c.rows();
+
+	Eigen::VectorXd xU_prev = iter.getxU();
+	Eigen::VectorXd xV_prev = iter.getxV();
+	Eigen::VectorXd y_prev = iter.gety();
+
+	high_resolution_clock::time_point t1 = high_resolution_clock::now();
+	Eigen::VectorXd xU = p.A.transpose() * solver.solve(p.b +
+		p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) - (-xV_prev - (1.0 / p.eta) * y_prev);
+	high_resolution_clock::time_point t2 = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(t2 - t1).count();
+	if (p.verbose && (iter.count - 1) % p.print_every == 0) std::cout << "solver.solve() takes " << duration << " microseconds" << std::endl;
+
+	Eigen::VectorXd xV = ((xU - (1.0 / p.eta) * y_prev) - (1.0 / p.eta) * p.c).cwiseMax(0);
 	Eigen::VectorXd y = y_prev - p.eta * (xU - xV);
 	iter.z_hat << xU, xV, y_prev - p.eta * (xU - xV_prev);
 	iter.z << xU, xV, y;

@@ -3,9 +3,10 @@
 #include <vector>
 #include <iostream>
 #include <chrono>
+
 #include "gurobi_c++.h"
 #include "eigen3/eigen/core"
-#include "eigen3/eigen/sparsecore"
+#include "eigen3/eigen/sparse"
 
 using namespace std::chrono;
 
@@ -18,7 +19,6 @@ public:
 	Eigen::SparseMatrix<double, Eigen::RowMajor> A;
 	bool verbose, restart;
 	GRBEnv env;
-	std::vector<GRBConstr> constrs;
 	Params();
 	void load_example();
 	void load_model(const std::string&);
@@ -81,6 +81,8 @@ double GetOptimalw(Params& p, RecordIterates(*method)(const Params&));
 
 void ADMM(const Params&);
 void ADMMStep(Iterates&, const Params&, RecordIterates&, std::vector<GRBModel>&);
+void ADMMStep(Iterates& iter, const Params&, RecordIterates&,
+	Eigen::SparseLU<Eigen::SparseMatrix<double>>&);
 Eigen::VectorXd update_x(const Eigen::VectorXd&, const double&, const Eigen::VectorXd&,
 	const double&, GRBModel&, const bool&, const int&, const int&);
 void generate_update_model(const Params&, std::vector<GRBModel>&);

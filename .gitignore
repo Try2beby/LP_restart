@@ -5,6 +5,7 @@ FirstOrderLp.jl
 data/
 x64
 eigen3
+cache/
 
 # configuration folder
 .vscode
