@@ -16,9 +16,9 @@ Iterates::Iterates(const int& Repeat_x, const int& Size_x, const int& Size_y) : 
 	size_x = Size_x;
 	size_y = Size_y;
 	size_z = Repeat_x * size_x + size_y;
-	z = Eigen::VectorXd::Zero(size_z);
-	z_hat = Eigen::VectorXd::Zero(size_z);
-	z_bar = Eigen::VectorXd::Zero(size_z);
+	z = Eigen::VectorXd::Random(size_z);
+	z_hat = Eigen::VectorXd::Random(size_z);
+	z_bar = Eigen::VectorXd::Random(size_z);
 	this->use_ADMM = true;
 }
 
@@ -75,6 +75,9 @@ void Iterates::print_iteration_information(const Params& p) const
 		Eigen::VectorXd xU = getxU();
 		Eigen::VectorXd xV = getxV();
 		Eigen::VectorXd y = gety();
+		std::cout << xU.norm() << " " << xV.norm() << " " << (xU - xV).norm() << " " << y.norm() << std::endl;
+		/*std::cout << xU.transpose() << std::endl;
+		std::cout << xV.transpose() << std::endl;*/
 		std::cout << "obj: " << p.c.dot(xV) - y.dot(xU - xV) << std::endl;
 	}
 	std::cout << std::endl;
@@ -149,22 +152,22 @@ void Params::set_verbose(const bool& Verbose, const bool& gbVerbose)
 	env.set(GRB_IntParam_OutputFlag, gbVerbose);
 }
 
-//void Params::load_example()
-//{
-//	Eigen::VectorXd c_tmp(4);
-//	c_tmp << -4, -3, 0, 0;
-//	c = c_tmp;
-//	Eigen::VectorXd b_tmp(2);
-//	b_tmp << 4, 5;
-//	b = b_tmp;
-//	Eigen::SparseMatrix<double> A_tmp(2, 4);
-//	A_tmp.insert(0, 0) = 1;
-//	A_tmp.insert(0, 2) = 1;
-//	A_tmp.insert(1, 0) = 1;
-//	A_tmp.insert(1, 1) = 1;
-//	A = A_tmp;
-//	// solution is (4, 1, 0, 0)
-//}
+void Params::load_example()
+{
+	Eigen::VectorXd c_tmp(5);
+	c_tmp << -4, -3, 0, 0, 0;
+	c = c_tmp;
+	Eigen::VectorXd b_tmp(2);
+	b_tmp << 4, 5;
+	b = b_tmp;
+	Eigen::SparseMatrix<double> A_tmp(2, 5);
+	A_tmp.insert(0, 0) = 1;
+	A_tmp.insert(0, 2) = 1;
+	A_tmp.insert(1, 0) = 1;
+	A_tmp.insert(1, 1) = 1;
+	A = A_tmp;
+	// solution is (4, 1, 0, 0, 0)
+}
 
 void Params::load_model(const std::string& data)
 {
@@ -180,12 +183,16 @@ void Params::load_model(const std::string& data)
 
 	GRBVar* Vars = model.getVars();
 	GRBConstr* Constrs = model.getConstrs();
+	for (int i = 0; i < numConstraints; i++)
+	{
+		constrs.push_back(Constrs[i]);
+	}
 
 	// Get the object coefficients from the model.
 	c = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_Obj, Vars, numVars), numVars);
 
 	// Get the matrix A, use sparse representation.
-	Eigen::SparseMatrix<double> A_tmp(numConstraints, numVars);
+	Eigen::SparseMatrix<double, Eigen::RowMajor> A_tmp(numConstraints, numVars);
 	std::vector<Eigen::Triplet<double>> triplets;
 
 	// high_resolution_clock::time_point t1 = high_resolution_clock::now();
@@ -361,7 +368,7 @@ Eigen::VectorXd compute_F(const Eigen::VectorXd& z, const Params& p)
 double GetOptimalw(Params& p, RecordIterates(*method)(const Params&))
 {
 	auto best_kkt_error = INFINITY;
-	double best_w = NULL;
+	double best_w = 0;
 	p.restart = false;
 	std::vector<double> w_candidates;
 	for (int i = -5; i < 6; i++)

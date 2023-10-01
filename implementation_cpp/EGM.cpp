@@ -1,8 +1,5 @@
 #include "shared_functions.h"
 
-void EGMStep(Iterates&, const Params&, RecordIterates&);
-void EGM(const Params&);
-
 //int main()
 //{
 //	using std::cout, std::endl;
@@ -10,7 +7,8 @@ void EGM(const Params&);
 //	p.set_verbose(true, false);
 //	p.max_iter = 5000;
 //	p.print_every = 100;
-//	p.load_model("data/nug08-3rd.mps");
+//	//p.load_model("data/nug08-3rd.mps");
+//	p.load_example();
 //	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
 //	double sigma_max = std::sqrt(PowerIteration(AAT, 1));  // 1 for verbose
 //	//p.eta = 0.9 * sigma_max;
