@@ -1,12 +1,10 @@
 #include "shared_functions.h"
 
-void ADMM(const Params& p)
+RecordIterates ADMM(const Params& p)
 {
 	Iterates iter(2, p.c.rows(), p.c.rows());
 	RecordIterates record(2, p.c.rows(), p.c.rows(), p.max_iter / p.record_every + 2);
 	record.append(iter, p);
-	Cache cache;
-	cache.z_cur_start = iter.z;
 
 	std::vector<GRBModel> model;
 	//generate_update_model(p, model);
@@ -20,13 +18,14 @@ void ADMM(const Params& p)
 	{
 		//ADMMStep(iter, p, record, model);
 		ADMMStep(iter, p, record, solver);
-		AdaptiveRestarts(iter, p, record, cache);
+		AdaptiveRestarts(iter, p, record);
 		if (iter.count > p.max_iter)
 			break;
 	}
 
 	/*std::cout << iter.getxU().head(100) << std::endl;
 	std::cout << iter.getxV().head(100) << std::endl;*/
+	return record;
 }
 
 void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record, std::vector<GRBModel>& model)
@@ -48,11 +47,13 @@ void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record, std::vect
 
 	iter.update();
 
-	if ((iter.count - 1) % p.record_every == 0)
-		record.append(iter, p);
-	if ((iter.count - 1) % p.print_every == 0)
+	if ((iter.count - 1) % p.record_every == 0 || (iter.count - 1) % p.print_every == 0)
 	{
-		iter.print_iteration_information(p);
+		iter.compute_convergence_information(p);
+		if ((iter.count - 1) % p.record_every == 0)
+			record.append(iter, p);
+		if ((iter.count - 1) % p.print_every == 0)
+			iter.print_iteration_information(p);
 	}
 }
 

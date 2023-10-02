@@ -1,27 +1,6 @@
 #include "shared_functions.h"
 
-//int main()
-//{
-//	using std::cout, std::endl;
-//	Params p;
-//	p.set_verbose(true, false);
-//	p.max_iter = 5000;
-//	p.print_every = 100;
-//	//p.load_model("data/nug08-3rd.mps");
-//	p.load_example();
-//	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
-//	double sigma_max = std::sqrt(PowerIteration(AAT, 1));  // 1 for verbose
-//	//p.eta = 0.9 * sigma_max;
-//	p.eta = 1e-1;
-//
-//	p.restart = false;
-//
-//	EGM(p);
-//
-//	return 0;
-//}
-
-void EGM(const Params& p)
+RecordIterates EGM(const Params& p)
 {
 	Iterates iter(p.c.rows(), p.b.rows());
 	RecordIterates record(p.c.rows(), p.b.rows(), p.max_iter / p.record_every + 2);
@@ -30,11 +9,12 @@ void EGM(const Params& p)
 	cache.z_cur_start = iter.z;
 	while (true) {
 		EGMStep(iter, p, record);
-		AdaptiveRestarts(iter, p, record, cache);
+		AdaptiveRestarts(iter, p, record);
 		if (iter.count > p.max_iter) break;
 	}
 
 	//std::cout << iter.z << std::endl;
+	return record;
 }
 
 void EGMStep(Iterates& iter, const Params& p, RecordIterates& record)
@@ -46,8 +26,12 @@ void EGMStep(Iterates& iter, const Params& p, RecordIterates& record)
 
 	iter.update();
 
-	if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
-	if ((iter.count - 1) % p.print_every == 0) {
-		iter.print_iteration_information(p);
+	if ((iter.count - 1) % p.record_every == 0 || (iter.count - 1) % p.print_every == 0)
+	{
+		iter.compute_convergence_information(p);
+		if ((iter.count - 1) % p.record_every == 0)
+			record.append(iter, p);
+		if ((iter.count - 1) % p.print_every == 0)
+			iter.print_iteration_information(p);
 	}
 }

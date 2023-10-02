@@ -9,6 +9,7 @@ Iterates::Iterates(const int& Size_x, const int& Size_y) : n(0), t(0), count(1)
 	z_hat = Eigen::VectorXd::Zero(size_z);
 	z_bar = Eigen::VectorXd::Zero(size_z);
 	this->use_ADMM = false;
+	this->cache.z_cur_start = this->z;
 }
 
 Iterates::Iterates(const int& Repeat_x, const int& Size_x, const int& Size_y) : n(0), t(0), count(1)
@@ -20,6 +21,7 @@ Iterates::Iterates(const int& Repeat_x, const int& Size_x, const int& Size_y) : 
 	z_hat = Eigen::VectorXd::Random(size_z);
 	z_bar = Eigen::VectorXd::Random(size_z);
 	this->use_ADMM = true;
+	this->cache.z_cur_start = this->z;
 }
 
 void Iterates::update()
@@ -35,36 +37,41 @@ void Iterates::restart()
 	t = 0;
 	count++;
 	z = z_bar;
+
+	cache.z_prev_start = cache.z_cur_start;
+	cache.z_cur_start = this->z;
 }
 
-double Iterates::compute_convergence_information(const Params& p) const
+Convergeinfo Iterates::compute_convergence_information(const Params& p)
 {
 	Eigen::VectorXd y = gety();
-	//std::cout << use_ADMM << std::endl;
 	if (use_ADMM == false) {
 		Eigen::VectorXd x = getx();
 		Eigen::VectorXd kkt_error_vec(2 * size_x + 2 * size_y + 1);
 		kkt_error_vec << -x, p.A* x - p.b, p.b - p.A * x, p.A.transpose()* y - p.c,
 			p.c.transpose()* x - p.b.transpose() * y;
-
-		return (kkt_error_vec.cwiseMax(0)).norm();
+		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).norm();
 	}
 	else {
 		Eigen::VectorXd xU = getxU();
 		Eigen::VectorXd xV = getxV();
 		Eigen::VectorXd kkt_error_vec(3 * size_x + 2 * p.b.rows());
 		kkt_error_vec << -xV, p.A* xU - p.b, p.b - p.A * xU, xU - xV, xV - xU;
-
-		return (kkt_error_vec.cwiseMax(0)).norm();
+		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).norm();
 	}
 
+	double r = (this->z - this->cache.z_cur_start).norm();
+	//std::cout << this->count - 1 << " r = " << r << std::endl;
+	this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->z_bar, r + 1e-6, p);
+	return this->convergeinfo;
 }
 
 void Iterates::print_iteration_information(const Params& p) const
 {
 	std::cout << "Iteration " << count - 1 << ", ";
-	double kkt_error = compute_convergence_information(p);
-	std::cout << "kkt_error: " << kkt_error << std::endl;
+	std::cout << "kkt_error: " << this->convergeinfo.kkt_error << std::endl;
+	std::cout << "normalized_duality_gap: " << this->convergeinfo.normalized_duality_gap << std::endl;
+
 	if (use_ADMM == false) {
 		Eigen::VectorXd x = getx();
 		Eigen::VectorXd y = gety();
@@ -76,8 +83,6 @@ void Iterates::print_iteration_information(const Params& p) const
 		Eigen::VectorXd xV = getxV();
 		Eigen::VectorXd y = gety();
 		std::cout << xU.norm() << " " << xV.norm() << " " << (xU - xV).norm() << " " << y.norm() << std::endl;
-		/*std::cout << xU.transpose() << std::endl;
-		std::cout << xV.transpose() << std::endl;*/
 		std::cout << "obj: " << p.c.dot(xV) - y.dot(xU - xV) << std::endl;
 	}
 	std::cout << std::endl;
@@ -108,9 +113,9 @@ RecordIterates::RecordIterates(const int& Size_x, const int& Size_y, const int& 
 {
 	Iterates iter(Size_x, Size_y);
 	std::vector<Iterates> aIteratesList(Size_record, iter);
-	std::vector<double> akkt_errorList(Size_record, 0);
+	std::vector<Convergeinfo> aConvergeinfoList(Size_record);
 	IteratesList = aIteratesList;
-	kkt_errorList = akkt_errorList;
+	ConvergeinfoList = aConvergeinfoList;
 	this->use_ADMM = false;
 }
 
@@ -119,16 +124,16 @@ RecordIterates::RecordIterates(const int& Repeat_x, const int& Size_x, const int
 {
 	Iterates iter(Repeat_x, Size_x, Size_y);
 	std::vector<Iterates> aIteratesList(Size_record, iter);
-	std::vector<double> akkt_errorList(Size_record, 0);
+	std::vector<Convergeinfo> aConvergeinfoList(Size_record);
 	IteratesList = aIteratesList;
-	kkt_errorList = akkt_errorList;
+	ConvergeinfoList = aConvergeinfoList;
 	this->use_ADMM = true;
 }
 
 void RecordIterates::append(const Iterates& iter, const Params& p)
 {
 	IteratesList[end_idx] = iter;
-	kkt_errorList[end_idx] = iter.compute_convergence_information(p);
+	ConvergeinfoList[end_idx] = iter.convergeinfo;
 	end_idx++;
 }
 
@@ -139,7 +144,7 @@ Iterates RecordIterates::operator[](const int& i) {
 	return IteratesList[i];
 }
 
-Params::Params() : env(GRBEnv()), eta(1e-1), beta(1e-1), w(1),
+Params::Params() : env(GRBEnv()), eta(1e-1), beta(std::exp(-1)), w(1),
 max_iter(static_cast<int>(5e3)), tau0(1), verbose(false), restart(true),
 record_every(30), print_every(100), evaluate_every(30)
 {
@@ -179,7 +184,6 @@ void Params::load_model(const std::string& data)
 
 	// Get the number of constraints in the model.
 	int numConstraints = model.get(GRB_IntAttr_NumConstrs);
-	// std::cout << numConstraints << std::endl;
 
 	GRBVar* Vars = model.getVars();
 	GRBConstr* Constrs = model.getConstrs();
@@ -228,7 +232,7 @@ double compute_normalized_duality_gap(const Eigen::VectorXd& z0, const double& r
 	Eigen::VectorXd y_coeff = p.b - p.A * x0;
 	Eigen::VectorXd x_coeff = y0.transpose() * p.A - p.c.transpose();
 
-	double constant = (double)(p.c.transpose() * x0) - (double)(p.b.transpose() * y0);
+	double constant = p.c.dot(x0) - p.b.dot(y0);
 
 	//std::cout << y_coeff << x_coeff << constant << std::endl;
 
@@ -276,9 +280,9 @@ double compute_normalized_duality_gap(const Eigen::VectorXd& z0, const double& r
 }
 
 void AdaptiveRestarts(Iterates& iter, const Params& p,
-	RecordIterates& record, Cache& cache)
+	RecordIterates& record)
 {
-	if (p.restart == false) return;
+	if (iter.count % p.evaluate_every != 0 || p.restart == false) return;
 
 	bool restart = false;
 	if (iter.n == 0)
@@ -291,11 +295,11 @@ void AdaptiveRestarts(Iterates& iter, const Params& p,
 	else
 	{
 		// ||z_bar^n,t-z^n,0||
-		double r1 = (iter.z_bar - cache.z_cur_start).norm();
+		double r1 = (iter.z_bar - iter.cache.z_cur_start).norm();
 		// ||z^n,0-z^n-1,0||
-		double r2 = (cache.z_cur_start - cache.z_prev_start).norm();
+		double r2 = (iter.cache.z_cur_start - iter.cache.z_prev_start).norm();
 		double duality_gap1 = compute_normalized_duality_gap(iter.z_bar, r1, p);
-		double duality_gap2 = compute_normalized_duality_gap(cache.z_cur_start, r2, p);
+		double duality_gap2 = compute_normalized_duality_gap(iter.cache.z_cur_start, r2, p);
 		if (duality_gap1 <= p.beta * duality_gap2)
 		{
 			restart = true;
@@ -304,17 +308,42 @@ void AdaptiveRestarts(Iterates& iter, const Params& p,
 
 	if (restart == true)
 	{
+		iter.compute_convergence_information(p);
 		iter.restart();
-		cache.z_prev_start = cache.z_cur_start;
-		cache.z_cur_start = iter.z;
-
 		if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
-		/*if ((iter.count - 1) % p.print_every == 0) {
-			print_iteration_information(iter, p);
-		}*/
 		iter.print_iteration_information(p);
 	}
 
+}
+
+void FixedFrequencyRestart(Iterates& iter, const Params& p,
+	RecordIterates& record, const int restart_length)
+{
+	if (p.restart == false) return;
+	if (iter.count % restart_length == 0)
+	{
+		iter.compute_convergence_information(p);
+		iter.restart();
+		if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
+		iter.print_iteration_information(p);
+	}
+
+}
+
+void GetBestFixedRestartLength(Params& p, RecordIterates(*method)(const Params&))
+{
+	auto best_gap = INFINITY;
+	int best_length = 0;
+	p.restart = false;
+	std::vector<double> w_candidates;
+	for (int i = 1; i < 10; i++)
+	{
+		w_candidates.push_back(std::pow(4, i));
+	}
+	for (int i = 0; i < w_candidates.size(); i++)
+	{
+	}
+	return;
 }
 
 double PowerIteration(const Eigen::SparseMatrix<double>& A, const bool& verbose = false)
@@ -376,7 +405,7 @@ double GetOptimalw(Params& p, RecordIterates(*method)(const Params&))
 		p.w = w_candidates[i];
 		std::cout << "testing w=4^" << i - 5 << std::endl;
 		RecordIterates record = method(p);
-		double kkt_error = record.kkt_errorList[record.end_idx - 1];
+		double kkt_error = record.ConvergeinfoList[record.end_idx - 1].kkt_error;
 		if (kkt_error < best_kkt_error)
 		{
 			best_kkt_error = kkt_error;
