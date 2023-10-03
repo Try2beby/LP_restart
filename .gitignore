@@ -11,8 +11,6 @@ eigen3
 
 # files
 *.exe
-*.md
-assets
 test*
 *.gz
 
