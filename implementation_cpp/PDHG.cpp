@@ -1,20 +1,21 @@
 #include "shared_functions.h"
 
-RecordIterates PDHG(const Params& p)
+RecordIterates& PDHG(const Params& p)
 {
 	Iterates iter(p.c.rows(), p.b.rows());
-	RecordIterates record(p.c.rows(), p.b.rows(), p.max_iter / p.record_every + 2);
-	record.append(iter, p);
+	static RecordIterates record(p.c.rows(), p.b.rows(), p.max_iter / p.record_every);
 
 	while (true)
 	{
 		PDHGStep(iter, p, record);
 		//AdaptiveRestarts(iter, p, record);
 		//FixedFrequencyRestart(iter, p, record, 64);
-		if (iter.count > p.max_iter)
+		if (iter.terminate || iter.count > p.max_iter)
 			break;
 	}
-	// std::cout << iter.z << std::endl;
+
+	//record.saveConvergeinfo(cachepath + __func__ + "/" + Data[p.dataidx] + "_adaptive_restarts");
+	//record.saveRestart_idx(cachepath + __func__ + "/" + Data[p.dataidx] + "_adaptive_restarts");
 	return record;
 }
 

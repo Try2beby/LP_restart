@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <chrono>
+#include <fstream>
 #include "gurobi_c++.h"
 
 #define EIGEN_USE_MKL_ALL
@@ -10,8 +11,17 @@
 
 #include "eigen3/eigen/core"
 #include "eigen3/eigen/sparse"
-#include "eigen3/Eigen/PardisoSupport"
+//#include "eigen3/Eigen/PardisoSupport"
 
+//#include <boost/archive/xml_oarchive.hpp>
+//#include <boost/archive/xml_iarchive.hpp>
+//#include <boost/serialization/vector.hpp>
+
+const std::vector<std::string> Data = { "qap10", "qap15", "nug08-3rd", "nug20" };
+const std::string cachepath = "cache/";
+const std::string cachesuffix = ".txt";
+const std::string datapath = "data/";
+const std::string datasuffix = ".mps";
 
 using namespace std::chrono;
 
@@ -28,27 +38,33 @@ struct ADMMmodel
 struct Convergeinfo
 {
 	double normalized_duality_gap{ -1 }, kkt_error{ -1 };
+	/*template <class Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar& BOOST_SERIALIZATION_NVP(normalized_duality_gap);
+		ar& BOOST_SERIALIZATION_NVP(kkt_error);
+	}*/
 };
 
 class Params
 {
 public:
-	float eta, beta, w;
-	int max_iter, tau0, record_every, print_every, evaluate_every;
+	float eta, beta, w, tol;
+	int dataidx, max_iter, tau0, record_every, print_every, evaluate_every;
 	Eigen::VectorXd c, b;
 	Eigen::SparseMatrix<double, Eigen::RowMajor> A;
 	bool verbose, restart;
 	GRBEnv env;
 	Params();
 	void load_example();
-	void load_model(const std::string&);
+	void load_model(const int&);
 	void set_verbose(const bool&, const bool&);
 };
 
 class Iterates
 {
 public:
-	bool use_ADMM;
+	bool use_ADMM, terminate;
 	int size_x, size_y, size_z;
 	Eigen::VectorXd z, z_hat, z_bar;
 	Cache cache;
@@ -74,10 +90,13 @@ public:
 	int end_idx;
 	std::vector<Iterates> IteratesList;
 	std::vector<Convergeinfo> ConvergeinfoList;
+	std::vector<int> restart_idx;
 	RecordIterates(const int&, const int&, const int&);
 	RecordIterates(const int&, const int&, const int&, const int&);
 	void append(const Iterates&, const Params&);
 	Iterates operator[](const int&);
+	void saveConvergeinfo(const std::string);
+	void saveRestart_idx(const std::string);
 };
 
 
@@ -103,7 +122,7 @@ Eigen::VectorXd update_x(const Eigen::VectorXd&, const double&, const Eigen::Vec
 void generate_update_model(const Params&, std::vector<GRBModel>&);
 
 void PDHGStep(Iterates&, const Params&, RecordIterates&);
-RecordIterates PDHG(const Params&);
+RecordIterates& PDHG(const Params&);
 
 void EGMStep(Iterates&, const Params&, RecordIterates&);
 RecordIterates EGM(const Params&);

@@ -1,6 +1,7 @@
 #include "shared_functions.h"
 
-Iterates::Iterates(const int& Size_x, const int& Size_y) : n(0), t(0), count(1)
+Iterates::Iterates(const int& Size_x, const int& Size_y) : n(0), t(0), count(1),
+terminate{ false }
 {
 	size_x = Size_x;
 	size_y = Size_y;
@@ -12,7 +13,8 @@ Iterates::Iterates(const int& Size_x, const int& Size_y) : n(0), t(0), count(1)
 	this->cache.z_cur_start = this->z;
 }
 
-Iterates::Iterates(const int& Repeat_x, const int& Size_x, const int& Size_y) : n(0), t(0), count(1)
+Iterates::Iterates(const int& Repeat_x, const int& Size_x, const int& Size_y) :
+	n(0), t(0), count(1), terminate{ false }
 {
 	size_x = Size_x;
 	size_y = Size_y;
@@ -63,6 +65,10 @@ Convergeinfo Iterates::compute_convergence_information(const Params& p)
 	double r = (this->z - this->cache.z_cur_start).norm();
 	//std::cout << this->count - 1 << " r = " << r << std::endl;
 	this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->z_bar, r + 1e-6, p);
+	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol)
+	{
+		this->terminate = true;
+	}
 	return this->convergeinfo;
 }
 
@@ -144,9 +150,42 @@ Iterates RecordIterates::operator[](const int& i) {
 	return IteratesList[i];
 }
 
-Params::Params() : env(GRBEnv()), eta(1e-1), beta(std::exp(-1)), w(1),
+void RecordIterates::saveConvergeinfo(const std::string filename)
+{
+	std::ofstream ofs(filename + cachesuffix);
+	if (ofs.is_open())
+	{
+		/*boost::archive::xml_oarchive xml_output_archive(ofs);
+		xml_output_archive& BOOST_SERIALIZATION_NVP(this->ConvergeinfoList);*/
+		for (int i = 0; i < end_idx; i++)
+		{
+			auto& obj = ConvergeinfoList[i];
+			ofs << std::setprecision(10) << obj.normalized_duality_gap << "," << obj.kkt_error << std::endl;
+		}
+		std::cout << "save Convergeinfo done" << std::endl;
+		ofs.close();
+	}
+	else std::cout << "Unable to open file";
+}
+
+void RecordIterates::saveRestart_idx(const std::string filename)
+{
+	std::ofstream ofs(filename + "_restart_idx" + cachesuffix);
+	if (ofs.is_open())
+	{
+		for (auto i : restart_idx)
+		{
+			ofs << i << std::endl;
+		}
+		std::cout << "save restart_idx done" << std::endl;
+		ofs.close();
+	}
+	else std::cout << "Unable to open file";
+}
+
+Params::Params() : env(GRBEnv()), eta(1e-1), beta(std::exp(-1)), w(1), tol(1e-7),
 max_iter(static_cast<int>(5e3)), tau0(1), verbose(false), restart(true),
-record_every(30), print_every(100), evaluate_every(30)
+record_every(30), print_every(100), evaluate_every(30), dataidx(0)
 {
 	env.set(GRB_IntParam_OutputFlag, verbose);
 }
@@ -174,9 +213,10 @@ void Params::load_example()
 	// solution is (4, 1, 0, 0, 0)
 }
 
-void Params::load_model(const std::string& data)
+void Params::load_model(const int& dataidx)
 {
-	GRBModel model = GRBModel(env, data);
+	this->dataidx = dataidx;
+	GRBModel model = GRBModel(env, datapath + Data[dataidx] + datasuffix);
 	//model.optimize();
 
 	// Get the number of variables in the model.
@@ -195,8 +235,6 @@ void Params::load_model(const std::string& data)
 	Eigen::SparseMatrix<double, Eigen::RowMajor> A_tmp(numConstraints, numVars);
 	std::vector<Eigen::Triplet<double>> triplets;
 
-	// high_resolution_clock::time_point t1 = high_resolution_clock::now();
-
 	for (int i = 0; i < numConstraints; i++)
 	{
 		for (int j = 0; j < numVars; j++)
@@ -209,16 +247,14 @@ void Params::load_model(const std::string& data)
 		}
 	}
 
-	/*high_resolution_clock::time_point t2 = high_resolution_clock::now();
-	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
-	std::cout << "It took" << time_span.count() << " seconds.";*/
-
 	A_tmp.setFromTriplets(triplets.begin(), triplets.end());
 	A = A_tmp;
-	// std::cout << A.nonZeros()<<std::endl;
 
 	// Get the right-hand side vector from the model.
-	b = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_RHS, model.getConstrs(), numConstraints), numConstraints);
+	b = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_RHS,
+		model.getConstrs(), numConstraints), numConstraints);
+
+	std::cout << "Model loaded." << std::endl;
 }
 
 double compute_normalized_duality_gap(const Eigen::VectorXd& z0, const double& r, const Params& p)
@@ -282,7 +318,7 @@ double compute_normalized_duality_gap(const Eigen::VectorXd& z0, const double& r
 void AdaptiveRestarts(Iterates& iter, const Params& p,
 	RecordIterates& record)
 {
-	if (iter.count % p.evaluate_every != 0 || p.restart == false) return;
+	if ((iter.count - 1) % p.evaluate_every != 0 || p.restart == false) return;
 
 	bool restart = false;
 	if (iter.n == 0)
@@ -310,6 +346,8 @@ void AdaptiveRestarts(Iterates& iter, const Params& p,
 	{
 		iter.compute_convergence_information(p);
 		iter.restart();
+
+		record.restart_idx.push_back(iter.count - 1);
 		if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
 		iter.print_iteration_information(p);
 	}

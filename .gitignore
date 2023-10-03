@@ -2,10 +2,8 @@
 or-tools-stable
 source_julia
 FirstOrderLp.jl
-data/
 x64
 eigen3
-cache/
 
 # configuration folder
 .vscode
@@ -16,6 +14,7 @@ cache/
 *.md
 assets
 test*
+*.gz
 
 *.vcxproj*
 
