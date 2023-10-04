@@ -150,9 +150,11 @@ Iterates RecordIterates::operator[](const int& i) {
 	return IteratesList[i];
 }
 
-void RecordIterates::saveConvergeinfo(const std::string filename)
+void RecordIterates::saveConvergeinfo(const std::string method, const int dataidx, const std::string filename)
 {
-	std::ofstream ofs(filename + cachesuffix);
+	auto path = cachepath + method + "/" + Data[dataidx] + "/";
+	std::filesystem::create_directories(path);
+	std::ofstream ofs(path + filename + cachesuffix);
 	if (ofs.is_open())
 	{
 		/*boost::archive::xml_oarchive xml_output_archive(ofs);
@@ -165,12 +167,14 @@ void RecordIterates::saveConvergeinfo(const std::string filename)
 		std::cout << "save Convergeinfo done" << std::endl;
 		ofs.close();
 	}
-	else std::cout << "Unable to open file";
+	else std::cout << "Unable to open file" << std::endl;
 }
 
-void RecordIterates::saveRestart_idx(const std::string filename)
+void RecordIterates::saveRestart_idx(const std::string method, const int dataidx, const std::string filename)
 {
-	std::ofstream ofs(filename + "_restart_idx" + cachesuffix);
+	auto path = cachepath + method + "/" + Data[dataidx] + "/";
+	std::filesystem::create_directories(path);
+	std::ofstream ofs(path + filename + "_restart_idx" + cachesuffix);
 	if (ofs.is_open())
 	{
 		for (auto i : restart_idx)
@@ -180,11 +184,11 @@ void RecordIterates::saveRestart_idx(const std::string filename)
 		std::cout << "save restart_idx done" << std::endl;
 		ofs.close();
 	}
-	else std::cout << "Unable to open file";
+	else std::cout << "Unable to open file" << std::endl;
 }
 
 Params::Params() : env(GRBEnv()), eta(1e-1), beta(std::exp(-1)), w(1), tol(1e-7),
-max_iter(static_cast<int>(5e3)), tau0(1), verbose(false), restart(true),
+max_iter(static_cast<int>(5e5)), tau0(1), verbose(false), restart(true),
 record_every(30), print_every(100), evaluate_every(30), dataidx(0)
 {
 	env.set(GRB_IntParam_OutputFlag, verbose);
@@ -344,12 +348,12 @@ void AdaptiveRestarts(Iterates& iter, const Params& p,
 
 	if (restart == true)
 	{
+		record.restart_idx.push_back(iter.count - 1);
+		iter.print_iteration_information(p);
+		//if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
+
 		iter.compute_convergence_information(p);
 		iter.restart();
-
-		record.restart_idx.push_back(iter.count - 1);
-		if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
-		iter.print_iteration_information(p);
 	}
 
 }

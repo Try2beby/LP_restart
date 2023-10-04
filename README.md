@@ -30,11 +30,10 @@ $$
 迭代公式：
 
 $$
-\begin{align}
+\begin{align*}
 & \hat z^{t+1} ={\rm Proj}_Z ( z^t-\eta F(z^t) )\\
 & z^{t+1}={\rm Proj}_Z(z^t-\eta F(\hat z ^{t+1}))
-
-\end{align}
+\end{align*}
 $$
 
 - [ ] PDHG 解二次优化问题
@@ -44,10 +43,10 @@ $$
 迭代公式
 
 $$
-\begin{align}
+\begin{align*}
 & x^{t+1}=(x^t -\eta /w (c-Ay))_+\\
 & y^{t+1}=y-\eta w (-b+A(2x^{t+1}-x^t))
-\end{align}
+\end{align*}
 $$
 
 - [ ] ADMM
@@ -58,7 +57,7 @@ $$
 \theta_1=0, \theta_2(x_V)=c^\top x_V\\
 U=I,V=-I,q=0\\
 x_U^{t+1}=A^\top(AA^\top)^{-1}(b+A(-x_V^t-\frac1\eta y^t ))\\
-       x_V^{t+1}=x_U-\frac 1\eta y^t-\frac 1\eta c
+x_V^{t+1}=x_U-\frac 1\eta y^t-\frac 1\eta c
 $$
 
 ![image-20230929202527319](assets/image-20230929202527319.png)
@@ -66,10 +65,10 @@ $$
 ### normalized duality gap
 
 $$
-\begin{align}
+\begin{align*}
 & \rho_r(z):=\frac{\max_{\hat{z}\in W_r(z)  }\{{\cal L}(x,\hat y)- {\cal L}(\hat x,y)\}}{r}\\
 & W_r(z):=\{\hat z \in Z\mid \|z-\hat z \|\le r \}
-\end{align}
+\end{align*}
 $$
 
 若
@@ -84,10 +83,10 @@ $$
 
 具体地
 $$
-\begin{align}
+\begin{align*}
 {\cal L}(x,\hat y)-{\cal L}(\hat x,y)&=c^\top x+\hat y ^\top b-\hat y ^\top Ax -(c^\top \hat x+y^\top b -y^\top A \hat x)\\
 &=\hat y ^\top (b-Ax) +(y^\top A-c^\top)\hat x +c^\top x -y^\top b
-\end{align}
+\end{align*}
 $$
 
 - 当$Z=\R^{m+n}$时，
@@ -109,6 +108,8 @@ $$
 <img src="assets/image-20230922181437110.png" alt="image-20230922181437110" style="zoom:50%;" />
 
 ## Results
+
+Dependencies: Gurobi, Eigen3
 
 |          | PDHG | EGM  | ADMM |
 | -------- | ---- | ---- | ---- |
@@ -152,3 +153,4 @@ $$
 [google-research/FirstOrderLp.jl: Experimental first-order solvers for linear and quadratic programming. (github.com)](https://github.com/google-research/FirstOrderLp.jl)
 
 https://github.com/google-research/google-research/tree/master/restarting_FOM_for_LP
+

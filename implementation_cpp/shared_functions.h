@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <fstream>
+#include <filesystem>
 #include "gurobi_c++.h"
 
 #define EIGEN_USE_MKL_ALL
@@ -95,8 +96,8 @@ public:
 	RecordIterates(const int&, const int&, const int&, const int&);
 	void append(const Iterates&, const Params&);
 	Iterates operator[](const int&);
-	void saveConvergeinfo(const std::string);
-	void saveRestart_idx(const std::string);
+	void saveConvergeinfo(const std::string, const int, const std::string);
+	void saveRestart_idx(const std::string, const int, const std::string);
 };
 
 
