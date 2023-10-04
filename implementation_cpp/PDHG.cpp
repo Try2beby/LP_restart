@@ -9,12 +9,12 @@ RecordIterates& PDHG(const Params& p)
 	{
 		PDHGStep(iter, p, record);
 		//AdaptiveRestarts(iter, p, record);
-		//FixedFrequencyRestart(iter, p, record, 16384);
+		FixedFrequencyRestart(iter, p, record, 4096);
 		if (iter.terminate || iter.count > p.max_iter)
 			break;
 	}
 
-	record.saveConvergeinfo(__func__, p.dataidx, "no_restarts");
+	record.saveConvergeinfo(__func__, p.dataidx, "fixed_restarts_4096");
 	//record.saveRestart_idx(__func__, p.dataidx, "adaptive_restarts");
 	return record;
 }

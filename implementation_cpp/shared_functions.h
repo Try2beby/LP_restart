@@ -70,13 +70,16 @@ public:
 	Eigen::VectorXd z, z_hat, z_bar;
 	Cache cache;
 	int n, t, count;
+	high_resolution_clock::time_point time;
 	Iterates(const int&, const int&);
 	Iterates(const int&, const int&, const int&);
 	void update();
 	void restart();
 	Convergeinfo compute_convergence_information(const Params&);
 	Convergeinfo convergeinfo;
-	void print_iteration_information(const Params&) const;
+	void print_iteration_information(const Params&);
+	void now_time();
+	float timing();
 	Eigen::VectorXd getx() const;
 	Eigen::VectorXd gety() const;
 	Eigen::VectorXd getxU() const;

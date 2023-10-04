@@ -11,6 +11,7 @@ terminate{ false }
 	z_bar = Eigen::VectorXd::Zero(size_z);
 	this->use_ADMM = false;
 	this->cache.z_cur_start = this->z;
+	this->now_time();
 }
 
 Iterates::Iterates(const int& Repeat_x, const int& Size_x, const int& Size_y) :
@@ -24,6 +25,20 @@ Iterates::Iterates(const int& Repeat_x, const int& Size_x, const int& Size_y) :
 	z_bar = Eigen::VectorXd::Random(size_z);
 	this->use_ADMM = true;
 	this->cache.z_cur_start = this->z;
+	this->now_time();
+}
+
+void Iterates::now_time()
+{
+	time = high_resolution_clock::now();
+}
+
+float Iterates::timing()
+{
+	auto now = high_resolution_clock::now();
+	auto duration = duration_cast<milliseconds>(now - time).count();
+	time = now;
+	return duration / 1e3;
 }
 
 void Iterates::update()
@@ -72,7 +87,7 @@ Convergeinfo Iterates::compute_convergence_information(const Params& p)
 	return this->convergeinfo;
 }
 
-void Iterates::print_iteration_information(const Params& p) const
+void Iterates::print_iteration_information(const Params& p)
 {
 	std::cout << "Iteration " << count - 1 << ", ";
 	std::cout << "kkt_error: " << this->convergeinfo.kkt_error << std::endl;
@@ -91,6 +106,8 @@ void Iterates::print_iteration_information(const Params& p) const
 		std::cout << xU.norm() << " " << xV.norm() << " " << (xU - xV).norm() << " " << y.norm() << std::endl;
 		std::cout << "obj: " << p.c.dot(xV) - y.dot(xU - xV) << std::endl;
 	}
+
+	std::cout << p.print_every << " iterations take " << this->timing() << "s" << std::endl;
 	std::cout << std::endl;
 }
 
