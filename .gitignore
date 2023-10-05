@@ -3,7 +3,6 @@ or-tools-stable
 source_julia
 FirstOrderLp.jl
 x64
-eigen3
 
 # configuration folder
 .vscode
@@ -13,7 +12,5 @@ eigen3
 *.exe
 test*
 *.gz
-
-*.vcxproj*
 
 HP

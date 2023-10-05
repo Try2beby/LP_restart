@@ -128,7 +128,15 @@ $$
 
 ## Results
 
-Dependencies: Gurobi, Eigen3
+使用库: [Gurobi](https://support.gurobi.com/hc/en-us/articles/360013194392-How-do-I-configure-a-new-Gurobi-C-project-with-Microsoft-Visual-Studio-#:~:text=How%20do%20I%20configure%20a%20new%20Gurobi%20C%2B%2B,the%20Solution%20Explorer%20panel%2C%20then%20select%20Properties.%20), Eigen3, intel MKL(非必要)
+
+以下代码与MKL相关
+
+```cpp  
+#define EIGEN_USE_MKL_ALL
+#define EIGEN_VECTORIZE_SSE4_2
+```
+
 
 |          | PDHG | EGM  | ADMM |
 | -------- | ---- | ---- | ---- |
