@@ -62,18 +62,19 @@ void Iterates::restart()
 Convergeinfo Iterates::compute_convergence_information(const Params& p)
 {
 	Eigen::VectorXd y = gety();
+	Eigen::VectorXd c = p.c; Eigen::VectorXd b = p.b; Eigen::SparseMatrix<double> A = p.A;
 	if (use_ADMM == false) {
 		Eigen::VectorXd x = getx();
 		Eigen::VectorXd kkt_error_vec(2 * size_x + 2 * size_y + 1);
-		kkt_error_vec << -x, p.A* x - p.b, p.b - p.A * x, p.A.transpose()* y - p.c,
-			p.c.transpose()* x - p.b.transpose() * y;
+		kkt_error_vec << -x, A* x - b, b - A * x, A.transpose()* y - c,
+			c.dot(x) - b.dot(y);
 		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).norm();
 	}
 	else {
 		Eigen::VectorXd xU = getxU();
 		Eigen::VectorXd xV = getxV();
 		Eigen::VectorXd kkt_error_vec(3 * size_x + 2 * p.b.rows());
-		kkt_error_vec << -xV, p.A* xU - p.b, p.b - p.A * xU, xU - xV, xV - xU;
+		kkt_error_vec << -xV, A* xU - b, b - A * xU, xU - xV, xV - xU;
 		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).norm();
 	}
 
@@ -107,7 +108,7 @@ void Iterates::print_iteration_information(const Params& p)
 		std::cout << "obj: " << p.c.dot(xV) - y.dot(xU - xV) << std::endl;
 	}
 
-	std::cout << p.print_every << " iterations take " << this->timing() << "s" << std::endl;
+	std::cout << "Iterations take " << this->timing() << "s" << std::endl;
 	std::cout << std::endl;
 }
 
@@ -280,8 +281,8 @@ void Params::load_model(const int& dataidx)
 
 double compute_normalized_duality_gap(const Eigen::VectorXd& z0, const double& r, const Params& p)
 {
-	int size_x = p.c.rows();
-	int size_y = p.b.rows();
+	int size_x = (int)p.c.rows();
+	int size_y = (int)p.b.rows();
 
 	Eigen::VectorXd x0 = z0.head(size_x);
 	Eigen::VectorXd y0 = z0.tail(size_y);
@@ -379,12 +380,12 @@ void FixedFrequencyRestart(Iterates& iter, const Params& p,
 	RecordIterates& record, const int restart_length)
 {
 	if (p.restart == false) return;
-	if (iter.count % restart_length == 0)
+	if ((iter.count - 1) % restart_length == 0)
 	{
 		iter.compute_convergence_information(p);
+		iter.print_iteration_information(p);
 		iter.restart();
 		if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
-		iter.print_iteration_information(p);
 	}
 
 }
@@ -407,7 +408,7 @@ void GetBestFixedRestartLength(Params& p, RecordIterates(*method)(const Params&)
 
 double PowerIteration(const Eigen::SparseMatrix<double>& A, const bool& verbose = false)
 {
-	int size = A.rows();
+	int size = (int)A.rows();
 	Eigen::VectorXd u = Eigen::VectorXd::Random(size);
 	Eigen::VectorXd y = Eigen::VectorXd::Zero(size);
 	double tol = 1e-12;

@@ -1,10 +1,18 @@
 # Implementation
 
+<style> table { table-layout: fixed;
+text-align: center; }
+td { width: 33%; }
+img {align: center;}
+ </style>
+
 ## Targets
 
 原问题
 
-$$\min_{x\ge 0}\max_{y} {\mathcal L}(x,y) = c^\top x+y^\top b-y^\top Ax.$$
+$$
+\min_{x\ge 0}\max_{y} {\mathcal L}(x,y) = c^\top x+y^\top b-y^\top Ax.
+$$
 
 $$
 F(z)= \begin{pmatrix}
@@ -19,13 +27,17 @@ $$
 
 ### PrimalDualStep
 
-- [ ] PPM 解鞍点问题
+- [ ] PPM 解
 
-<img src="assets/image-20230918192334096.png" alt="image-20230918192334096" style="zoom: 67%;" />
+<p align="center">
+<img src="assets/image-20230918192334096.png" alt="image-20230918192334096.png" width="50%">
+</p>
 
 - [ ] EGM 解二次优化问题
 
-<img src="assets/image-20230918192429086.png" alt="image-20230918192429086" style="zoom:67%;" />
+<p align="center">
+<img src="assets/image-20230918192429086.png" alt="image-20230918192429086.png" width="50%">
+</p>
 
 迭代公式：
 
@@ -38,7 +50,9 @@ $$
 
 - [ ] PDHG 解二次优化问题
 
-<img src="assets/image-20230918192640621.png" alt="image-20230918192640621" style="zoom:67%;" />
+<p align="center">
+<img src="assets/image-20230918192640621.png" alt="image-20230918192640621.png" width="50%">
+</p>
 
 迭代公式
 
@@ -51,16 +65,22 @@ $$
 
 - [ ] ADMM
 
-![image-20230929202435675](assets/image-20230929202435675.png)
+<p align="center">
+<img src="assets/image-20230929202435675.png" alt="image-20230929202435675.png" width="50%">
+</p>
 
 $$
-\theta_1=0, \theta_2(x_V)=c^\top x_V\\
-U=I,V=-I,q=0\\
-x_U^{t+1}=A^\top(AA^\top)^{-1}(b+A(-x_V^t-\frac1\eta y^t ))\\
-x_V^{t+1}=x_U-\frac 1\eta y^t-\frac 1\eta c
+\begin{align*}
+&\theta_1=0, \theta_2(x_V)=c^\top x_V\\
+&U=I,V=-I,q=0\\
+&x_U^{t+1}=A^\top(AA^\top)^{-1}(b+A(-x_V^t-\frac1\eta y^t ))\\
+&x_V^{t+1}=x_U-\frac 1\eta y^t-\frac 1\eta c
+\end{align*}
 $$
 
-![image-20230929202527319](assets/image-20230929202527319.png)
+<p align="center">
+<img src="assets/image-20230929202527319.png" alt="image-20230929202527319.png" width="50%">
+</p>
 
 ### normalized duality gap
 
@@ -74,14 +94,17 @@ $$
 若
 
 $$
-{\cal L}(x,y)=c^\top x+y^\top b-y^\top Ax,\quad x\ge 0,y\in \R^m
+{\cal L}(x,y)=c^\top x+y^\top b-y^\top Ax,\quad x\ge 0,y\in {\mathbb R}^m
 $$
 
-求在$z$处的$\rho(z)$即要求一个二次约束线性目标函数的优化问题，这是QCQP
+求在 $z$ 处的 $\rho(z)$ 即要求一个二次约束线性目标函数的优化问题，这是QCQP
 
-<img src="assets/image-20230918191501489.png" alt="image-20230918191501489" style="zoom: 50%;" />
+<p align="center">
+<img src="assets/image-20230918191501489.png" alt="image-20230918191501489.png" width="50%">
+</p>
 
 具体地
+
 $$
 \begin{align*}
 {\cal L}(x,\hat y)-{\cal L}(\hat x,y)&=c^\top x+\hat y ^\top b-\hat y ^\top Ax -(c^\top \hat x+y^\top b -y^\top A \hat x)\\
@@ -89,7 +112,7 @@ $$
 \end{align*}
 $$
 
-- 当$Z=\R^{m+n}$时，
+- 当 $Z={\mathbb R}^{m+n}$ 时，
 
 $$
 \rho_r(z)=\|F(z)\|=\left \|
@@ -99,13 +122,15 @@ $$
 \end{pmatrix}\right \|
 $$
 
-- 而对标准线性规划$Z=X\times Y,X\in\R^m_+$，则需使用数值算法求值
+- 而对标准线性规划 $Z=X\times Y,X\in{\mathbb R}^m_+$ ，则需使用数值算法求值
 
 ### Restart
 
 #### Adaptive
 
-<img src="assets/image-20230922181437110.png" alt="image-20230922181437110" style="zoom:50%;" />
+<p align="center">
+<img src="assets/image-20230922181437110.png" alt="image-20230922181437110.png" width="50%">
+</p>
 
 ## Results
 
@@ -120,11 +145,30 @@ Dependencies: Gurobi, Eigen3
 
 ### PDHG
 
-|                                                              |      |
-| ------------------------------------------------------------ | ---- |
-| <img src="./implementation_cpp/fig/PDHG/nug08-3rd.png" style="zoom: 67%;" > |      |
+参数：
+
+- $\eta=0.1,w=4^2$
+
+<table>
+<tr>
+<td><img src="./implementation_cpp/fig/PDHG/qap10.png" alt="qap10.png"></td>
+<td><img src="./implementation_cpp/fig/PDHG/qap15.png" alt="qap15.png"></td>
+</tr>
+<tr>
+<td><img src="./implementation_cpp/fig/PDHG/nug08-3rd.png" alt="nug08-3rd.png"></td>
+<td><img src="./implementation_cpp/fig/PDHG/nug20.png" alt="nug20.png"></td>
+</table>
 
 ### EGM
+
+<tr>
+<td><img src="./implementation_cpp/fig/EGM/qap10.png" alt="qap10.png"></td>
+<td><img src="./implementation_cpp/fig/EGM/qap15.png" alt="qap15.png"></td>
+</tr>
+<tr>
+<td><img src="./implementation_cpp/fig/EGM/nug08-3rd.png" alt="nug08-3rd.png"></td>
+<td><img src="./implementation_cpp/fig/EGM/nug20.png" alt="nug20.png"></td>
+</table>
 
 ### ADMM（目前的实现较慢）
 
@@ -132,19 +176,25 @@ Dependencies: Gurobi, Eigen3
 
 参考目标函数值：`1040.99`
 
-<img src="assets/image-20231001122706368.png" alt="image-20231001122706368" style="zoom: 33%;" />
+<p align="center">
+<img src="assets/image-20231001122706368.png" alt="image-20231001122706368.png" width="50%">
+</p>
 
 #### qap10
 
 参考目标函数值：`340`
 
-使用gurobi解二次优化更新$x_U$
+使用gurobi解二次优化更新 $x_U$
 
-<img src="assets/image-20231001213240023.png" alt="image-20231001213240023" style="zoom: 33%;" />
+<p align="center">
+<img src="assets/image-20231001213240023.png" alt="image-20231001213240023.png" width="50%">
+</p>
 
 通过解析解更新，（使用`Eigen::SparseLU`解线性方程组）
 
-<img src="assets/image-20231001213628768.png" alt="image-20231001213628768" style="zoom:33%;" />
+<p align="center">
+<img src="assets/image-20231001213628768.png" alt="image-20231001213628768.png" width="50%">
+</p>
 
 ## Related links
 
@@ -152,5 +202,4 @@ Dependencies: Gurobi, Eigen3
 
 [google-research/FirstOrderLp.jl: Experimental first-order solvers for linear and quadratic programming. (github.com)](https://github.com/google-research/FirstOrderLp.jl)
 
-https://github.com/google-research/google-research/tree/master/restarting_FOM_for_LP
-
+[google-research/restarting_FOM_for_LP at master · google-research/google-research (github.com)](https://github.com/google-research/google-research/tree/master/restarting_FOM_for_LP)
