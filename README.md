@@ -1,12 +1,6 @@
 # Implementation
 
-<style> table { table-layout: fixed;
-text-align: center; }
-td { width: 33%; }
-img {align: center;}
- </style>
-
-## Targets
+## Problems
 
 原问题
 
@@ -138,8 +132,8 @@ Dependencies: Gurobi, Eigen3
 
 |          | PDHG | EGM  | ADMM |
 | -------- | ---- | ---- | ---- |
-| qap10    |      |      |      |
-| qap15    |      |      |      |
+| qap10    |  √    |      |      |
+| qap15    |  √    |      |      |
 | nug8-3rd | √    |      |      |
 | nug20    |      |      |      |
 
@@ -149,21 +143,19 @@ Dependencies: Gurobi, Eigen3
 
 - $\eta=0.1,w=4^2$
 
-<table>
-<tr>
-<td><img src="./implementation_cpp/fig/PDHG/qap10.png" alt="qap10.png"></td>
-<td><img src="./implementation_cpp/fig/PDHG/qap15.png" alt="qap15.png"></td>
-</tr>
-<tr>
-<td><img src="./implementation_cpp/fig/PDHG/nug08-3rd.png" alt="nug08-3rd.png"></td>
-<td><img src="./implementation_cpp/fig/PDHG/nug20.png" alt="nug20.png"></td>
-</table>
+| <img width=300px src="./implementation_cpp/fig/PDHG/qap10.png" alt="qap10.png"> | <img width=300px src="./implementation_cpp/fig/PDHG/qap15.png" alt="qap15.png"> |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| <img width=300px src="./implementation_cpp/fig/PDHG/nug08-3rd.png" alt="nug08-3rd.png"> |  <img width=300px src="./implementation_cpp/fig/PDHG/nug20.png" alt="nug20.png">               |
+
 
 ### EGM
 
+<table>
 <tr>
-<td><img src="./implementation_cpp/fig/EGM/qap10.png" alt="qap10.png"></td>
-<td><img src="./implementation_cpp/fig/EGM/qap15.png" alt="qap15.png"></td>
+<td>
+<img src="./implementation_cpp/fig/EGM/qap10.png" alt="qap10.png"></td>
+<td>
+<img src="./implementation_cpp/fig/EGM/qap10.png" alt="qap15.png"></td>
 </tr>
 <tr>
 <td><img src="./implementation_cpp/fig/EGM/nug08-3rd.png" alt="nug08-3rd.png"></td>

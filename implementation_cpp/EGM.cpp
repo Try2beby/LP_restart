@@ -1,12 +1,11 @@
 #include "shared_functions.h"
 
-RecordIterates EGM(const Params& p)
+RecordIterates& EGM(const Params& p)
 {
-	Iterates iter(p.c.rows(), p.b.rows());
-	RecordIterates record(p.c.rows(), p.b.rows(), p.max_iter / p.record_every + 2);
-	record.append(iter, p);
-	Cache cache;
-	cache.z_cur_start = iter.z;
+	int size_x = (int)p.c.rows(); int size_y = (int)p.b.rows();
+	Iterates iter(size_x, size_y);
+	static RecordIterates record(size_x, size_y, p.max_iter / p.record_every);
+
 	while (true) {
 		EGMStep(iter, p, record);
 		AdaptiveRestarts(iter, p, record);

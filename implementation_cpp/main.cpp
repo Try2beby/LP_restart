@@ -4,7 +4,7 @@ void OPT(RecordIterates& (*method)(const Params& p), int dataidx);
 
 int main()
 {
-	OPT(PDHG, 1);
+	OPT(EGM, 0);
 }
 
 

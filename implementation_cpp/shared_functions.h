@@ -117,7 +117,7 @@ Eigen::VectorXd compute_F(const Eigen::VectorXd&, const Params&);
 double GetOptimalw(Params& p, RecordIterates(*method)(const Params&));
 void GetBestFixedRestartLength(Params&, RecordIterates(*method)(const Params&));
 
-RecordIterates ADMM(const Params&);
+RecordIterates& ADMM(const Params&);
 void ADMMStep(Iterates&, const Params&, RecordIterates&, std::vector<GRBModel>&);
 void ADMMStep(Iterates& iter, const Params&, RecordIterates&,
 	Eigen::SparseLU<Eigen::SparseMatrix<double>>&);
@@ -129,4 +129,4 @@ void PDHGStep(Iterates&, const Params&, RecordIterates&);
 RecordIterates& PDHG(const Params&);
 
 void EGMStep(Iterates&, const Params&, RecordIterates&);
-RecordIterates EGM(const Params&);
+RecordIterates& EGM(const Params&);

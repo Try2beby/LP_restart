@@ -2,30 +2,31 @@
 
 RecordIterates& PDHG(const Params& p)
 {
-	Iterates iter(p.c.rows(), p.b.rows());
-	static RecordIterates record(p.c.rows(), p.b.rows(), p.max_iter / p.record_every);
+	int size_x = (int)p.c.rows(); int size_y = (int)p.b.rows();
+	Iterates iter(size_x, size_y);
+	static RecordIterates record(size_x, size_y, p.max_iter / p.record_every);
 
 	while (true)
 	{
 		PDHGStep(iter, p, record);
-		AdaptiveRestarts(iter, p, record);
+		//AdaptiveRestarts(iter, p, record);
 		//FixedFrequencyRestart(iter, p, record, 16384);
 		if (iter.terminate || iter.count > p.max_iter)
 			break;
 	}
 
-	record.saveConvergeinfo(__func__, p.dataidx, "adaptive_restarts");
-	record.saveRestart_idx(__func__, p.dataidx, "adaptive_restarts");
+	record.saveConvergeinfo(__func__, p.dataidx, "no_restarts");
+	//record.saveRestart_idx(__func__, p.dataidx, "adaptive_restarts");
 	return record;
 }
 
 void PDHGStep(Iterates& iter, const Params& p, RecordIterates& record)
 {
-	auto eta = p.eta; auto w = p.w;
+	auto eta = p.eta; auto w = p.w; Eigen::SparseMatrix<double> A = p.A;
 	Eigen::VectorXd x = iter.getx();
 	Eigen::VectorXd y = iter.gety();
-	Eigen::VectorXd x_new = (x - (eta / w) * (p.c - p.A.transpose() * y)).cwiseMax(0);
-	Eigen::VectorXd y_new = y - eta * w * (-p.b + p.A * (2 * x_new - x));
+	Eigen::VectorXd x_new = (x - (eta / w) * (p.c - A.transpose() * y)).cwiseMax(0);
+	Eigen::VectorXd y_new = y - eta * w * (-p.b + A * (2 * x_new - x));
 
 	iter.z << x_new, y_new;
 	iter.z_hat << x_new, y_new;

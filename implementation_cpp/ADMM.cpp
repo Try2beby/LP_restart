@@ -1,9 +1,10 @@
 #include "shared_functions.h"
 
-RecordIterates ADMM(const Params& p)
+RecordIterates& ADMM(const Params& p)
 {
-	Iterates iter(2, p.c.rows(), p.c.rows());
-	RecordIterates record(2, p.c.rows(), p.c.rows(), p.max_iter / p.record_every + 2);
+	auto size_x = (int)p.c.rows(); auto size_y = (int)p.b.rows();
+	Iterates iter(2, size_x, size_y);
+	static RecordIterates record(2, size_x, size_y, p.max_iter / p.record_every + 2);
 	record.append(iter, p);
 
 	std::vector<GRBModel> model;
@@ -30,7 +31,7 @@ RecordIterates ADMM(const Params& p)
 
 void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record, std::vector<GRBModel>& model)
 {
-	int size_x = p.c.rows();
+	int size_x = (int)p.c.rows();
 
 	Eigen::VectorXd xU_prev = iter.getxU();
 	Eigen::VectorXd xV_prev = iter.getxV();
@@ -60,7 +61,7 @@ void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record, std::vect
 void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
 	Eigen::SparseLU<Eigen::SparseMatrix<double>>& solver)
 {
-	int size_x = p.c.rows();
+	int size_x = (int)p.c.rows();
 
 	Eigen::VectorXd xU_prev = iter.getxU();
 	Eigen::VectorXd xV_prev = iter.getxV();
@@ -90,7 +91,7 @@ void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
 
 void generate_update_model(const Params& p, std::vector<GRBModel>& model)
 {
-	int size_x = p.c.rows();
+	int size_x = (int)p.c.rows();
 	// model_xU
 	GRBModel model_xU = GRBModel(p.env);
 	GRBVar* xU = new GRBVar[size_x];
@@ -119,7 +120,7 @@ Eigen::VectorXd update_x(const Eigen::VectorXd& theta, const double& coeff,
 	const Eigen::VectorXd& constant, const double& eta, GRBModel& model,
 	const bool& verbose, const int& count, const int& print_every)
 {
-	int size_x = theta.size();
+	int size_x = (int)theta.size();
 	//get variables
 	GRBVar* x = model.getVars();
 
