@@ -120,7 +120,7 @@ void GetBestFixedRestartLength(Params&, RecordIterates(*method)(const Params&));
 RecordIterates& ADMM(const Params&);
 void ADMMStep(Iterates&, const Params&, RecordIterates&, std::vector<GRBModel>&);
 void ADMMStep(Iterates& iter, const Params&, RecordIterates&,
-	Eigen::SparseLU<Eigen::SparseMatrix<double>>&);
+	Eigen::SimplicialCholesky<Eigen::SparseMatrix<double>>&);
 Eigen::VectorXd update_x(const Eigen::VectorXd&, const double&, const Eigen::VectorXd&,
 	const double&, GRBModel&, const bool&, const int&, const int&);
 void generate_update_model(const Params&, std::vector<GRBModel>&);

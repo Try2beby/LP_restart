@@ -52,7 +52,7 @@ $$
 
 $$
 \begin{align*}
-& x^{t+1}=(x^t -\eta /w (c-Ay))_+\\
+& x^{t+1}=(x^t -\eta /w (c-A^\top y))_+\\
 & y^{t+1}=y-\eta w (-b+A(2x^{t+1}-x^t))
 \end{align*}
 $$
@@ -67,7 +67,7 @@ $$
 \begin{align*}
 &\theta_1=0, \theta_2(x_V)=c^\top x_V\\
 &U=I,V=-I,q=0\\
-&x_U^{t+1}=A^\top(AA^\top)^{-1}(b+A(-x_V^t-\frac1\eta y^t ))\\
+&x_U^{t+1}=A^\top(AA^\top)^{-1}(b+A(-x_V^t-\frac1\eta y^t )) -(-x_V^t-\frac1\eta y^t ) \\
 &x_V^{t+1}=x_U-\frac 1\eta y^t-\frac 1\eta c
 \end{align*}
 $$
@@ -91,7 +91,7 @@ $$
 {\cal L}(x,y)=c^\top x+y^\top b-y^\top Ax,\quad x\ge 0,y\in {\mathbb R}^m
 $$
 
-求在 $z$ 处的 $\rho(z)$ 即要求一个二次约束线性目标函数的优化问题，这是QCQP
+求在 $z$ 处的 $\rho(z)$ 即要求一个二次约束线性目标函数的优化问题
 
 <p align="center">
 <img src="assets/image-20230918191501489.png" alt="image-20230918191501489.png" width="50%">
@@ -116,7 +116,7 @@ $$
 \end{pmatrix}\right \|
 $$
 
-- 而对标准线性规划 $Z=X\times Y,X\in{\mathbb R}^m_+$ ，则需使用数值算法求值
+- 而对标准线性规划 $Z=X\times Y,X={\mathbb R}^m_+$ ，则需使用数值算法求值
 
 ### Restart
 

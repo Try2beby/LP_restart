@@ -15,7 +15,7 @@ RecordIterates& PDHG(const Params& p)
 			break;
 	}
 
-	record.saveConvergeinfo(__func__, p.dataidx, "no_restarts");
+	//record.saveConvergeinfo(__func__, p.dataidx, "no_restarts");
 	//record.saveRestart_idx(__func__, p.dataidx, "adaptive_restarts");
 	return record;
 }

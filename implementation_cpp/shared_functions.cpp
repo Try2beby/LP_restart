@@ -80,7 +80,7 @@ Convergeinfo Iterates::compute_convergence_information(const Params& p)
 
 	double r = (this->z - this->cache.z_cur_start).norm();
 	//std::cout << this->count - 1 << " r = " << r << std::endl;
-	this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->z_bar, r + 1e-6, p);
+	//this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->z_bar, r + 1e-6, p);
 	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol)
 	{
 		this->terminate = true;
@@ -277,6 +277,56 @@ void Params::load_model(const int& dataidx)
 		model.getConstrs(), numConstraints), numConstraints);
 
 	std::cout << "Model loaded." << std::endl;
+}
+
+Eigen::VectorXd& z_hat_lambda(const double& lambda, const Eigen::VectorXd& z,
+	const Eigen::VectorXd& g, const Eigen::VectorXd& l)
+{
+	static Eigen::VectorXd z_hat = (z - lambda * g).cwiseMax(l);
+	return z_hat;
+}
+
+Eigen::VectorXd& LinearObjectiveTruseRegion(const Eigen::VectorXd& g, const Eigen::VectorXd& l,
+	const Eigen::VectorXd& z, const double& r)
+{
+	static Eigen::VectorXd z_hat;
+	if ((l - z).norm() <= r) {
+		z_hat = l;
+		return z_hat;
+	}
+
+	double lambda_mid{ -1 }, f_low{ 0 }, f_high{ 0 }, f_mid{ -1 };
+	Eigen::VectorXd z_hat, idx;
+
+	Eigen::VectorXd lambdalist = (z - l).cwiseQuotient(g);
+	Eigen::VectorXd lambdalist_sorted = (z - l).cwiseQuotient(g);
+	std::sort(lambdalist_sorted.data(), lambdalist_sorted.data() + lambdalist_sorted.size());
+
+	auto size_z = (int)z.size();
+	int low{ 0 }, high{ size_z - 1 }, mid{ -1 };
+	auto r_squared = std::pow(r, 2.0);
+
+	while (low < high) {
+		mid = std::ceil((low + high) / 2.0 - 1);
+		lambda_mid = lambdalist_sorted[mid];
+		f_mid = 0;
+		z_hat = z_hat_lambda(lambda_mid, z, g, l);
+		f_mid = f_low + f_high * std::pow(lambda_mid, 2.0) + (z_hat - z).segment(low, high).squaredNorm();
+		if (f_mid <= r_squared) {
+			low = mid + 1;
+			idx = (lambdalist.array() <= lambda_mid).cast<double>();
+			f_low += (l - z).cwiseProduct(idx).squaredNorm();
+		}
+		else {
+			high = mid - 1;
+			idx = (lambdalist.array() >= lambda_mid).cast<double>();
+			f_high += g.cwiseProduct(idx).squaredNorm();
+		}
+	}
+	lambda_mid = std::sqrt((r_squared - f_low) / f_high);
+	z_hat = z_hat_lambda(lambda_mid, z, g, l);
+
+	return z_hat;
 }
 
 double compute_normalized_duality_gap(const Eigen::VectorXd& z0, const double& r, const Params& p)
