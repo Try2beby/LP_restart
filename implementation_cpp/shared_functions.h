@@ -105,6 +105,8 @@ public:
 
 
 double compute_normalized_duality_gap(const Eigen::VectorXd&, const double&, const Params&);
+Eigen::VectorXd& LinearObjectiveTrustRegion(const Eigen::VectorXd& g, const Eigen::VectorXd& l,
+	const Eigen::VectorXd& z, const double& r);
 
 void AdaptiveRestarts(Iterates&, const Params&, RecordIterates&);
 void FixedFrequencyRestart(Iterates&, const Params&,

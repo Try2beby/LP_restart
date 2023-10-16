@@ -279,16 +279,16 @@ void Params::load_model(const int& dataidx)
 	std::cout << "Model loaded." << std::endl;
 }
 
-Eigen::VectorXd& z_hat_lambda(const double& lambda, const Eigen::VectorXd& z,
-	const Eigen::VectorXd& g, const Eigen::VectorXd& l)
+Eigen::VectorXd& LinearObjectiveTrustRegion(const Eigen::VectorXd& G, const Eigen::VectorXd& L,
+	const Eigen::VectorXd& Z, const double& r)
 {
-	static Eigen::VectorXd z_hat = (z - lambda * g).cwiseMax(l);
-	return z_hat;
-}
+	// set l_i to -inf if g_i <= 0
+	auto g_idx = G.array() <= 0;
+	auto l = g_idx.select(-INFINITY, L);
+	auto& z = Z;
+	// set g > 0
+	auto g = G.cwiseAbs();
 
-Eigen::VectorXd& LinearObjectiveTruseRegion(const Eigen::VectorXd& g, const Eigen::VectorXd& l,
-	const Eigen::VectorXd& z, const double& r)
-{
 	static Eigen::VectorXd z_hat;
 	if ((l - z).norm() <= r) {
 		z_hat = l;
@@ -296,35 +296,43 @@ Eigen::VectorXd& LinearObjectiveTruseRegion(const Eigen::VectorXd& g, const Eige
 	}
 
 	double lambda_mid{ -1 }, f_low{ 0 }, f_high{ 0 }, f_mid{ -1 };
-	Eigen::VectorXd z_hat, idx;
 
 	Eigen::VectorXd lambdalist = (z - l).cwiseQuotient(g);
 	Eigen::VectorXd lambdalist_sorted = (z - l).cwiseQuotient(g);
 	std::sort(lambdalist_sorted.data(), lambdalist_sorted.data() + lambdalist_sorted.size());
+	//std::cout << lambdalist_sorted << std::endl;
+
+	// initialize f_low and f_high
+	f_low = (lambdalist.array() <= 0).select(l - z, 0).squaredNorm();
+	f_high = (lambdalist.array() >= INFINITY).select(g, 0).squaredNorm();
+	//std::cout << f_low << " " << f_high << std::endl;
 
 	auto size_z = (int)z.size();
 	int low{ 0 }, high{ size_z - 1 }, mid{ -1 };
 	auto r_squared = std::pow(r, 2.0);
 
-	while (low < high) {
-		mid = std::ceil((low + high) / 2.0 - 1);
+	// initialize low and high
+	while (low < size_z && lambdalist_sorted[low] == 0) low++;
+	while (high >= 0 && lambdalist_sorted[high] == INFINITY) high--;
+
+	while (low <= high) {
+		mid = (low + high) / 2;
 		lambda_mid = lambdalist_sorted[mid];
-		f_mid = 0;
-		z_hat = z_hat_lambda(lambda_mid, z, g, l);
-		f_mid = f_low + f_high * std::pow(lambda_mid, 2.0) + (z_hat - z).segment(low, high).squaredNorm();
-		if (f_mid <= r_squared) {
+		auto idx = (lambdalist_sorted[low] <= lambdalist.array() <= lambdalist_sorted[high]);
+		z_hat = (z - lambda_mid * g).cwiseMax(l);
+		f_mid = f_low + f_high * std::pow(lambda_mid, 2.0) + idx.select(z_hat - z, 0).squaredNorm();
+		if (f_mid < r_squared) {
 			low = mid + 1;
-			idx = (lambdalist.array() <= lambda_mid).cast<double>();
-			f_low += (l - z).cwiseProduct(idx).squaredNorm();
+			f_low += (lambdalist.array() <= lambda_mid).select(l - z, 0).squaredNorm();
 		}
 		else {
 			high = mid - 1;
-			idx = (lambdalist.array() >= lambda_mid).cast<double>();
-			f_high += g.cwiseProduct(idx).squaredNorm();
+			f_high += (lambdalist.array() >= lambda_mid).select(g, 0).squaredNorm();
 		}
 	}
 	lambda_mid = std::sqrt((r_squared - f_low) / f_high);
-	z_hat = z_hat_lambda(lambda_mid, z, g, l);
+	//std::cout << lambda_mid << " " << f_low << " " << f_high << std::endl;
+	z_hat = (z - lambda_mid * G).cwiseMax(l);
 
 	return z_hat;
 }
