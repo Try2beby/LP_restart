@@ -70,7 +70,7 @@ public:
 	Eigen::VectorXd z, z_hat, z_bar;
 	Cache cache;
 	int n, t, count;
-	high_resolution_clock::time_point time;
+	high_resolution_clock::time_point time, start_time;
 	Iterates(const int&, const int&);
 	Iterates(const int&, const int&, const int&);
 	void update();
@@ -80,6 +80,7 @@ public:
 	void print_iteration_information(const Params&);
 	void now_time();
 	float timing();
+	float end();
 	Eigen::VectorXd getx() const;
 	Eigen::VectorXd gety() const;
 	Eigen::VectorXd getxU() const;

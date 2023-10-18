@@ -31,6 +31,7 @@ Iterates::Iterates(const int& Repeat_x, const int& Size_x, const int& Size_y) :
 void Iterates::now_time()
 {
 	time = high_resolution_clock::now();
+	start_time = time;
 }
 
 float Iterates::timing()
@@ -38,6 +39,13 @@ float Iterates::timing()
 	auto now = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(now - time).count();
 	time = now;
+	return duration / 1e3;
+}
+
+float Iterates::end()
+{
+	auto now = high_resolution_clock::now();
+	auto duration = duration_cast<milliseconds>(now - start_time).count();
 	return duration / 1e3;
 }
 
@@ -68,22 +76,26 @@ Convergeinfo Iterates::compute_convergence_information(const Params& p)
 		Eigen::VectorXd kkt_error_vec(2 * size_x + 2 * size_y + 1);
 		kkt_error_vec << -x, A* x - b, b - A * x, A.transpose()* y - c,
 			c.dot(x) - b.dot(y);
-		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).norm();
+		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
 	}
 	else {
 		Eigen::VectorXd xU = getxU();
 		Eigen::VectorXd xV = getxV();
 		Eigen::VectorXd kkt_error_vec(3 * size_x + 2 * p.b.rows());
 		kkt_error_vec << -xV, A* xU - b, b - A * xU, xU - xV, xV - xU;
-		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).norm();
+		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
 	}
 
 	double r = (this->z - this->cache.z_cur_start).norm();
 	//std::cout << this->count - 1 << " r = " << r << std::endl;
 	//this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->z_bar, r + 1e-6, p);
-	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol)
+	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol
+		|| this->convergeinfo.kkt_error < p.tol)
 	{
 		this->terminate = true;
+		auto duration = this->end();
+		std::cout << "Iteration terminates at " << this->count - 1 <<
+			", takes " << duration << "s" << std::endl;
 	}
 	return this->convergeinfo;
 }

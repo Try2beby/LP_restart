@@ -26,12 +26,11 @@ RecordIterates& ADMM(const Params& p)
 			break;
 	}
 
-	/*std::cout << iter.getxU().head(100) << std::endl;
-	std::cout << iter.getxV().head(100) << std::endl;*/
 	return record;
 }
 
-void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record, std::vector<GRBModel>& model)
+void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
+	std::vector<GRBModel>& model)
 {
 	int size_x = (int)p.c.rows();
 
@@ -71,8 +70,10 @@ void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
 	Eigen::VectorXd y_prev = iter.gety();
 
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
 	Eigen::VectorXd xU = p.A.transpose() * solver.solve(p.b +
 		p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) - (-xV_prev - (1.0 / p.eta) * y_prev);
+
 	high_resolution_clock::time_point t2 = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(t2 - t1).count();
 	/*if (p.verbose && (iter.count - 1) % p.print_every == 0)

@@ -10,7 +10,7 @@ RecordIterates& PDHG(const Params& p)
 	{
 		PDHGStep(iter, p, record);
 		//AdaptiveRestarts(iter, p, record);
-		//FixedFrequencyRestart(iter, p, record, 16384);
+		FixedFrequencyRestart(iter, p, record, 16384);
 		if (iter.terminate || iter.count > p.max_iter)
 			break;
 	}
