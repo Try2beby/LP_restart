@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.16)
+set(CMAKE_CXX_COMPILER "/home/twh/software/gcc-13.2.0/bin/g++")
 
 project(LP_restart CXX)
 
 include_directories("${PROJECT_BINARY_DIR}")
+include_directories("${PROJECT_SOURCE_DIR}")
 
-configure_file (
+configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
   "${PROJECT_BINARY_DIR}/config.h"
 )
@@ -16,9 +18,11 @@ if(CXX)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif()
+
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 # Visual Studio compiler with static runtime libraries
@@ -41,7 +45,7 @@ add_executable(${CMAKE_PROJECT_NAME} ${sources})
 if(CXX)
   set(CMAKE_CXX_STANDARD 20)
   target_link_libraries(${CMAKE_PROJECT_NAME} optimized ${GUROBI_CXX_LIBRARY}
-                        debug ${GUROBI_CXX_DEBUG_LIBRARY})
+    debug ${GUROBI_CXX_DEBUG_LIBRARY})
 endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} ${GUROBI_LIBRARY})
@@ -51,10 +55,6 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   feature_summary(WHAT ALL)
 endif()
 
-SET( EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}" )
-IF( NOT EIGEN3_INCLUDE_DIR )
-    MESSAGE( FATAL_ERROR "Please point the environment variable EIGEN3_INCLUDE_DIR to the include directory of your Eigen3 installation.")
-ENDIF()
-INCLUDE_DIRECTORIES ( "${EIGEN3_INCLUDE_DIR}" )
+SET(EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}")
 
-
+# INCLUDE_DIRECTORIES("${EIGEN3_INCLUDE_DIR}")

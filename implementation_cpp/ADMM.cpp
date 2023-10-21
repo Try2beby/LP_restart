@@ -1,6 +1,6 @@
 #include "shared_functions.h"
 
-RecordIterates& ADMM(const Params& p)
+RecordIterates &ADMM(const Params &p)
 {
 	auto size_x = (int)p.c.rows();
 	auto size_y = size_x;
@@ -8,17 +8,17 @@ RecordIterates& ADMM(const Params& p)
 	static RecordIterates record(2, size_x, size_y, p.max_iter / p.record_every);
 	record.append(iter, p);
 
-	/*std::vector<GRBModel> model;
-	generate_update_model(p, model);*/
+	// std::vector<GRBModel> model;
+	// generate_update_model(p, model);
 	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
-	Eigen::SimplicialCholesky<Eigen::SparseMatrix<double>> solver;
+	Solver solver;
 	solver.analyzePattern(AAT);
 	solver.factorize(AAT);
 	std::cout << "factorize done" << std::endl;
 
 	while (true)
 	{
-		//ADMMStep(iter, p, record, model);
+		// ADMMStep(iter, p, record, model);
 		ADMMStep(iter, p, record, solver);
 		// AdaptiveRestarts(iter, p, record);
 		// FixedFrequencyRestart(iter, p, record, 16);
@@ -29,8 +29,8 @@ RecordIterates& ADMM(const Params& p)
 	return record;
 }
 
-void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
-	std::vector<GRBModel>& model)
+void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
+			  std::vector<GRBModel> &model)
 {
 	int size_x = (int)p.c.rows();
 
@@ -39,10 +39,10 @@ void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
 	Eigen::VectorXd y_prev = iter.gety();
 
 	Eigen::VectorXd xU = update_x(Eigen::VectorXd::Zero(size_x), 1.0,
-		-xV_prev - (1.0 / p.eta) * y_prev, p.eta, model[0], p.verbose,
-		iter.count + 1, p.print_every);
+								  -xV_prev - (1.0 / p.eta) * y_prev, p.eta, model[0], p.verbose,
+								  iter.count + 1, p.print_every);
 	Eigen::VectorXd xV = update_x(p.c, -1.0,
-		xU - (1.0 / p.eta) * y_prev, p.eta, model[1], p.verbose, iter.count + 1, p.print_every);
+								  xU - (1.0 / p.eta) * y_prev, p.eta, model[1], p.verbose, iter.count + 1, p.print_every);
 	Eigen::VectorXd y = y_prev - p.eta * (xU - xV);
 	iter.z_hat << xU, xV, y_prev - p.eta * (xU - xV_prev);
 	iter.z << xU, xV, y;
@@ -60,8 +60,8 @@ void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
 	}
 }
 
-void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
-	Eigen::SimplicialCholesky<Eigen::SparseMatrix<double>>& solver)
+void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
+			  Solver &solver)
 {
 	int size_x = (int)p.c.rows();
 
@@ -69,15 +69,26 @@ void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
 	Eigen::VectorXd xV_prev = iter.getxV();
 	Eigen::VectorXd y_prev = iter.gety();
 
-	high_resolution_clock::time_point t1 = high_resolution_clock::now();
+	// Eigen::VectorXd xU = p.A.transpose() * solver.solve(p.b +
+	// 	p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) - (-xV_prev - (1.0 / p.eta) * y_prev);
 
-	Eigen::VectorXd xU = p.A.transpose() * solver.solve(p.b +
-		p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) - (-xV_prev - (1.0 / p.eta) * y_prev);
+	// step by step
+	Timer timer;
+	Eigen::VectorXd xU = p.b + p.A * (-xV_prev - (1.0 / p.eta) * y_prev);
+	timer.timing();
 
-	high_resolution_clock::time_point t2 = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(t2 - t1).count();
-	/*if (p.verbose && (iter.count - 1) % p.print_every == 0)
-		std::cout << "solver.solve() takes " << duration << " milliseconds" << std::endl;*/
+	xU = solver.solve(xU);
+	timer.timing();
+
+	xU = p.A.transpose() * xU;
+	timer.timing();
+
+	xU = xU - (-xV_prev - (1.0 / p.eta) * y_prev);
+	timer.timing();
+
+	timer.save(__func__, p.data_name);
+	// if (p.verbose && (iter.count - 1) % p.print_every == 0)
+	// 	std::cout << "solver.solve() takes " << duration << " milliseconds" << std::endl;
 
 	Eigen::VectorXd xV = ((xU - (1.0 / p.eta) * y_prev) - (1.0 / p.eta) * p.c).cwiseMax(0);
 	Eigen::VectorXd y = y_prev - p.eta * (xU - xV);
@@ -97,12 +108,12 @@ void ADMMStep(Iterates& iter, const Params& p, RecordIterates& record,
 	}
 }
 
-void generate_update_model(const Params& p, std::vector<GRBModel>& model)
+void generate_update_model(const Params &p, std::vector<GRBModel> &model)
 {
 	int size_x = (int)p.c.rows();
 	// model_xU
 	GRBModel model_xU = GRBModel(p.env);
-	GRBVar* xU = new GRBVar[size_x];
+	GRBVar *xU = new GRBVar[size_x];
 	for (int i = 0; i < size_x; i++)
 	{
 		xU[i] = model_xU.addVar(-GRB_INFINITY, GRB_INFINITY, 0.0, GRB_CONTINUOUS);
@@ -119,20 +130,20 @@ void generate_update_model(const Params& p, std::vector<GRBModel>& model)
 	model_xU.update();
 
 	GRBModel model_xV = GRBModel(p.env);
-	GRBVar* xV = model_xV.addVars(size_x, GRB_CONTINUOUS);
+	GRBVar *xV = model_xV.addVars(size_x, GRB_CONTINUOUS);
 	model_xV.update();
 
 	model.push_back(model_xU);
 	model.push_back(model_xV);
 }
 
-Eigen::VectorXd update_x(const Eigen::VectorXd& theta, const double& coeff,
-	const Eigen::VectorXd& constant, const double& eta, GRBModel& model,
-	const bool& verbose, const int& count, const int& print_every)
+Eigen::VectorXd update_x(const Eigen::VectorXd &theta, const double &coeff,
+						 const Eigen::VectorXd &constant, const double &eta, GRBModel &model,
+						 const bool &verbose, const int &count, const int &print_every)
 {
 	int size_x = (int)theta.size();
 	// get variables
-	GRBVar* x = model.getVars();
+	GRBVar *x = model.getVars();
 
 	// Set objective
 	GRBQuadExpr objExpr = GRBQuadExpr();

@@ -1,2 +1,2 @@
 // get project root path
-#define PROJECT "@CMAKE_CURRENT_SOURCE_DIR@"
+#define PROJECT "@CMAKE_CURRENT_SOURCE_DIR@/"

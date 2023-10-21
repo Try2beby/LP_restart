@@ -5,7 +5,7 @@
 #include <chrono>
 #include <fstream>
 #include <iomanip>
-// #include <experimental/filesystem>
+#include <filesystem>
 #include "gurobi_c++.h"
 #include "config.h"
 
@@ -26,6 +26,9 @@ const std::string cachepath = "cache/";
 const std::string cachesuffix = ".txt";
 const std::string datapath = "data/";
 const std::string datasuffix = ".mps";
+const std::string logpath = "log/";
+
+typedef Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> Solver;
 
 using namespace std::chrono;
 
@@ -37,6 +40,16 @@ struct Cache
 struct ADMMmodel
 {
 	GRBModel model_xU, model_xV;
+};
+
+class Timer
+{
+public:
+	high_resolution_clock::time_point start_time;
+	std::vector<double> time_record;
+	Timer();
+	float timing();
+	void save(const std::string, const std::string);
 };
 
 struct Convergeinfo
@@ -55,6 +68,7 @@ class Params
 public:
 	float eta, beta, w, tol;
 	int dataidx, max_iter, tau0, record_every, print_every, evaluate_every;
+	std::string data_name;
 	Eigen::VectorXd c, b;
 	Eigen::SparseMatrix<double, Eigen::RowMajor> A;
 	bool verbose, restart;
@@ -107,6 +121,7 @@ public:
 };
 
 double compute_normalized_duality_gap(const Eigen::VectorXd &, const double &, const Params &);
+double compute_normalized_duality_gap(const Eigen::VectorXd &z0, const double &r, const Params &p, const bool use_Gurobi);
 Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &g, const Eigen::VectorXd &l,
 											const Eigen::VectorXd &z, const double &r);
 
@@ -124,7 +139,7 @@ void GetBestFixedRestartLength(Params &, RecordIterates (*method)(const Params &
 RecordIterates &ADMM(const Params &);
 void ADMMStep(Iterates &, const Params &, RecordIterates &, std::vector<GRBModel> &);
 void ADMMStep(Iterates &iter, const Params &, RecordIterates &,
-			  Eigen::SimplicialCholesky<Eigen::SparseMatrix<double>> &);
+			  Solver &);
 Eigen::VectorXd update_x(const Eigen::VectorXd &, const double &, const Eigen::VectorXd &,
 						 const double &, GRBModel &, const bool &, const int &, const int &);
 void generate_update_model(const Params &, std::vector<GRBModel> &);

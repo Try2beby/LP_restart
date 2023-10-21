@@ -1,5 +1,37 @@
 #include "shared_functions.h"
 
+Timer::Timer()
+{
+	start_time = high_resolution_clock::now();
+}
+
+float Timer::timing()
+{
+	auto now = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(now - start_time).count();
+	start_time = now;
+	time_record.push_back(duration);
+	return duration;
+}
+
+void Timer::save(const std::string method, const std::string data_name)
+{
+	auto path = projectpath + logpath + method + "/" + data_name + "/";
+	std::filesystem::create_directories(path);
+	std::ofstream ofs(path + "/time_record.txt", std::ios::app);
+	if (ofs.is_open())
+	{
+		for (auto i : time_record)
+		{
+			ofs << i << " ";
+		}
+		ofs << std::endl;
+		ofs.close();
+	}
+	else
+		std::cout << "Unable to open file" << std::endl;
+}
+
 Iterates::Iterates(const int &Size_x, const int &Size_y) : n(0), t(0), count(1),
 														   terminate{false}
 {
@@ -187,7 +219,7 @@ Iterates RecordIterates::operator[](const int &i)
 void RecordIterates::saveConvergeinfo(const std::string method, const int dataidx, const std::string filename)
 {
 	auto path = projectpath + cachepath + method + "/" + Data[dataidx] + "/";
-	// std::experimental::filesystem::create_directories(path);
+	std::filesystem::create_directories(path);
 	std::ofstream ofs(path + filename + cachesuffix);
 	if (ofs.is_open())
 	{
@@ -208,7 +240,7 @@ void RecordIterates::saveConvergeinfo(const std::string method, const int dataid
 void RecordIterates::saveRestart_idx(const std::string method, const int dataidx, const std::string filename)
 {
 	auto path = projectpath + "/" + method + "/" + Data[dataidx] + "/";
-	// std::experimental::filesystem::create_directories(path);
+	std::filesystem::create_directories(path);
 	std::ofstream ofs(path + filename + "_restart_idx" + cachesuffix);
 	if (ofs.is_open())
 	{
@@ -256,9 +288,9 @@ void Params::load_example()
 void Params::load_model(const int &dataidx)
 {
 	this->dataidx = dataidx;
+	this->data_name = Data[dataidx];
 	GRBModel model = GRBModel(env, projectpath + "/" + datapath + Data[dataidx] + datasuffix);
 	// model.optimize();
-	std::cout << "Hello World!" << std::endl;
 	// Get the number of variables in the model.
 	int numVars = model.get(GRB_IntAttr_NumVars);
 
@@ -370,6 +402,30 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &z0, const double &r
 	Eigen::VectorXd x0 = z0.head(size_x);
 	Eigen::VectorXd y0 = z0.tail(size_y);
 
+	double constant = p.c.dot(x0) - p.b.dot(y0);
+
+	Eigen::VectorXd g(size_x, size_y);
+	g << p.c - p.A.transpose() * y0, p.A * x0 - p.b;
+
+	Eigen::VectorXd l = Eigen::VectorXd::Zero(size_x + size_y);
+	// set last size_y entries to -inf
+	l.tail(size_y) = Eigen::VectorXd::Constant(size_y, -std::numeric_limits<double>::infinity());
+
+	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
+	Eigen::VectorXd x_hat = z_hat.head(size_x);
+	Eigen::VectorXd y_hat = z_hat.tail(size_y);
+
+	return (-g.dot(z_hat) + constant) / r;
+}
+
+double compute_normalized_duality_gap(const Eigen::VectorXd &z0, const double &r, const Params &p, const bool use_Gurobi)
+{
+	int size_x = (int)p.c.rows();
+	int size_y = (int)p.b.rows();
+
+	Eigen::VectorXd x0 = z0.head(size_x);
+	Eigen::VectorXd y0 = z0.tail(size_y);
+
 	Eigen::VectorXd y_coeff = p.b - p.A * x0;
 	Eigen::VectorXd x_coeff = y0.transpose() * p.A - p.c.transpose();
 
@@ -441,6 +497,9 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 		// ||z^n,0-z^n-1,0||
 		double r2 = (iter.cache.z_cur_start - iter.cache.z_prev_start).norm();
 		double duality_gap1 = compute_normalized_duality_gap(iter.z_bar, r1, p);
+		double duality_gap1_usegurobi = compute_normalized_duality_gap(iter.z_bar, r1, p, 0);
+		std::cout << "duality_gap1: " << duality_gap1 << " " << duality_gap1_usegurobi << std::endl;
+
 		double duality_gap2 = compute_normalized_duality_gap(iter.cache.z_cur_start, r2, p);
 		if (duality_gap1 <= p.beta * duality_gap2)
 		{
