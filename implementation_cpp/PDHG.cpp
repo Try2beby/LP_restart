@@ -27,16 +27,19 @@ void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 	auto eta = p.eta;
 	auto w = p.w;
 	Eigen::SparseMatrix<double> A = p.A;
-	Eigen::VectorXd x = iter.getx();
-	Eigen::VectorXd y = iter.gety();
+	Eigen::VectorXd x = iter.x;
+	Eigen::VectorXd y = iter.y;
 	timer.timing();
 
 	Eigen::VectorXd x_new = (x - (eta / w) * (p.c - A.transpose() * y)).cwiseMax(0);
 	Eigen::VectorXd y_new = y - eta * w * (-p.b + A * (2 * x_new - x));
 	timer.timing();
 
-	iter.z << x_new, y_new;
-	iter.z_hat << x_new, y_new;
+	iter.x = x_new;
+	iter.y = y_new;
+
+	iter.x_hat = x_new;
+	iter.y_hat = y_new;
 	iter.update();
 	timer.timing();
 

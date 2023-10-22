@@ -38,11 +38,15 @@ Iterates::Iterates(const int &Size_x, const int &Size_y) : n(0), t(0), count(1),
 	size_x = Size_x;
 	size_y = Size_y;
 	size_z = size_x + size_y;
-	z = Eigen::VectorXd::Zero(size_z);
-	z_hat = Eigen::VectorXd::Zero(size_z);
-	z_bar = Eigen::VectorXd::Zero(size_z);
+	x = Eigen::VectorXd::Zero(size_x);
+	y = Eigen::VectorXd::Zero(size_y);
+	x_hat = Eigen::VectorXd::Zero(size_x);
+	y_hat = Eigen::VectorXd::Zero(size_y);
+	x_bar = Eigen::VectorXd::Zero(size_x);
+	y_bar = Eigen::VectorXd::Zero(size_y);
 	this->use_ADMM = false;
-	this->cache.z_cur_start = this->z;
+	this->cache.x_cur_start = this->x;
+	this->cache.y_cur_start = this->y;
 	this->now_time();
 }
 
@@ -51,11 +55,17 @@ Iterates::Iterates(const int &Repeat_x, const int &Size_x, const int &Size_y) : 
 	size_x = Size_x;
 	size_y = Size_y;
 	size_z = Repeat_x * size_x + size_y;
-	z = Eigen::VectorXd::Random(size_z);
-	z_hat = Eigen::VectorXd::Random(size_z);
-	z_bar = Eigen::VectorXd::Random(size_z);
+	xU = Eigen::VectorXd::Zero(size_x);
+	xV = Eigen::VectorXd::Zero(size_x);
+	xU_hat = Eigen::VectorXd::Zero(size_x);
+	xV_hat = Eigen::VectorXd::Zero(size_x);
+	xU_bar = Eigen::VectorXd::Zero(size_x);
+	xV_bar = Eigen::VectorXd::Zero(size_x);
+	y = Eigen::VectorXd::Zero(size_y);
 	this->use_ADMM = true;
-	this->cache.z_cur_start = this->z;
+	this->cache.xU_cur_start = this->xU;
+	this->cache.xV_cur_start = this->xV;
+	this->cache.y_cur_start = this->y;
 	this->now_time();
 }
 
@@ -82,7 +92,14 @@ float Iterates::end()
 
 void Iterates::update()
 {
-	z_bar = t * 1.0 / (t + 1) * z_bar + 1.0 / (t + 1) * z_hat;
+	if (use_ADMM == false)
+		x_bar = t * 1.0 / (t + 1) * x_bar + 1.0 / (t + 1) * x_hat;
+	else
+	{
+		xU_bar = t * 1.0 / (t + 1) * xU_bar + 1.0 / (t + 1) * xU_hat;
+		xV_bar = t * 1.0 / (t + 1) * xV_bar + 1.0 / (t + 1) * xV_hat;
+	}
+	y_bar = t * 1.0 / (t + 1) * y_bar + 1.0 / (t + 1) * y_hat;
 	t++;
 	count++;
 }
@@ -92,21 +109,33 @@ void Iterates::restart()
 	n++;
 	t = 0;
 	count++;
-	z = z_bar;
-
-	cache.z_prev_start = cache.z_cur_start;
-	cache.z_cur_start = this->z;
+	if (use_ADMM == false)
+	{
+		x = x_bar;
+		cache.x_prev_start = cache.x_cur_start;
+		cache.x_cur_start = this->x;
+	}
+	else
+	{
+		xU = xU_bar;
+		xV = xV_bar;
+		cache.xU_prev_start = cache.xU_cur_start;
+		cache.xU_cur_start = this->xU;
+		cache.xV_prev_start = cache.xV_cur_start;
+		cache.xV_cur_start = this->xV;
+	}
+	y = y_bar;
+	cache.y_prev_start = cache.y_cur_start;
+	cache.y_cur_start = this->y;
 }
-
 Convergeinfo Iterates::compute_convergence_information(const Params &p)
 {
-	Eigen::VectorXd y = gety();
 	Eigen::VectorXd c = p.c;
 	Eigen::VectorXd b = p.b;
 	Eigen::SparseMatrix<double> A = p.A;
+
 	if (use_ADMM == false)
 	{
-		Eigen::VectorXd x = getx();
 		Eigen::VectorXd kkt_error_vec(2 * size_x + 2 * size_y + 1);
 		kkt_error_vec << -x, A * x - b, b - A * x, A.transpose() * y - c,
 			c.dot(x) - b.dot(y);
@@ -114,14 +143,12 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 	}
 	else
 	{
-		Eigen::VectorXd xU = getxU();
-		Eigen::VectorXd xV = getxV();
 		Eigen::VectorXd kkt_error_vec(3 * size_x + 2 * p.b.rows());
 		kkt_error_vec << -xV, A * xU - b, b - A * xU, xU - xV, xV - xU;
 		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
 	}
 
-	double r = (this->z - this->cache.z_cur_start).norm();
+	double r = std::sqrt((x - cache.x_cur_start).squaredNorm() + (x - cache.x_cur_start).squaredNorm());
 	// std::cout << this->count - 1 << " r = " << r << std::endl;
 	// this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->z_bar, r + 1e-6, p);
 	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
@@ -141,41 +168,16 @@ void Iterates::print_iteration_information(const Params &p)
 
 	if (use_ADMM == false)
 	{
-		Eigen::VectorXd x = getx();
-		Eigen::VectorXd y = gety();
 		std::cout << "obj: " << p.c.dot(x) + p.b.dot(y) - y.transpose() * p.A * x << std::endl;
 	}
 	else
 	{
-		Eigen::VectorXd xU = getxU();
-		Eigen::VectorXd xV = getxV();
-		Eigen::VectorXd y = gety();
 		std::cout << xU.norm() << " " << xV.norm() << " " << (xU - xV).norm() << " " << y.norm() << std::endl;
 		std::cout << "obj: " << p.c.dot(xV) - y.dot(xU - xV) << std::endl;
 	}
 
 	std::cout << "Iterations take " << this->timing() << "s" << std::endl;
 	std::cout << std::endl;
-}
-
-Eigen::VectorXd Iterates::getx() const
-{
-	return z.head(size_x);
-}
-
-Eigen::VectorXd Iterates::gety() const
-{
-	return z.tail(size_y);
-}
-
-Eigen::VectorXd Iterates::getxU() const
-{
-	return z.head(size_x);
-}
-
-Eigen::VectorXd Iterates::getxV() const
-{
-	return z(Eigen::seq(size_x, 2 * size_x - 1));
 }
 
 RecordIterates::RecordIterates(const int &Size_x, const int &Size_y, const int &Size_record)
@@ -394,14 +396,11 @@ Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eige
 	return z_hat;
 }
 
-double compute_normalized_duality_gap(const Eigen::VectorXd &z0, const double &r, const Params &p)
+double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::VectorXd &y0,
+									  const double &r, const Params &p)
 {
 	int size_x = (int)p.c.rows();
 	int size_y = (int)p.b.rows();
-
-	Eigen::VectorXd x0 = z0.head(size_x);
-	Eigen::VectorXd y0 = z0.tail(size_y);
-
 	double constant = p.c.dot(x0) - p.b.dot(y0);
 
 	Eigen::VectorXd g(size_x, size_y);
@@ -411,6 +410,8 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &z0, const double &r
 	// set last size_y entries to -inf
 	l.tail(size_y) = Eigen::VectorXd::Constant(size_y, -std::numeric_limits<double>::infinity());
 
+	Eigen::VectorXd z0(size_x + size_y);
+	z0 << x0, y0;
 	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
 	Eigen::VectorXd x_hat = z_hat.head(size_x);
 	Eigen::VectorXd y_hat = z_hat.tail(size_y);
@@ -418,13 +419,11 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &z0, const double &r
 	return (-g.dot(z_hat) + constant) / r;
 }
 
-double compute_normalized_duality_gap(const Eigen::VectorXd &z0, const double &r, const Params &p, const bool use_Gurobi)
+double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::VectorXd &y0,
+									  const double &r, const Params &p, const bool use_Gurobi)
 {
 	int size_x = (int)p.c.rows();
 	int size_y = (int)p.b.rows();
-
-	Eigen::VectorXd x0 = z0.head(size_x);
-	Eigen::VectorXd y0 = z0.tail(size_y);
 
 	Eigen::VectorXd y_coeff = p.b - p.A * x0;
 	Eigen::VectorXd x_coeff = y0.transpose() * p.A - p.c.transpose();
@@ -493,15 +492,15 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 	else
 	{
 		// ||z_bar^n,t-z^n,0||
-		double r1 = (iter.z_bar - iter.cache.z_cur_start).norm();
+		double r1 = std::sqrt((iter.x - iter.cache.x_cur_start).squaredNorm() + (iter.y - iter.cache.y_cur_start).squaredNorm());
 		// ||z^n,0-z^n-1,0||
-		double r2 = (iter.cache.z_cur_start - iter.cache.z_prev_start).norm();
-		double duality_gap1 = compute_normalized_duality_gap(iter.z_bar, r1, p);
-		double duality_gap1_usegurobi = compute_normalized_duality_gap(iter.z_bar, r1, p, 0);
+		double r2 = std::sqrt((iter.cache.x_prev_start - iter.cache.x_cur_start).squaredNorm() + (iter.cache.y_prev_start - iter.cache.y_cur_start).squaredNorm());
+		double duality_gap1 = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p);
+		double duality_gap1_usegurobi = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p, 0);
 		std::cout << "duality_gap1: " << duality_gap1 << " " << duality_gap1_usegurobi << std::endl;
 
-		double duality_gap2 = compute_normalized_duality_gap(iter.cache.z_cur_start, r2, p);
-		if (duality_gap1 <= p.beta * duality_gap2)
+		double duality_gap2 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r2, p);
+		if (duality_gap1_usegurobi <= p.beta * duality_gap2)
 		{
 			restart = true;
 		}
@@ -585,11 +584,9 @@ double PowerIteration(const Eigen::SparseMatrix<double> &A, const bool &verbose 
 	return lambda;
 }
 
-Eigen::VectorXd compute_F(const Eigen::VectorXd &z, const Params &p)
+Eigen::VectorXd compute_F(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const Params &p)
 {
-	Eigen::VectorXd x = z.head(p.c.rows());
-	Eigen::VectorXd y = z.tail(p.b.rows());
-	Eigen::VectorXd F(p.c.rows() + p.b.rows());
+	Eigen::VectorXd F((int)p.c.rows() + (int)p.b.rows());
 	Eigen::VectorXd nabla_xL = p.c - p.A.transpose() * y;
 	Eigen::VectorXd nabla_yL = p.A * x - p.b;
 

@@ -1,27 +1,31 @@
 #include "shared_functions.h"
 
-RecordIterates& EGM(const Params& p)
+RecordIterates &EGM(const Params &p)
 {
-	int size_x = (int)p.c.rows(); int size_y = (int)p.b.rows();
+	int size_x = (int)p.c.rows();
+	int size_y = (int)p.b.rows();
 	Iterates iter(size_x, size_y);
 	static RecordIterates record(size_x, size_y, p.max_iter / p.record_every);
 
-	while (true) {
+	while (true)
+	{
 		EGMStep(iter, p, record);
 		AdaptiveRestarts(iter, p, record);
-		if (iter.count > p.max_iter) break;
+		if (iter.count > p.max_iter)
+			break;
 	}
 
-	//std::cout << iter.z << std::endl;
+	// std::cout << iter.z << std::endl;
 	return record;
 }
 
-void EGMStep(Iterates& iter, const Params& p, RecordIterates& record)
+void EGMStep(Iterates &iter, const Params &p, RecordIterates &record)
 {
-	iter.z_hat = iter.z - p.eta * compute_F(iter.z, p);
-	iter.z_hat.segment(0, p.c.rows()) = iter.z_hat.segment(0, p.c.rows()).cwiseMax(0);
-	iter.z = iter.z - p.eta * compute_F(iter.z_hat, p);
-	iter.z.segment(0, p.c.rows()) = iter.z.segment(0, p.c.rows()).cwiseMax(0);
+	iter.x_hat = (iter.x - p.eta * compute_F(iter.x, iter.y, p).head(iter.size_x)).cwiseMax(0);
+	iter.y_hat = iter.y - p.eta * compute_F(iter.x, iter.y, p).tail(iter.size_y);
+
+	iter.x = iter.x - p.eta * compute_F(iter.x_hat, iter.y_hat, p).cwiseMax(0);
+	iter.y = iter.y - p.eta * compute_F(iter.x_hat, iter.y_hat, p);
 
 	iter.update();
 

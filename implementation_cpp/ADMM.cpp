@@ -34,18 +34,19 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 {
 	int size_x = (int)p.c.rows();
 
-	Eigen::VectorXd xU_prev = iter.getxU();
-	Eigen::VectorXd xV_prev = iter.getxV();
-	Eigen::VectorXd y_prev = iter.gety();
+	Eigen::VectorXd xU_prev = iter.xU;
+	Eigen::VectorXd xV_prev = iter.xV;
+	Eigen::VectorXd y_prev = iter.y;
 
-	Eigen::VectorXd xU = update_x(Eigen::VectorXd::Zero(size_x), 1.0,
-								  -xV_prev - (1.0 / p.eta) * y_prev, p.eta, model[0], p.verbose,
-								  iter.count + 1, p.print_every);
-	Eigen::VectorXd xV = update_x(p.c, -1.0,
-								  xU - (1.0 / p.eta) * y_prev, p.eta, model[1], p.verbose, iter.count + 1, p.print_every);
-	Eigen::VectorXd y = y_prev - p.eta * (xU - xV);
-	iter.z_hat << xU, xV, y_prev - p.eta * (xU - xV_prev);
-	iter.z << xU, xV, y;
+	iter.xU = update_x(Eigen::VectorXd::Zero(iter.size_x), 1.0,
+					   -xV_prev - (1.0 / p.eta) * y_prev, p.eta, model[0], p.verbose,
+					   iter.count + 1, p.print_every);
+	iter.xV = update_x(p.c, -1.0,
+					   iter.xU - (1.0 / p.eta) * y_prev, p.eta, model[1], p.verbose, iter.count + 1, p.print_every);
+	iter.y = y_prev - p.eta * (iter.xU - iter.xV);
+	iter.xU_hat = iter.xU;
+	iter.xV_hat = iter.xV;
+	iter.y_hat = y_prev - p.eta * (iter.xU - xV_prev);
 
 	iter.update();
 
@@ -65,9 +66,9 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 {
 	int size_x = (int)p.c.rows();
 
-	Eigen::VectorXd xU_prev = iter.getxU();
-	Eigen::VectorXd xV_prev = iter.getxV();
-	Eigen::VectorXd y_prev = iter.gety();
+	Eigen::VectorXd xU_prev = iter.xU;
+	Eigen::VectorXd xV_prev = iter.xV;
+	Eigen::VectorXd y_prev = iter.y;
 
 	// Eigen::VectorXd xU = p.A.transpose() * solver.solve(p.b +
 	// 	p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) - (-xV_prev - (1.0 / p.eta) * y_prev);
@@ -92,9 +93,9 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 
 	Eigen::VectorXd xV = ((xU - (1.0 / p.eta) * y_prev) - (1.0 / p.eta) * p.c).cwiseMax(0);
 	Eigen::VectorXd y = y_prev - p.eta * (xU - xV);
-	iter.z_hat << xU, xV, y_prev - p.eta * (xU - xV_prev);
-	iter.z << xU, xV, y;
-
+	iter.xU_hat = iter.xU;
+	iter.xV_hat = iter.xV;
+	iter.y_hat = y_prev - p.eta * (iter.xU - xV_prev);
 	iter.update();
 
 	auto count = iter.count;

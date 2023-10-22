@@ -17,7 +17,7 @@ void OPT(RecordIterates &(*method)(const Params &p), int dataidx)
 {
 	using std::cout, std::endl;
 	Params p;
-	p.max_iter = 70;
+	p.max_iter = 100;
 	p.print_every = 100;
 	p.tol = 1e-5;
 	p.set_verbose(0, 0);

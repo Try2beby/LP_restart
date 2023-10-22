@@ -34,7 +34,8 @@ using namespace std::chrono;
 
 struct Cache
 {
-	Eigen::VectorXd z_prev_start, z_cur_start;
+	Eigen::VectorXd x_prev_start, x_cur_start, y_prev_start, y_cur_start;
+	Eigen::VectorXd xU_prev_start, xU_cur_start, xV_prev_start, xV_cur_start;
 };
 
 struct ADMMmodel
@@ -84,7 +85,8 @@ class Iterates
 public:
 	bool use_ADMM, terminate;
 	int size_x, size_y, size_z;
-	Eigen::VectorXd z, z_hat, z_bar;
+	Eigen::VectorXd x, y, x_hat, y_hat, x_bar, y_bar;
+	Eigen::VectorXd xU, xV, xU_hat, xV_hat, xU_bar, xV_bar;
 	Cache cache;
 	int n, t, count;
 	high_resolution_clock::time_point time, start_time;
@@ -92,16 +94,12 @@ public:
 	Iterates(const int &, const int &, const int &);
 	void update();
 	void restart();
-	Convergeinfo compute_convergence_information(const Params &);
-	Convergeinfo convergeinfo;
-	void print_iteration_information(const Params &);
 	void now_time();
 	float timing();
 	float end();
-	Eigen::VectorXd getx() const;
-	Eigen::VectorXd gety() const;
-	Eigen::VectorXd getxU() const;
-	Eigen::VectorXd getxV() const;
+	Convergeinfo compute_convergence_information(const Params &);
+	Convergeinfo convergeinfo;
+	void print_iteration_information(const Params &);
 };
 
 class RecordIterates
@@ -120,8 +118,8 @@ public:
 	void saveRestart_idx(const std::string, const int, const std::string);
 };
 
-double compute_normalized_duality_gap(const Eigen::VectorXd &, const double &, const Params &);
-double compute_normalized_duality_gap(const Eigen::VectorXd &z0, const double &r, const Params &p, const bool use_Gurobi);
+double compute_normalized_duality_gap(const Eigen::VectorXd &, const Eigen::VectorXd &, const double &, const Params &);
+double compute_normalized_duality_gap(const Eigen::VectorXd &, const Eigen::VectorXd &, const double &r, const Params &p, const bool use_Gurobi);
 Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &g, const Eigen::VectorXd &l,
 											const Eigen::VectorXd &z, const double &r);
 
@@ -131,7 +129,7 @@ void FixedFrequencyRestart(Iterates &, const Params &,
 
 double PowerIteration(const Eigen::SparseMatrix<double> &, const bool &);
 
-Eigen::VectorXd compute_F(const Eigen::VectorXd &, const Params &);
+Eigen::VectorXd compute_F(const Eigen::VectorXd &, const Eigen::VectorXd &, const Params &);
 
 double GetOptimalw(Params &p, RecordIterates (*method)(const Params &));
 void GetBestFixedRestartLength(Params &, RecordIterates (*method)(const Params &));
