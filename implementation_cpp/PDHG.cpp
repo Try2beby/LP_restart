@@ -9,14 +9,40 @@ RecordIterates *PDHG(const Params &p)
 	while (true)
 	{
 		PDHGStep(iter, p, *record);
-		// AdaptiveRestarts(iter, p, *record);
-		// FixedFrequencyRestart(iter, p, *record, 256);
+		if (p.restart)
+		{
+			if (p.fixed_restart_length == -1)
+			{
+				AdaptiveRestarts(iter, p, *record);
+			}
+			else
+			{
+				FixedFrequencyRestart(iter, p, *record);
+			}
+		}
+
 		if (iter.terminate || iter.count > p.max_iter)
 			break;
 	}
+	std::string file_name{"foo"};
+	if (p.restart)
+	{
+		if (p.fixed_restart_length == -1)
+		{
+			file_name = "adaptive_restarts";
+			record->saveRestart_idx(__func__, p.dataidx, file_name);
+		}
+		else
+		{
+			file_name = "fixed_restarts_" + std::to_string(p.fixed_restart_length);
+		}
+	}
+	else
+	{
+		file_name = "no_restarts";
+	}
+	record->saveConvergeinfo(__func__, p.dataidx, file_name);
 
-	record->saveConvergeinfo(__func__, p.dataidx, "no_restarts");
-	// record->saveRestart_idx(__func__, p.dataidx, "adaptive_restarts");
 	return record;
 }
 

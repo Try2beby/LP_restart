@@ -184,16 +184,17 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 	double r{1};
 	if (p.restart)
 	{
-		double r = std::sqrt((x - cache.x_cur_start).squaredNorm() + (y - cache.y_cur_start).squaredNorm());
+		double r = std::sqrt((x_bar - cache.x_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
+		this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
 	}
 	else
 	{
 		double r = std::sqrt((x - cache.x_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
+		this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x, this->y, r, p);
 		// std::cout << this->count - 1 << " r = " << r << std::endl;
 	}
 
-	this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x, this->y, r, p);
-	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
+		// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
 	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol)
 	{
 		this->terminate = true;
@@ -303,7 +304,7 @@ void RecordIterates::saveRestart_idx(const std::string method, const int dataidx
 Params::Params() : env(GRBEnv()), eta(1e-1), beta(std::exp(-1)), w(1), tol(1e-7),
 				   max_iter(static_cast<int>(5e5)), tau0(1), verbose(false), restart(true),
 				   record_every(30), print_every(100), evaluate_every(30), dataidx(0),
-				   save2file(true), print_timing(false)
+				   save2file(true), print_timing(false), fixed_restart_length(-1)
 {
 	env.set(GRB_IntParam_OutputFlag, verbose);
 }
@@ -524,7 +525,7 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 void AdaptiveRestarts(Iterates &iter, const Params &p,
 					  RecordIterates &record)
 {
-	if ((iter.count - 1) % p.evaluate_every != 0 || p.restart == false)
+	if ((iter.count - 1) % p.evaluate_every != 0)
 		return;
 
 	bool restart = false;
@@ -538,7 +539,7 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 	else
 	{
 		// ||z_bar^n,t-z^n,0||
-		double r1 = std::sqrt((iter.x - iter.cache.x_cur_start).squaredNorm() + (iter.y - iter.cache.y_cur_start).squaredNorm());
+		double r1 = std::sqrt((iter.x_bar - iter.cache.x_cur_start).squaredNorm() + (iter.y_bar - iter.cache.y_cur_start).squaredNorm());
 		// ||z^n,0-z^n-1,0||
 		double r2 = std::sqrt((iter.cache.x_prev_start - iter.cache.x_cur_start).squaredNorm() + (iter.cache.y_prev_start - iter.cache.y_cur_start).squaredNorm());
 
@@ -569,11 +570,9 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 }
 
 void FixedFrequencyRestart(Iterates &iter, const Params &p,
-						   RecordIterates &record, const int restart_length)
+						   RecordIterates &record)
 {
-	if (p.restart == false)
-		return;
-	if ((iter.count - 1) % restart_length == 0)
+	if ((iter.count - 1) % p.fixed_restart_length == 0)
 	{
 		iter.compute_convergence_information(p);
 		if (p.verbose)

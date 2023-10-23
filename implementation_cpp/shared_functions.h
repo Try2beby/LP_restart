@@ -31,7 +31,7 @@ const std::string datapath = "data/";
 const std::string datasuffix = ".mps";
 const std::string logpath = "log/";
 
-typedef Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> Solver;
+typedef Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> Solver;
 
 using namespace std::chrono;
 
@@ -61,7 +61,7 @@ class Params
 {
 public:
 	float eta, beta, w, tol;
-	int dataidx, max_iter, tau0, record_every, print_every, evaluate_every;
+	int dataidx, max_iter, tau0, record_every, print_every, evaluate_every, fixed_restart_length;
 	std::string data_name;
 	Eigen::VectorXd c, b;
 	Eigen::SparseMatrix<double, Eigen::RowMajor> A;
@@ -127,8 +127,7 @@ Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &g, const Eige
 											const Eigen::VectorXd &z, const double &r);
 
 void AdaptiveRestarts(Iterates &, const Params &, RecordIterates &);
-void FixedFrequencyRestart(Iterates &, const Params &,
-						   RecordIterates &, const int);
+void FixedFrequencyRestart(Iterates &, const Params &, RecordIterates &);
 
 double PowerIteration(const Eigen::SparseMatrix<double> &, const bool &);
 
