@@ -95,7 +95,7 @@ public:
 	high_resolution_clock::time_point time, start_time;
 	Iterates(const int &, const int &);
 	Iterates(const int &, const int &, const int &);
-	void update();
+	void update(const bool);
 	void restart();
 	void now_time();
 	float timing();

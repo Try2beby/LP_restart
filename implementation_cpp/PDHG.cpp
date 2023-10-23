@@ -10,7 +10,7 @@ RecordIterates *PDHG(const Params &p)
 	{
 		PDHGStep(iter, p, *record);
 		// AdaptiveRestarts(iter, p, *record);
-		// FixedFrequencyRestart(iter, p, *record, 1024);
+		// FixedFrequencyRestart(iter, p, *record, 256);
 		if (iter.terminate || iter.count > p.max_iter)
 			break;
 	}
@@ -32,7 +32,7 @@ void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 
 	iter.x_hat = x_new;
 	iter.y_hat = y_new;
-	iter.update();
+	iter.update(p.restart);
 	timer.timing();
 
 	timer.save(__func__, p, iter.count);

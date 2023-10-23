@@ -47,7 +47,7 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 	iter.xV_hat = iter.xV;
 	iter.y_hat = y_prev - p.eta * (iter.xU - xV_prev);
 
-	iter.update();
+	iter.update(p.restart);
 
 	auto count = iter.count;
 	if ((count - 1) % p.record_every == 0 || (count - 1) % p.print_every == 0)
@@ -95,7 +95,7 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 	iter.xU_hat = iter.xU;
 	iter.xV_hat = iter.xV;
 	iter.y_hat = y_prev - p.eta * (iter.xU - xV_prev);
-	iter.update();
+	iter.update(p.restart);
 
 	auto count = iter.count;
 	if ((count - 1) % p.record_every == 0 || (count - 1) % p.print_every == 0)

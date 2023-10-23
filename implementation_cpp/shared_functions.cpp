@@ -105,16 +105,35 @@ float Iterates::end()
 	return duration / 1e3;
 }
 
-void Iterates::update()
+void Iterates::update(const bool restart)
 {
 	if (use_ADMM == false)
+	{
 		x_bar = t * 1.0 / (t + 1) * x_bar + 1.0 / (t + 1) * x_hat;
+		if (not restart)
+		{
+			cache.x_prev_start = cache.x_cur_start;
+			cache.x_cur_start = this->x;
+		}
+	}
 	else
 	{
 		xU_bar = t * 1.0 / (t + 1) * xU_bar + 1.0 / (t + 1) * xU_hat;
 		xV_bar = t * 1.0 / (t + 1) * xV_bar + 1.0 / (t + 1) * xV_hat;
+		if (not restart)
+		{
+			cache.xU_prev_start = cache.xU_cur_start;
+			cache.xU_cur_start = this->xU;
+			cache.xV_prev_start = cache.xV_cur_start;
+			cache.xV_cur_start = this->xV;
+		}
 	}
 	y_bar = t * 1.0 / (t + 1) * y_bar + 1.0 / (t + 1) * y_hat;
+	if (not restart)
+	{
+		cache.y_prev_start = cache.y_cur_start;
+		cache.y_cur_start = this->y;
+	}
 	t++;
 	count++;
 }
@@ -162,10 +181,18 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 		kkt_error_vec << -xV, A * xU - b, b - A * xU, xU - xV, xV - xU;
 		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
 	}
+	double r{1};
+	if (p.restart)
+	{
+		double r = std::sqrt((x - cache.x_cur_start).squaredNorm() + (y - cache.y_cur_start).squaredNorm());
+	}
+	else
+	{
+		double r = std::sqrt((x - cache.x_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
+		// std::cout << this->count - 1 << " r = " << r << std::endl;
+	}
 
-	double r = std::sqrt((x - cache.x_cur_start).squaredNorm() + (x - cache.x_cur_start).squaredNorm());
-	// std::cout << this->count - 1 << " r = " << r << std::endl;
-	this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
+	this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x, this->y, r, p);
 	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
 	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol)
 	{

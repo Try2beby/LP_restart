@@ -27,7 +27,7 @@ void EGMStep(Iterates &iter, const Params &p, RecordIterates &record)
 	iter.x = iter.x - p.eta * compute_F(iter.x_hat, iter.y_hat, p).cwiseMax(0);
 	iter.y = iter.y - p.eta * compute_F(iter.x_hat, iter.y_hat, p);
 
-	iter.update();
+	iter.update(p.restart);
 
 	if ((iter.count - 1) % p.record_every == 0 || (iter.count - 1) % p.print_every == 0)
 	{

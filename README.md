@@ -118,6 +118,9 @@ $$
 
 - 而对标准线性规划 $Z=X\times Y,X={\mathbb R}^m_+$ ，则需使用数值算法求值
 
+可用算法如下：
+![algo](assets/2023-10-23-18-14-49.png)
+
 ### Restart
 
 #### Adaptive
@@ -130,14 +133,6 @@ $$
 
 使用库: [Gurobi](https://support.gurobi.com/hc/en-us/articles/360013194392-How-do-I-configure-a-new-Gurobi-C-project-with-Microsoft-Visual-Studio-#:~:text=How%20do%20I%20configure%20a%20new%20Gurobi%20C%2B%2B,the%20Solution%20Explorer%20panel%2C%20then%20select%20Properties.%20), Eigen3, intel MKL(非必要)
 
-以下代码与MKL相关
-
-```cpp  
-#define EIGEN_USE_MKL_ALL
-#define EIGEN_VECTORIZE_SSE4_2
-```
-
-
 |          | PDHG | EGM  | ADMM |
 | -------- | ---- | ---- | ---- |
 | qap10    |  √    |      |      |
@@ -149,12 +144,14 @@ $$
 
 参数：
 
-- $\eta=0.1,w=4^2$
+- $\eta=\frac{0.9}{\sigma_{max}(A)},w=4^2$
 
 | <img width=300px src="./implementation_cpp/fig/PDHG/qap10.png" alt="qap10.png"> | <img width=300px src="./implementation_cpp/fig/PDHG/qap15.png" alt="qap15.png"> |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| <img width=300px src="./implementation_cpp/fig/PDHG/nug08-3rd.png" alt="nug08-3rd.png"> |  <img width=300px src="./implementation_cpp/fig/PDHG/nug20.png" alt="nug20.png">               |
+| <img width=300px src="./implementation_cpp/fig/PDHG/nug08-3rd.png" alt="nug08-3rd.png"> |  <img width=300px src="./implementation_cpp/fig/PDHG/nug20.png" alt="nug20.png">  
+|
 
+### ADMM
 
 ### EGM
 
@@ -169,32 +166,6 @@ $$
 <td><img src="./implementation_cpp/fig/EGM/nug08-3rd.png" alt="nug08-3rd.png"></td>
 <td><img src="./implementation_cpp/fig/EGM/nug20.png" alt="nug20.png"></td>
 </table>
-
-### ADMM（目前的实现较慢）
-
-#### qap15
-
-参考目标函数值：`1040.99`
-
-<p align="center">
-<img src="assets/image-20231001122706368.png" alt="image-20231001122706368.png" width="50%">
-</p>
-
-#### qap10
-
-参考目标函数值：`340`
-
-使用gurobi解二次优化更新 $x_U$
-
-<p align="center">
-<img src="assets/image-20231001213240023.png" alt="image-20231001213240023.png" width="50%">
-</p>
-
-通过解析解更新，（使用`Eigen::SparseLU`解线性方程组）
-
-<p align="center">
-<img src="assets/image-20231001213628768.png" alt="image-20231001213628768.png" width="50%">
-</p>
 
 ## Related links
 
