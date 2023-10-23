@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <map>
 #include <iostream>
 #include <chrono>
 #include <fstream>
@@ -11,6 +12,8 @@
 
 // #define EIGEN_USE_MKL_ALL
 // #define EIGEN_VECTORIZE_SSE4_2
+// #define EIGEN_DONT_PARALLELIZE
+#define EIGEN_USE_BLAS
 
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Sparse"
@@ -43,16 +46,6 @@ struct ADMMmodel
 	GRBModel model_xU, model_xV;
 };
 
-class Timer
-{
-public:
-	high_resolution_clock::time_point start_time;
-	std::vector<double> time_record;
-	Timer();
-	float timing();
-	void save(const std::string, const std::string);
-};
-
 struct Convergeinfo
 {
 	double normalized_duality_gap{-1}, kkt_error{-1};
@@ -72,12 +65,22 @@ public:
 	std::string data_name;
 	Eigen::VectorXd c, b;
 	Eigen::SparseMatrix<double, Eigen::RowMajor> A;
-	bool verbose, restart;
+	bool verbose, restart, save2file, print_timing;
 	GRBEnv env;
 	Params();
 	void load_example();
 	void load_model(const int &);
 	void set_verbose(const bool &, const bool &);
+};
+
+class Timer
+{
+public:
+	high_resolution_clock::time_point start_time;
+	std::vector<double> time_record;
+	Timer();
+	float timing();
+	void save(const std::string, const Params &, const int);
 };
 
 class Iterates
@@ -131,10 +134,10 @@ double PowerIteration(const Eigen::SparseMatrix<double> &, const bool &);
 
 Eigen::VectorXd compute_F(const Eigen::VectorXd &, const Eigen::VectorXd &, const Params &);
 
-double GetOptimalw(Params &p, RecordIterates (*method)(const Params &));
+double GetOptimalw(Params &p, RecordIterates *(*method)(const Params &));
 void GetBestFixedRestartLength(Params &, RecordIterates (*method)(const Params &));
 
-RecordIterates &ADMM(const Params &);
+RecordIterates *ADMM(const Params &);
 void ADMMStep(Iterates &, const Params &, RecordIterates &, std::vector<GRBModel> &);
 void ADMMStep(Iterates &iter, const Params &, RecordIterates &,
 			  Solver &);
@@ -143,7 +146,7 @@ Eigen::VectorXd update_x(const Eigen::VectorXd &, const double &, const Eigen::V
 void generate_update_model(const Params &, std::vector<GRBModel> &);
 
 void PDHGStep(Iterates &, const Params &, RecordIterates &);
-RecordIterates &PDHG(const Params &);
+RecordIterates *PDHG(const Params &);
 
 void EGMStep(Iterates &, const Params &, RecordIterates &);
-RecordIterates &EGM(const Params &);
+RecordIterates *EGM(const Params &);

@@ -14,22 +14,35 @@ float Timer::timing()
 	return duration;
 }
 
-void Timer::save(const std::string method, const std::string data_name)
+void Timer::save(const std::string method, const Params &p, const int count)
 {
-	auto path = projectpath + logpath + method + "/" + data_name + "/";
-	std::filesystem::create_directories(path);
-	std::ofstream ofs(path + "/time_record.txt", std::ios::app);
-	if (ofs.is_open())
+	if (p.save2file == true)
 	{
+		auto path = projectpath + logpath + method + "/" + Data[p.dataidx] + "/";
+		std::filesystem::create_directories(path);
+		std::ofstream ofs(path + "/time_record.txt", std::ios::app);
+		if (ofs.is_open())
+		{
+			for (auto i : time_record)
+			{
+				ofs << i << " ";
+			}
+			ofs << std::endl;
+			ofs.close();
+		}
+		else
+			std::cout << "Unable to open file" << std::endl;
+	}
+	if (p.verbose == true && p.print_timing == true && (count - 1) % p.print_every == 0)
+	{
+		std::cout << "Timing: ";
 		for (auto i : time_record)
 		{
-			ofs << i << " ";
+			std::cout << i << " ";
 		}
-		ofs << std::endl;
-		ofs.close();
+		std::cout << "microseconds" << std::endl;
+		std::cout << std::endl;
 	}
-	else
-		std::cout << "Unable to open file" << std::endl;
 }
 
 Iterates::Iterates(const int &Size_x, const int &Size_y) : n(0), t(0), count(1),
@@ -62,6 +75,8 @@ Iterates::Iterates(const int &Repeat_x, const int &Size_x, const int &Size_y) : 
 	xU_bar = Eigen::VectorXd::Zero(size_x);
 	xV_bar = Eigen::VectorXd::Zero(size_x);
 	y = Eigen::VectorXd::Zero(size_y);
+	y_hat = Eigen::VectorXd::Zero(size_y);
+	y_bar = Eigen::VectorXd::Zero(size_y);
 	this->use_ADMM = true;
 	this->cache.xU_cur_start = this->xU;
 	this->cache.xV_cur_start = this->xV;
@@ -150,8 +165,9 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 
 	double r = std::sqrt((x - cache.x_cur_start).squaredNorm() + (x - cache.x_cur_start).squaredNorm());
 	// std::cout << this->count - 1 << " r = " << r << std::endl;
-	// this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->z_bar, r + 1e-6, p);
-	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
+	this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
+	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
+	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol)
 	{
 		this->terminate = true;
 		auto duration = this->end();
@@ -241,7 +257,7 @@ void RecordIterates::saveConvergeinfo(const std::string method, const int dataid
 
 void RecordIterates::saveRestart_idx(const std::string method, const int dataidx, const std::string filename)
 {
-	auto path = projectpath + "/" + method + "/" + Data[dataidx] + "/";
+	auto path = projectpath + cachepath + method + "/" + Data[dataidx] + "/";
 	std::filesystem::create_directories(path);
 	std::ofstream ofs(path + filename + "_restart_idx" + cachesuffix);
 	if (ofs.is_open())
@@ -259,7 +275,8 @@ void RecordIterates::saveRestart_idx(const std::string method, const int dataidx
 
 Params::Params() : env(GRBEnv()), eta(1e-1), beta(std::exp(-1)), w(1), tol(1e-7),
 				   max_iter(static_cast<int>(5e5)), tau0(1), verbose(false), restart(true),
-				   record_every(30), print_every(100), evaluate_every(30), dataidx(0)
+				   record_every(30), print_every(100), evaluate_every(30), dataidx(0),
+				   save2file(true), print_timing(false)
 {
 	env.set(GRB_IntParam_OutputFlag, verbose);
 }
@@ -357,8 +374,8 @@ Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eige
 	// std::cout << lambdalist_sorted << std::endl;
 
 	// initialize f_low and f_high
-	f_low = (lambdalist.array() <= 0).select(l - z, 0).squaredNorm();
-	f_high = (lambdalist.array() >= INFINITY).select(g, 0).squaredNorm();
+	// f_low = (lambdalist.array() <= 0).select(l - z, 0).squaredNorm();
+	// f_high = (lambdalist.array() >= INFINITY).select(g, 0).squaredNorm();
 	// std::cout << f_low << " " << f_high << std::endl;
 
 	auto size_z = (int)z.size();
@@ -366,32 +383,38 @@ Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eige
 	auto r_squared = std::pow(r, 2.0);
 
 	// initialize low and high
-	while (low < size_z && lambdalist_sorted[low] == 0)
+	while (low <= size_z - 2 && lambdalist_sorted[low + 1] == 0)
 		low++;
-	while (high >= 0 && lambdalist_sorted[high] == INFINITY)
+	while (high >= 1 && lambdalist_sorted[high - 1] == INFINITY)
 		high--;
 
-	while (low <= high)
+	while (low + 1 < high)
 	{
 		mid = (low + high) / 2;
 		lambda_mid = lambdalist_sorted[mid];
-		auto idx = (lambdalist_sorted[low] <= lambdalist.array() <= lambdalist_sorted[high]);
-		z_hat = (z - lambda_mid * g).cwiseMax(l);
-		f_mid = f_low + f_high * std::pow(lambda_mid, 2.0) + idx.select(z_hat - z, 0).squaredNorm();
+		// auto idx = (lambdalist_sorted[low] <= lambdalist.array() <= lambdalist_sorted[high]);
+		// f_mid = f_low + f_high * std::pow(lambda_mid, 2.0) + idx.select(z_hat - z, 0).squaredNorm();
+		f_mid = ((z - lambda_mid * g).cwiseMax(l) - z).squaredNorm();
 		if (f_mid < r_squared)
 		{
-			low = mid + 1;
-			f_low += (lambdalist.array() <= lambda_mid).select(l - z, 0).squaredNorm();
+			low = mid;
 		}
 		else
 		{
-			high = mid - 1;
-			f_high += (lambdalist.array() >= lambda_mid).select(g, 0).squaredNorm();
+			high = mid;
 		}
 	}
+	f_low = (lambdalist.array() <= lambdalist_sorted[low]).select(l - z, 0).squaredNorm();
+	f_high = (lambdalist.array() >= lambdalist_sorted[high]).select(g, 0).squaredNorm();
 	lambda_mid = std::sqrt((r_squared - f_low) / f_high);
+
+	// std::cout << std::endl;
+	// std::cout << low << " " << high << std::endl;
+	// std::cout << ((z - lambdalist_sorted[low] * g).cwiseMax(l) - z).squaredNorm() << " " << ((z - lambdalist_sorted[high] * g).cwiseMax(l) - z).squaredNorm() << " " << r_squared << std::endl;
 	// std::cout << lambda_mid << " " << f_low << " " << f_high << std::endl;
-	z_hat = (z - lambda_mid * G).cwiseMax(l);
+	// std::cout << std::endl;
+
+	z_hat = (z - lambda_mid * G).cwiseMax(L);
 
 	return z_hat;
 }
@@ -403,7 +426,7 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	int size_y = (int)p.b.rows();
 	double constant = p.c.dot(x0) - p.b.dot(y0);
 
-	Eigen::VectorXd g(size_x, size_y);
+	Eigen::VectorXd g(size_x + size_y);
 	g << p.c - p.A.transpose() * y0, p.A * x0 - p.b;
 
 	Eigen::VectorXd l = Eigen::VectorXd::Zero(size_x + size_y);
@@ -413,8 +436,8 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	Eigen::VectorXd z0(size_x + size_y);
 	z0 << x0, y0;
 	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
-	Eigen::VectorXd x_hat = z_hat.head(size_x);
-	Eigen::VectorXd y_hat = z_hat.tail(size_y);
+	// std::cout << z_hat.size() << " " << g.size() << std::endl;
+	// std::cout << "gap obj:" << (-z_hat.dot(g) + constant) / r << " " << (-g.dot(z_hat) + constant) / r << std::endl;
 
 	return (-g.dot(z_hat) + constant) / r;
 }
@@ -446,7 +469,6 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	GRBLinExpr objExpr = GRBLinExpr();
 	objExpr.addTerms(y_coeff.data(), y, size_y);
 	objExpr.addTerms(x_coeff.data(), x, size_x);
-	objExpr += constant;
 
 	// Set objective
 	model.setObjective(objExpr, GRB_MAXIMIZE);
@@ -468,11 +490,8 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 
 	model.optimize();
 
-	/*std::cout << model.get(GRB_DoubleAttr_ObjVal) << std::endl;
-	std::cout << x[0].get(GRB_DoubleAttr_X) << std::endl;
-	std::cout << y[0].get(GRB_DoubleAttr_X) << std::endl;*/
-
-	return model.get(GRB_DoubleAttr_ObjVal) / r;
+	// std::cout << "gap obj grb:" << (model.get(GRB_DoubleAttr_ObjVal) + constant) / r << std::endl;
+	return (model.get(GRB_DoubleAttr_ObjVal) + constant) / r;
 }
 
 void AdaptiveRestarts(Iterates &iter, const Params &p,
@@ -495,12 +514,13 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 		double r1 = std::sqrt((iter.x - iter.cache.x_cur_start).squaredNorm() + (iter.y - iter.cache.y_cur_start).squaredNorm());
 		// ||z^n,0-z^n-1,0||
 		double r2 = std::sqrt((iter.cache.x_prev_start - iter.cache.x_cur_start).squaredNorm() + (iter.cache.y_prev_start - iter.cache.y_cur_start).squaredNorm());
+
 		double duality_gap1 = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p);
-		double duality_gap1_usegurobi = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p, 0);
-		std::cout << "duality_gap1: " << duality_gap1 << " " << duality_gap1_usegurobi << std::endl;
+		// double duality_gap1_usegurobi = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p, 0);
+		// std::cout << "duality_gap1: " << duality_gap1 << " " << duality_gap1_usegurobi << std::endl;
 
 		double duality_gap2 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r2, p);
-		if (duality_gap1_usegurobi <= p.beta * duality_gap2)
+		if (duality_gap1 <= p.beta * duality_gap2)
 		{
 			restart = true;
 		}
@@ -509,7 +529,11 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 	if (restart == true)
 	{
 		record.restart_idx.push_back(iter.count - 1);
-		iter.print_iteration_information(p);
+		if (p.verbose)
+		{
+			std::cout << "restart at " << iter.count - 1 << std::endl;
+			iter.print_iteration_information(p);
+		}
 		// if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
 
 		iter.compute_convergence_information(p);
@@ -525,7 +549,11 @@ void FixedFrequencyRestart(Iterates &iter, const Params &p,
 	if ((iter.count - 1) % restart_length == 0)
 	{
 		iter.compute_convergence_information(p);
-		iter.print_iteration_information(p);
+		if (p.verbose)
+		{
+			std::cout << "restart at " << iter.count - 1 << std::endl;
+			iter.print_iteration_information(p);
+		}
 		iter.restart();
 		if ((iter.count - 1) % p.record_every == 0)
 			record.append(iter, p);
@@ -594,12 +622,13 @@ Eigen::VectorXd compute_F(const Eigen::VectorXd &x, const Eigen::VectorXd &y, co
 	return F;
 }
 
-double GetOptimalw(Params &p, RecordIterates (*method)(const Params &))
+double GetOptimalw(Params &p, RecordIterates *(*method)(const Params &))
 {
 	auto best_kkt_error = INFINITY;
-	double best_w = 0;
+	double best_w = 0, kkt_error;
 	p.restart = false;
 	std::vector<double> w_candidates;
+	RecordIterates *record;
 	for (int i = -5; i < 6; i++)
 	{
 		w_candidates.push_back(std::pow(4, i));
@@ -608,8 +637,8 @@ double GetOptimalw(Params &p, RecordIterates (*method)(const Params &))
 	{
 		p.w = w_candidates[i];
 		std::cout << "testing w=4^" << i - 5 << std::endl;
-		RecordIterates record = method(p);
-		double kkt_error = record.ConvergeinfoList[record.end_idx - 1].kkt_error;
+		record = method(p);
+		kkt_error = record->ConvergeinfoList[record->end_idx - 1].kkt_error;
 		if (kkt_error < best_kkt_error)
 		{
 			best_kkt_error = kkt_error;

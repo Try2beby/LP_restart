@@ -1,16 +1,16 @@
 #include "shared_functions.h"
 
-RecordIterates &EGM(const Params &p)
+RecordIterates *EGM(const Params &p)
 {
 	int size_x = (int)p.c.rows();
 	int size_y = (int)p.b.rows();
 	Iterates iter(size_x, size_y);
-	static RecordIterates record(size_x, size_y, p.max_iter / p.record_every);
+	auto record = new RecordIterates(size_x, size_y, p.max_iter / p.record_every);
 
 	while (true)
 	{
-		EGMStep(iter, p, record);
-		AdaptiveRestarts(iter, p, record);
+		EGMStep(iter, p, *record);
+		AdaptiveRestarts(iter, p, *record);
 		if (iter.count > p.max_iter)
 			break;
 	}

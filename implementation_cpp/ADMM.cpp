@@ -1,12 +1,11 @@
 #include "shared_functions.h"
 
-RecordIterates &ADMM(const Params &p)
+RecordIterates *ADMM(const Params &p)
 {
 	auto size_x = (int)p.c.rows();
 	auto size_y = size_x;
 	Iterates iter(2, size_x, size_y);
-	static RecordIterates record(2, size_x, size_y, p.max_iter / p.record_every);
-	record.append(iter, p);
+	auto record = new RecordIterates(2, size_x, size_y, p.max_iter / p.record_every);
 
 	// std::vector<GRBModel> model;
 	// generate_update_model(p, model);
@@ -18,10 +17,10 @@ RecordIterates &ADMM(const Params &p)
 
 	while (true)
 	{
-		// ADMMStep(iter, p, record, model);
-		ADMMStep(iter, p, record, solver);
-		// AdaptiveRestarts(iter, p, record);
-		// FixedFrequencyRestart(iter, p, record, 16);
+		// ADMMStep(iter, p, *record, model);
+		ADMMStep(iter, p, *record, solver);
+		// AdaptiveRestarts(iter, p, *record);
+		// FixedFrequencyRestart(iter, p, *record, 16);
 		if (iter.terminate || iter.count > p.max_iter)
 			break;
 	}
@@ -87,7 +86,7 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 	xU = xU - (-xV_prev - (1.0 / p.eta) * y_prev);
 	timer.timing();
 
-	timer.save(__func__, p.data_name);
+	timer.save(__func__, p, iter.count);
 	// if (p.verbose && (iter.count - 1) % p.print_every == 0)
 	// 	std::cout << "solver.solve() takes " << duration << " milliseconds" << std::endl;
 
@@ -104,7 +103,7 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 		iter.compute_convergence_information(p);
 		if ((count - 1) % p.record_every == 0)
 			record.append(iter, p);
-		if ((count - 1) % p.print_every == 0)
+		if ((count - 1) % p.print_every == 0 && p.verbose)
 			iter.print_iteration_information(p);
 	}
 }
