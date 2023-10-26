@@ -174,6 +174,19 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 		kkt_error_vec << -x, A * x - b, b - A * x, A.transpose() * y - c,
 			c.dot(x) - b.dot(y);
 		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
+
+		double r{1};
+		if (p.restart)
+		{
+			double r = std::sqrt((x_bar - cache.x_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
+			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
+		}
+		else
+		{
+			double r = std::sqrt((x - cache.x_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
+			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x, this->y, r, p);
+			// std::cout << this->count - 1 << " r = " << r << std::endl;
+		}
 	}
 	else
 	{
@@ -181,20 +194,8 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 		kkt_error_vec << -xV, A * xU - b, b - A * xU, xU - xV, xV - xU;
 		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
 	}
-	double r{1};
-	if (p.restart)
-	{
-		double r = std::sqrt((x_bar - cache.x_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
-		this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
-	}
-	else
-	{
-		double r = std::sqrt((x - cache.x_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
-		this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x, this->y, r, p);
-		// std::cout << this->count - 1 << " r = " << r << std::endl;
-	}
 
-		// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
+	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
 	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol)
 	{
 		this->terminate = true;

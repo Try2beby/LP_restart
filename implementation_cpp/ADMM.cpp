@@ -7,13 +7,28 @@ RecordIterates *ADMM(const Params &p)
 	Iterates iter(2, size_x, size_y);
 	auto record = new RecordIterates(2, size_x, size_y, p.max_iter / p.record_every);
 
-	// std::vector<GRBModel> model;
-	// generate_update_model(p, model);
+	std::vector<GRBModel> model;
+	generate_update_model(p, model);
 	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
+	if (p.verbose)
+	{
+		// print A rows and cols
+		std::cout << "A rows: " << p.A.rows() << " A cols: " << p.A.cols() << std::endl;
+		// print nnz of AAT
+		std::cout << "AAT number of nonzeros: " << AAT.nonZeros() << std::endl;
+	}
 	Solver solver;
-	solver.analyzePattern(AAT);
-	solver.factorize(AAT);
-	std::cout << "factorize done" << std::endl;
+
+	Timer timer;
+	solver.compute(AAT);
+	if (solver.info() != Eigen::Success)
+	{
+		std::cout << "factorize failed" << std::endl;
+		exit(0);
+	}
+	std::cout << "factorize done, takes " << timer.timing() << " milliseconds" << std::endl;
+	// std::cout << "#iterations:     " << solver.iterations() << std::endl;
+	// std::cout << "estimated error: " << solver.error() << std::endl;
 
 	while (true)
 	{
@@ -26,6 +41,66 @@ RecordIterates *ADMM(const Params &p)
 	}
 
 	return record;
+}
+
+void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
+			  Solver &solver)
+{
+	Eigen::VectorXd xU_prev = iter.xU;
+	Eigen::VectorXd xV_prev = iter.xV;
+	Eigen::VectorXd y_prev = iter.y;
+
+	// iter.xU = p.A.transpose() * solver.solve(p.b +
+	// 										 p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) -
+	// 		  (-xV_prev - (1.0 / p.eta) * y_prev);
+
+	// step by step
+	Timer timer;
+	Eigen::VectorXd xU = p.b + p.A * (-xV_prev - (1.0 / p.eta) * y_prev);
+	// print xU.norm()
+	std::cout << "xU1.norm(): " << xU.norm() << std::endl;
+	timer.timing();
+
+	xU = solver.solve(xU);
+	// print xU.norm()
+	std::cout << "xU2.norm(): " << xU.norm() << std::endl;
+	// print first 5 elements of xU
+	// std::cout << "xU2.head(5): " << xU.tail(5).transpose() << std::endl;
+	timer.timing();
+
+	xU = p.A.transpose() * xU;
+	// print xU.norm()
+	std::cout << "xU3.norm(): " << xU.norm() << std::endl;
+	// print first 5 elements of xU
+	// std::cout << "xU3.head(5): " << xU.tail(5).transpose() << std::endl;
+	timer.timing();
+
+	iter.xU = xU - (-xV_prev - (1.0 / p.eta) * y_prev);
+	// print xU.norm()
+	// std::cout << "xU4.norm(): " << xU.Norm() << std::endl;
+	timer.timing();
+
+	timer.save(__func__, p, iter.count);
+	// if (p.verbose && (iter.count - 1) % p.print_every == 0)
+	// 	std::cout << "solver.solve() takes " << duration << " milliseconds" << std::endl;
+
+	iter.xV = ((iter.xU - (1.0 / p.eta) * y_prev) - (1.0 / p.eta) * p.c).cwiseMax(0);
+	iter.y = y_prev - p.eta * (iter.xU - iter.xV);
+	iter.xU_hat = iter.xU;
+	iter.xV_hat = iter.xV;
+	iter.y_hat = y_prev - p.eta * (iter.xU - xV_prev);
+
+	iter.update(p.restart);
+
+	auto count = iter.count;
+	if ((count - 1) % p.record_every == 0 || (count - 1) % p.print_every == 0)
+	{
+		iter.compute_convergence_information(p);
+		if ((count - 1) % p.record_every == 0)
+			record.append(iter, p);
+		if ((count - 1) % p.print_every == 0 && p.verbose)
+			iter.print_iteration_information(p);
+	}
 }
 
 void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
@@ -56,54 +131,6 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 		if ((count - 1) % p.record_every == 0)
 			record.append(iter, p);
 		if ((count - 1) % p.print_every == 0)
-			iter.print_iteration_information(p);
-	}
-}
-
-void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
-			  Solver &solver)
-{
-	int size_x = (int)p.c.rows();
-
-	Eigen::VectorXd xU_prev = iter.xU;
-	Eigen::VectorXd xV_prev = iter.xV;
-	Eigen::VectorXd y_prev = iter.y;
-
-	// Eigen::VectorXd xU = p.A.transpose() * solver.solve(p.b +
-	// 	p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) - (-xV_prev - (1.0 / p.eta) * y_prev);
-
-	// step by step
-	Timer timer;
-	Eigen::VectorXd xU = p.b + p.A * (-xV_prev - (1.0 / p.eta) * y_prev);
-	timer.timing();
-
-	xU = solver.solve(xU);
-	timer.timing();
-
-	xU = p.A.transpose() * xU;
-	timer.timing();
-
-	xU = xU - (-xV_prev - (1.0 / p.eta) * y_prev);
-	timer.timing();
-
-	timer.save(__func__, p, iter.count);
-	// if (p.verbose && (iter.count - 1) % p.print_every == 0)
-	// 	std::cout << "solver.solve() takes " << duration << " milliseconds" << std::endl;
-
-	Eigen::VectorXd xV = ((xU - (1.0 / p.eta) * y_prev) - (1.0 / p.eta) * p.c).cwiseMax(0);
-	Eigen::VectorXd y = y_prev - p.eta * (xU - xV);
-	iter.xU_hat = iter.xU;
-	iter.xV_hat = iter.xV;
-	iter.y_hat = y_prev - p.eta * (iter.xU - xV_prev);
-	iter.update(p.restart);
-
-	auto count = iter.count;
-	if ((count - 1) % p.record_every == 0 || (count - 1) % p.print_every == 0)
-	{
-		iter.compute_convergence_information(p);
-		if ((count - 1) % p.record_every == 0)
-			record.append(iter, p);
-		if ((count - 1) % p.print_every == 0 && p.verbose)
 			iter.print_iteration_information(p);
 	}
 }

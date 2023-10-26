@@ -30,8 +30,13 @@ const std::string cachesuffix = ".txt";
 const std::string datapath = "data/";
 const std::string datasuffix = ".mps";
 const std::string logpath = "log/";
+const std::string outputpath = "output/";
 
-typedef Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> Solver;
+// typedef Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> Solver;
+typedef Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> Solver;
+// typedef Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper, Eigen::IncompleteCholesky<double>> Solver;
+// BiCGSTAB
+// typedef Eigen::BiCGSTAB<Eigen::SparseMatrix<double>, Eigen::IncompleteLUT<double>> Solver;
 
 using namespace std::chrono;
 

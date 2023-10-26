@@ -20,27 +20,39 @@ int main(int argc, char *argv[])
 	{
 		std::cout << "Specify parameters in pairs" << std::endl;
 	}
+	// redirect output to file
+	auto path = projectpath + outputpath + std::string(argv[2]) + "_" +
+				std::string(argv[4]) + "_" + std::string(argv[6]) + "_" +
+				std::string(argv[8]) + ".txt";
+	std::filesystem::create_directories(projectpath + outputpath);
+	std::ofstream out(path, std::ios::app);
+	std::cout.rdbuf(out.rdbuf());
+
 	Params p;
 	Method method;
 	process_argument(argc, argv, method, p);
 
+	p.max_iter = 5;
 	// p.max_iter = 1e4;
-	p.max_iter = 5e5;
+	// p.max_iter = 5e5;
 	p.print_every = 100;
 	p.save2file = true;
 	p.print_timing = false;
 	p.set_verbose(1, 0);
 	p.load_model(p.dataidx);
-	Eigen::SparseMatrix<double, Eigen::ColMajor> AAT = p.A * p.A.transpose();
-	double sigma_max = std::sqrt(PowerIteration(AAT, 1)); // 1 for verbose
-	p.eta = 0.9 / sigma_max;
+	// Eigen::SparseMatrix<double, Eigen::ColMajor> AAT = p.A * p.A.transpose();
+	// double sigma_max = std::sqrt(PowerIteration(AAT, 1)); // 1 for verbose
+	// p.eta = 0.9 / sigma_max;
 	// p.eta = 1e-1;
-	// p.eta = 10;
+	p.eta = 10;
 	// auto w = GetOptimalw(p, PDHG);
 	p.w = std::pow(4, 2);
 	auto record = method(p);
 	delete record;
-	// std::vector<int> FixedRestartLengthList = { 64,256,1024 };
+
+	// close output file
+	out.close();
+
 	return 0;
 }
 

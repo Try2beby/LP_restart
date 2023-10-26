@@ -1,0 +1,38 @@
+Model loaded.
+A rows: 1820 A cols: 4150
+AAT number of nonzeros: 72220
+factorize done, takes 2.33455e+06 milliseconds
+xU1.norm(): 4.47214
+xU2.norm(): 0.813543
+xU3.norm(): 1.22474
+xU1.norm(): 6.20394
+xU2.norm(): 2.03634
+xU3.norm(): 1.13529
+xU1.norm(): 9.30591
+xU2.norm(): 3.0545
+xU3.norm(): 1.70294
+xU1.norm(): 12.4079
+xU2.norm(): 4.07267
+xU3.norm(): 2.27058
+xU1.norm(): 15.5099
+xU2.norm(): 5.09084
+xU3.norm(): 2.83823
+Model loaded.
+A rows: 1820 A cols: 4150
+AAT number of nonzeros: 72220
+factorize done, takes 224995 milliseconds
+xU1.norm(): 4.47214
+xU2.norm(): 5.23854
+xU3.norm(): 1.22474
+xU1.norm(): 6.20394
+xU2.norm(): 7.08233
+xU3.norm(): 1.13529
+xU1.norm(): 9.30591
+xU2.norm(): 9.38925
+xU3.norm(): 1.70294
+xU1.norm(): 12.4079
+xU2.norm(): 12.2891
+xU3.norm(): 2.27058
+xU1.norm(): 15.5099
+xU2.norm(): 15.7511
+xU3.norm(): 2.83823
