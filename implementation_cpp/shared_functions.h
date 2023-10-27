@@ -7,7 +7,8 @@
 #include <fstream>
 #include <iomanip>
 #include <filesystem>
-#include "gurobi_c++.h"
+#include <algorithm>
+#include <gurobi_c++.h>
 #include "config.h"
 
 // #define EIGEN_USE_MKL_ALL
@@ -154,3 +155,5 @@ RecordIterates *PDHG(const Params &);
 
 void EGMStep(Iterates &, const Params &, RecordIterates &);
 RecordIterates *EGM(const Params &);
+
+void export_xyr(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const double r);

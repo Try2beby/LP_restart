@@ -179,7 +179,7 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 		if (p.restart)
 		{
 			double r = std::sqrt((x_bar - cache.x_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
-			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
+			// this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
 		}
 		else
 		{
@@ -465,8 +465,10 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	Eigen::VectorXd z0(size_x + size_y);
 	z0 << x0, y0;
 	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
-	// std::cout << z_hat.size() << " " << g.size() << std::endl;
-	// std::cout << "gap obj:" << (-z_hat.dot(g) + constant) / r << " " << (-g.dot(z_hat) + constant) / r << std::endl;
+	std::cout << std::setprecision(8) << "Trust  gap obj:" << (-z_hat.dot(g) + constant) / r << " ";
+	std::cout << std::setprecision(16) << "cons vio: ||min(x,0)|| " << z_hat.head(size_x).cwiseMin(0).norm() << " ";
+	std::cout << std::setprecision(16) << "max(||z-z0||-r,0) " << std::max((z_hat - z0).norm() - r, 0.0) << " ";
+	std::cout << std::setprecision(8) << "r: " << r << std::endl;
 
 	return (-g.dot(z_hat) + constant) / r;
 }
@@ -482,9 +484,10 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 
 	double constant = p.c.dot(x0) - p.b.dot(y0);
 
-	// std::cout << y_coeff << x_coeff << constant << std::endl;
-
 	GRBModel model = GRBModel(p.env);
+	// set logfile, use first 6 numbers in r as filename
+	std::filesystem::create_directory(projectpath + logpath + "gurobi/");
+	model.set(GRB_StringParam_LogFile, projectpath + logpath + "gurobi/" + std::to_string(r).substr(0, 6) + ".log");
 
 	// Create variables
 	GRBVar *x = model.addVars(size_x, GRB_CONTINUOUS);
@@ -519,7 +522,21 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 
 	model.optimize();
 
-	// std::cout << "gap obj grb:" << (model.get(GRB_DoubleAttr_ObjVal) + constant) / r << std::endl;
+	std::cout << std::setprecision(8) << "Gurobi gap obj:" << (model.get(GRB_DoubleAttr_ObjVal) + constant) / r << " ";
+	// get solution
+	Eigen::VectorXd x_sol = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_X, x, size_x), size_x);
+	Eigen::VectorXd y_sol = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_X, y, size_y), size_y);
+	std::cout << std::setprecision(16) << "cons vio: ||min(x,0)|| " << x_sol.cwiseMin(0).norm() << " ";
+	std::cout << std::setprecision(16) << "max(||z-z0||-r,0) " << std::max(std::sqrt((x_sol - x0).squaredNorm() + (y_sol - y0).squaredNorm()) - r, 0.0) << " ";
+	std::cout << std::setprecision(8) << "r: " << r << std::endl;
+	std::cout << std::setprecision(16) << "||z-z0||-r " << std::sqrt((x_sol - x0).squaredNorm() + (y_sol - y0).squaredNorm()) - r << " ";
+	double report_ConstrVio = model.get(GRB_DoubleAttr_ConstrVio);
+	if (report_ConstrVio > 1e-1)
+	{
+		export_xyr(x0, y0, r);
+	}
+	std::cout << std::setprecision(16) << "model report ConstrVio " << model.get(GRB_DoubleAttr_ConstrVio) << std::endl;
+
 	return (model.get(GRB_DoubleAttr_ObjVal) + constant) / r;
 }
 
@@ -545,10 +562,9 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 		double r2 = std::sqrt((iter.cache.x_prev_start - iter.cache.x_cur_start).squaredNorm() + (iter.cache.y_prev_start - iter.cache.y_cur_start).squaredNorm());
 
 		double duality_gap1 = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p);
-		// double duality_gap1_usegurobi = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p, 0);
-		// std::cout << "duality_gap1: " << duality_gap1 << " " << duality_gap1_usegurobi << std::endl;
-
+		compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p, 0);
 		double duality_gap2 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r2, p);
+		compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r2, p, 0);
 		if (duality_gap1 <= p.beta * duality_gap2)
 		{
 			restart = true;
@@ -675,4 +691,19 @@ double GetOptimalw(Params &p, RecordIterates *(*method)(const Params &))
 	if (p.verbose)
 		std::cout << "the optimal w is: " << best_w << std::endl;
 	return best_w;
+}
+
+void export_xyr(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const double r)
+{
+	auto path = projectpath + outputpath + "xyr.txt";
+	std::ofstream out(path, std::ios::app);
+	if (out.is_open())
+	{
+		out << std::setprecision(15) << x.transpose() << std::endl;
+		out << std::setprecision(15) << y.transpose() << std::endl;
+		out << std::setprecision(15) << r << std::endl;
+		out.close();
+	}
+	else
+		std::cout << "Unable to open file" << std::endl;
 }

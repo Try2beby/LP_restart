@@ -10,6 +10,9 @@ x64
 build/
 debug/
 
+# log folder
+log/
+
 # files
 *.exe
 test*
