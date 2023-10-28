@@ -1,5 +1,34 @@
 #include "shared_functions.h"
 
+namespace utils
+{
+	void read_txt(Eigen::SparseMatrix<double, Eigen::RowMajor> &A, const std::string filename)
+	{
+		// read a eigen matrix from txt file
+		std::ifstream in(filename);
+		std::vector<Eigen::Triplet<double>> triplets;
+
+		if (in.is_open())
+		{
+			int row, col;
+			double value;
+			while (in >> row >> col >> value)
+			{
+				triplets.push_back(Eigen::Triplet<double>(row, col, value));
+			}
+			A.setFromTriplets(triplets.begin(), triplets.end());
+		}
+		else
+		{
+			std::cout << "File not found!" << std::endl;
+			exit(1);
+		}
+		// std::cout << A.rows() << " " << A.cols() << std::endl;
+		// std::cout << A.nonZeros() << std::endl;
+	}
+
+}
+
 Timer::Timer()
 {
 	start_time = high_resolution_clock::now();
@@ -138,14 +167,14 @@ void Iterates::update(const bool restart)
 	count++;
 }
 
-void Iterates::restart()
+void Iterates::restart(const Eigen::VectorXd &x_c, const Eigen::VectorXd &y_c)
 {
 	n++;
 	t = 0;
 	count++;
 	if (use_ADMM == false)
 	{
-		x = x_bar;
+		x = x_c;
 		cache.x_prev_start = cache.x_cur_start;
 		cache.x_cur_start = this->x;
 	}
@@ -158,10 +187,11 @@ void Iterates::restart()
 		cache.xV_prev_start = cache.xV_cur_start;
 		cache.xV_cur_start = this->xV;
 	}
-	y = y_bar;
+	y = y_c;
 	cache.y_prev_start = cache.y_cur_start;
 	cache.y_cur_start = this->y;
 }
+
 Convergeinfo Iterates::compute_convergence_information(const Params &p)
 {
 	Eigen::VectorXd c = p.c;
@@ -196,7 +226,7 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 	}
 
 	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
-	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol)
+	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.eps)
 	{
 		this->terminate = true;
 		auto duration = this->end();
@@ -302,12 +332,33 @@ void RecordIterates::saveRestart_idx(const std::string method, const int dataidx
 		std::cout << "Unable to open file" << std::endl;
 }
 
-Params::Params() : env(GRBEnv()), eta(1e-1), beta(std::exp(-1)), w(1), tol(1e-7),
+Params::Params() : env(GRBEnv()), eta(0), eta_hat{1e-1}, w(1), eps(1e-7), eps_0(1e-7),
+				   beta(0.9, 0.1, 0.5), theta(0.5),
 				   max_iter(static_cast<int>(5e5)), tau0(1), verbose(false), restart(true),
 				   record_every(30), print_every(100), evaluate_every(30), dataidx(0),
 				   save2file(true), print_timing(false), fixed_restart_length(-1)
 {
 	env.set(GRB_IntParam_OutputFlag, verbose);
+	this->init_w();
+}
+
+void Params::init_w()
+{
+	double c_norm = this->c.norm(), b_norm = this->b.norm();
+	if (c_norm > eps_0 && b_norm > eps_0)
+	{
+		this->w = c_norm / b_norm;
+	}
+}
+
+void Params::update_w(const Cache &cache)
+{
+	double delta_x = (cache.x_prev_start - cache.x_cur_start).norm();
+	double delta_y = (cache.y_prev_start - cache.y_cur_start).norm();
+	if (delta_x > eps_0 && delta_y > eps_0)
+	{
+		this->w = std::exp(theta * std::log(delta_x / delta_y) + (1 - theta) * std::log(this->w));
+	}
 }
 
 void Params::set_verbose(const bool &Verbose, const bool &gbVerbose)
@@ -331,6 +382,15 @@ void Params::load_example()
 	A_tmp.insert(1, 1) = 1;
 	A = A_tmp;
 	// solution is (4, 1, 0, 0, 0)
+}
+
+void Params::load_pagerank()
+{
+	Eigen::SparseMatrix<double, Eigen::RowMajor> A_tmp(1e4, 1e4);
+	utils::read_txt(A_tmp, projectpath + "/" + datapath + "graph.txt");
+	A = A_tmp;
+
+	std::cout << "PageRank model loaded." << std::endl;
 }
 
 void Params::load_model(const int &dataidx)
@@ -465,10 +525,11 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	Eigen::VectorXd z0(size_x + size_y);
 	z0 << x0, y0;
 	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
-	std::cout << std::setprecision(8) << "Trust  gap obj:" << (-z_hat.dot(g) + constant) / r << " ";
-	std::cout << std::setprecision(16) << "cons vio: ||min(x,0)|| " << z_hat.head(size_x).cwiseMin(0).norm() << " ";
-	std::cout << std::setprecision(16) << "max(||z-z0||-r,0) " << std::max((z_hat - z0).norm() - r, 0.0) << " ";
-	std::cout << std::setprecision(8) << "r: " << r << std::endl;
+
+	// std::cout << std::setprecision(8) << "Trust  gap obj:" << (-z_hat.dot(g) + constant) / r << " ";
+	// std::cout << std::setprecision(16) << "cons vio: ||min(x,0)|| " << z_hat.head(size_x).cwiseMin(0).norm() << " ";
+	// std::cout << std::setprecision(16) << "max(||z-z0||-r,0) " << std::max((z_hat - z0).norm() - r, 0.0) << " ";
+	// std::cout << std::setprecision(8) << "r: " << r << std::endl;
 
 	return (-g.dot(z_hat) + constant) / r;
 }
@@ -522,20 +583,20 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 
 	model.optimize();
 
-	std::cout << std::setprecision(8) << "Gurobi gap obj:" << (model.get(GRB_DoubleAttr_ObjVal) + constant) / r << " ";
+	// std::cout << std::setprecision(8) << "Gurobi gap obj:" << (model.get(GRB_DoubleAttr_ObjVal) + constant) / r << " ";
 	// get solution
-	Eigen::VectorXd x_sol = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_X, x, size_x), size_x);
-	Eigen::VectorXd y_sol = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_X, y, size_y), size_y);
-	std::cout << std::setprecision(16) << "cons vio: ||min(x,0)|| " << x_sol.cwiseMin(0).norm() << " ";
-	std::cout << std::setprecision(16) << "max(||z-z0||-r,0) " << std::max(std::sqrt((x_sol - x0).squaredNorm() + (y_sol - y0).squaredNorm()) - r, 0.0) << " ";
-	std::cout << std::setprecision(8) << "r: " << r << std::endl;
-	std::cout << std::setprecision(16) << "||z-z0||-r " << std::sqrt((x_sol - x0).squaredNorm() + (y_sol - y0).squaredNorm()) - r << " ";
-	double report_ConstrVio = model.get(GRB_DoubleAttr_ConstrVio);
-	if (report_ConstrVio > 1e-1)
-	{
-		export_xyr(x0, y0, r);
-	}
-	std::cout << std::setprecision(16) << "model report ConstrVio " << model.get(GRB_DoubleAttr_ConstrVio) << std::endl;
+	// Eigen::VectorXd x_sol = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_X, x, size_x), size_x);
+	// Eigen::VectorXd y_sol = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_X, y, size_y), size_y);
+	// std::cout << std::setprecision(16) << "cons vio: ||min(x,0)|| " << x_sol.cwiseMin(0).norm() << " ";
+	// std::cout << std::setprecision(16) << "max(||z-z0||-r,0) " << std::max(std::sqrt((x_sol - x0).squaredNorm() + (y_sol - y0).squaredNorm()) - r, 0.0) << " ";
+	// std::cout << std::setprecision(8) << "r: " << r << std::endl;
+	// std::cout << std::setprecision(16) << "||z-z0||-r " << std::sqrt((x_sol - x0).squaredNorm() + (y_sol - y0).squaredNorm()) - r << " ";
+	// double report_ConstrVio = model.get(GRB_DoubleAttr_ConstrVio);
+	// if (report_ConstrVio > 1e-1)
+	// {
+	// 	export_xyr(x0, y0, r);
+	// }
+	// std::cout << std::setprecision(16) << "model report ConstrVio " << model.get(GRB_DoubleAttr_ConstrVio) << std::endl;
 
 	return (model.get(GRB_DoubleAttr_ObjVal) + constant) / r;
 }
@@ -547,29 +608,52 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 		return;
 
 	bool restart = false;
-	if (iter.n == 0)
+	if (iter.t > p.beta.artificial)
 	{
-		if (iter.t >= p.tau0)
-		{
-			restart = true;
-		}
+		restart = true;
+	}
+	double r1, r2, mu_1, mu_2, mu_c;
+	Eigen::VectorXd x_c, y_c;
+	// ||z^n,t-z^n,0||
+	r1 = PDHGnorm(iter.x - iter.cache.x_cur_start, iter.y - iter.cache.y_cur_start, p.w);
+	// mu_1 = std::pow(compute_normalized_duality_gap(iter.x, iter.y, r1, p), 1.0 * iter.n);
+	mu_1 = compute_normalized_duality_gap(iter.x, iter.y, r1, p);
+
+	// ||z_bar^n,t-z^n,0||
+	r2 = PDHGnorm(iter.x_bar - iter.cache.x_cur_start, iter.y_bar - iter.cache.y_cur_start, p.w);
+	// mu_2 = std::pow(compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r2, p), 1.0 * iter.n);
+	mu_2 = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r2, p);
+
+	if (mu_1 < mu_2)
+	{
+		x_c = iter.x;
+		y_c = iter.y;
 	}
 	else
 	{
-		// ||z_bar^n,t-z^n,0||
-		double r1 = std::sqrt((iter.x_bar - iter.cache.x_cur_start).squaredNorm() + (iter.y_bar - iter.cache.y_cur_start).squaredNorm());
-		// ||z^n,0-z^n-1,0||
-		double r2 = std::sqrt((iter.cache.x_prev_start - iter.cache.x_cur_start).squaredNorm() + (iter.cache.y_prev_start - iter.cache.y_cur_start).squaredNorm());
-
-		double duality_gap1 = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p);
-		compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p, 0);
-		double duality_gap2 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r2, p);
-		compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r2, p, 0);
-		if (duality_gap1 <= p.beta * duality_gap2)
-		{
-			restart = true;
-		}
+		x_c = iter.x_bar;
+		y_c = iter.y_bar;
 	}
+	mu_c = std::min(mu_1, mu_2);
+
+	double r3, r4, mu_3, mu_4;
+	// ||z^n,0-z^n-1,0||
+	r3 = PDHGnorm(iter.cache.x_prev_start - iter.cache.x_cur_start, iter.cache.y_prev_start - iter.cache.y_cur_start, p.w);
+	// mu_3 = std::pow(compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p), 1.0 * iter.n);
+	mu_3 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p);
+
+	// ||z_c - z^n,0||
+	// r4 = PDHGnorm(iter.cache.x_c - iter.cache.x_cur_start, iter.cache.y_c - iter.cache.y_cur_start, p.w);
+	// mu_4 = std::pow(compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p), 1.0 * iter.n);
+	if (mu_c <= p.beta.sufficent * mu_3)
+	{
+		restart = true;
+	}
+	else if (mu_c <= p.beta.necessary * mu_3 && mu_c > iter.cache.mu_c)
+	{
+		restart = true;
+	}
+	iter.cache.mu_c = mu_c;
 
 	if (restart == true)
 	{
@@ -582,7 +666,7 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 		// if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
 
 		iter.compute_convergence_information(p);
-		iter.restart();
+		iter.restart(x_c, y_c);
 	}
 }
 
@@ -597,7 +681,7 @@ void FixedFrequencyRestart(Iterates &iter, const Params &p,
 			std::cout << "restart at " << iter.count - 1 << std::endl;
 			iter.print_iteration_information(p);
 		}
-		iter.restart();
+		// iter.restart();
 		if ((iter.count - 1) % p.record_every == 0)
 			record.append(iter, p);
 	}

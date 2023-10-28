@@ -1,0 +1,202 @@
+// -*- c++ -*-
+//
+// This file is part of eigen-matio, a lightweight C++ template
+// library for reading data files into Eigen matrices.
+//
+// Copyright (C) 2019 Michael Tesch, tesch1 (a) gmail com
+//
+// This Source Code Form is subject to the terms of the Mozilla
+// Public License v. 2.0. If a copy of the MPL was not distributed
+// with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+#ifndef EIGEN_MEXEIG_MODULE
+#define EIGEN_MEXEIG_MODULE
+#include "mex.h"
+#include <complex>
+#include <exception>
+#include <type_traits>
+#include <Eigen/Dense>
+
+#ifndef MX_HAS_INTERLEAVED_COMPLEX
+#define MX_HAS_INTERLEAVED_COMPLEX 0
+#endif
+
+namespace Eigen {
+
+namespace internal {
+
+template<class T> struct is_complex : std::false_type {};
+template<class T> struct is_complex<std::complex<T>> : std::true_type {};
+
+template <typename Tp> struct mex_classid { static const mxClassID cid = mxUNKNOWN_CLASS; };
+//template <> struct mex_classid<char>     { static const mxClassID cid = mxUNKNOWN_CLASS; };
+//template <> struct mex_classid<char>     { static const mxClassID cid = mxCELL_CLASS; };
+//template <> struct mex_classid<char>     { static const mxClassID cid = mxSTRUCT_CLASS; };
+template <> struct mex_classid<bool>    { static const mxClassID cid = mxLOGICAL_CLASS; };
+template <> struct mex_classid<char>    { static const mxClassID cid = mxCHAR_CLASS; };
+//template <> struct mex_classid<void>    { static const mxClassID cid = mxVOID_CLASS; };
+template <> struct mex_classid<double>  { static const mxClassID cid = mxDOUBLE_CLASS; };
+template <> struct mex_classid<float>   { static const mxClassID cid = mxSINGLE_CLASS; };
+template <> struct mex_classid<int8_t>  { static const mxClassID cid = mxINT8_CLASS; };
+template <> struct mex_classid<uint8_t> { static const mxClassID cid = mxUINT8_CLASS; };
+template <> struct mex_classid<int16_t> { static const mxClassID cid = mxINT16_CLASS; };
+template <> struct mex_classid<uint16_t> { static const mxClassID cid = mxUINT16_CLASS; };
+template <> struct mex_classid<int32_t>  { static const mxClassID cid = mxINT32_CLASS; };
+template <> struct mex_classid<uint32_t> { static const mxClassID cid = mxUINT32_CLASS; };
+template <> struct mex_classid<int64_t>  { static const mxClassID cid = mxINT64_CLASS; };
+template <> struct mex_classid<uint64_t> { static const mxClassID cid = mxUINT64_CLASS; };
+template <typename Tp> struct mex_classid<std::complex<Tp> > : public mex_classid<Tp> {};
+//template <> struct mex_classid<>     { static const mxClassID cid = mxFUNCTION_CLASS; };
+
+template <int classid = -1> struct classid_type {};
+template <> struct classid_type<mxLOGICAL_CLASS>{ typedef bool type; };
+template <> struct classid_type<mxCHAR_CLASS>   { typedef char type; };
+//template <> struct classid_type<mxVOID_CLASS>   { typedef void type; };
+template <> struct classid_type<mxDOUBLE_CLASS> { typedef double type; };
+template <> struct classid_type<mxSINGLE_CLASS> { typedef float type; };
+template <> struct classid_type<mxINT8_CLASS>   { typedef int8_t type; };
+template <> struct classid_type<mxUINT8_CLASS>  { typedef uint8_t type; };
+template <> struct classid_type<mxINT16_CLASS>  { typedef int16_t type; };
+template <> struct classid_type<mxUINT16_CLASS> { typedef uint16_t type; };
+template <> struct classid_type<mxINT32_CLASS>  { typedef int32_t type; };
+template <> struct classid_type<mxUINT32_CLASS> { typedef uint32_t type; };
+template <> struct classid_type<mxINT64_CLASS>  { typedef int64_t type; };
+template <> struct classid_type<mxUINT64_CLASS> { typedef uint64_t type; };
+
+}
+
+// assign to complex-matrix
+template <class T, class Derived>
+void AssignImag(std::true_type, Derived & M, const mxArray * a)
+{
+  typedef typename Derived::RealScalar Real;
+  Map<Matrix<T, Dynamic, Dynamic> > tmp((T *)mxGetPr(a), mxGetM(a), mxGetN(a));
+  M.real() = tmp.template cast<Real>();
+  if (mxIsComplex(a)) {
+    Map<Matrix<T, Dynamic, Dynamic> > tmp2((T *)mxGetPi(a), mxGetM(a), mxGetN(a));
+    M.imag() = tmp2.template cast<Real>();
+  }
+  else
+    M.imag().setZero();
+}
+
+// assign to real-matrix
+template <class T, class Derived>
+void AssignImag(std::false_type, Derived & M, const mxArray * a)
+{
+  typedef typename Derived::RealScalar Real;
+  Map<Matrix<T, Dynamic, Dynamic> > tmp((T *)mxGetPr(a), mxGetM(a), mxGetN(a));
+  M.real() = tmp.template cast<Real>();
+}
+
+template <class Derived>
+void MxArrayToEigen(Derived & matrix, const mxArray * a)
+{
+  typedef typename Derived::Scalar Scalar;
+
+  if (((size_t)matrix.rows() != mxGetM(a) && Derived::RowsAtCompileTime != Eigen::Dynamic) ||
+      ((size_t)matrix.cols() != mxGetN(a) && Derived::ColsAtCompileTime != Eigen::Dynamic)) {
+    std::stringstream s;
+    s << "Attempted to convert " << mxGetM(a) << "x" << mxGetN(a)
+      << " matrix into fixed-size Matrix "
+      << (Derived::RowsAtCompileTime == Eigen::Dynamic ? mxGetM(a) : Derived::RowsAtCompileTime)
+      << "x"
+      << (Derived::ColsAtCompileTime == Eigen::Dynamic ? mxGetN(a) : Derived::ColsAtCompileTime);
+    throw std::invalid_argument(s.str());
+  }
+
+  matrix.resize(mxGetM(a), mxGetN(a));
+
+  mxClassID classid = mxGetClassID(a);
+  bool iscomplex = internal::is_complex<Scalar>::value;
+
+  if (mxIsComplex(a) && !iscomplex)
+    throw std::invalid_argument("Tried to assign complex mxArray to non-complex EigenMatrix");
+
+#define HANDLE_TYPE(CLASSID)                                            \
+  else if (classid == CLASSID)                                          \
+    do {                                                                \
+      typedef typename internal::classid_type<CLASSID>::type data_t;    \
+      AssignImag<data_t>(typename internal::is_complex<Scalar>{}, matrix, a); \
+    } while (0)
+
+  if (0) ;
+  HANDLE_TYPE(mxLOGICAL_CLASS);
+  HANDLE_TYPE(mxCHAR_CLASS);
+  //HANDLE_TYPE(mxVOID_CLASS);
+  HANDLE_TYPE(mxSINGLE_CLASS);
+  HANDLE_TYPE(mxDOUBLE_CLASS);
+  HANDLE_TYPE(mxINT8_CLASS);
+  HANDLE_TYPE(mxUINT8_CLASS);
+  HANDLE_TYPE(mxINT16_CLASS);
+  HANDLE_TYPE(mxUINT16_CLASS);
+  HANDLE_TYPE(mxINT32_CLASS);
+  HANDLE_TYPE(mxUINT32_CLASS);
+  HANDLE_TYPE(mxINT64_CLASS);
+  HANDLE_TYPE(mxUINT64_CLASS);
+  else {
+    throw std::invalid_argument("Unknown mxArray type ClassID, HANDLE_TYPE failed");
+  }
+}
+
+// todo: take EigenBase and detect SparseMatrix
+template <class Derived>
+mxArray * EigenToMxArray(MatrixBase<Derived> const & em)
+{
+  typedef typename Derived::Scalar Scalar;
+  typedef typename Derived::RealScalar Real;
+  mxArray * a;
+  mwSize ndim = 2;
+  mwSize M = em.rows();
+  mwSize N = em.cols();
+  mwSize dims[2] = {M, N};
+  bool iscomplex = internal::is_complex<Scalar>::value;
+
+  switch (internal::mex_classid<Scalar>::cid) {
+  case mxLOGICAL_CLASS:
+  case mxCHAR_CLASS:
+    //  case mxVOID_CLASS:
+  case mxDOUBLE_CLASS:
+  case mxSINGLE_CLASS:
+  case mxINT8_CLASS:
+  case mxUINT8_CLASS:
+  case mxINT16_CLASS:
+  case mxUINT16_CLASS:
+  case mxINT32_CLASS:
+  case mxUINT32_CLASS:
+  case mxINT64_CLASS:
+  case mxUINT64_CLASS:
+    a = mxCreateNumericArray(ndim, dims, 
+                             internal::mex_classid<Scalar>::cid,
+                             (mxComplexity)iscomplex);
+    // make sure we got a matrix
+    if (!a)
+      throw std::invalid_argument("mxCreateNumericArray failed");
+
+    // set the values
+    if (!iscomplex || MX_HAS_INTERLEAVED_COMPLEX) {
+      Map<Matrix<Scalar, Dynamic, Dynamic> > tmp((Scalar *)mxGetPr(a), M, N);
+      tmp = em;
+    }
+    else {
+      Map<Matrix<Real, Dynamic, Dynamic> > tmp_re((Real *)mxGetPr(a), M, N);
+      tmp_re = em.real();
+      Map<Matrix<Real, Dynamic, Dynamic> > tmp_im((Real *)mxGetPi(a), M, N);
+      tmp_im = em.imag();
+    }
+    break;
+
+  case mxUNKNOWN_CLASS:
+  case mxCELL_CLASS:
+  case mxSTRUCT_CLASS:
+  case mxFUNCTION_CLASS:
+  default:
+    throw std::invalid_argument("Unable to find mxClassID for Eigen::Matrix<>::Scalar");
+    break;
+  }
+  return a;
+}
+
+} // namespace Eigen
+
+#endif // EIGEN_MEXEIG_MODULE

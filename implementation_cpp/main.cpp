@@ -38,11 +38,12 @@ int main(int argc, char *argv[])
 	p.print_every = 100;
 	p.save2file = true;
 	p.print_timing = false;
-	p.set_verbose(1, 1);
-	p.load_model(p.dataidx);
+	p.set_verbose(1, 0);
+	// p.load_model(p.dataidx);
+	p.load_pagerank();
 	Eigen::SparseMatrix<double, Eigen::ColMajor> AAT = p.A * p.A.transpose();
 	double sigma_max = std::sqrt(PowerIteration(AAT, 1)); // 1 for verbose
-	p.eta = 0.9 / sigma_max;
+	p.eta_hat = 1 / sigma_max;
 	// p.eta = 1e-1;
 	// p.eta = 10;
 	// auto w = GetOptimalw(p, PDHG);

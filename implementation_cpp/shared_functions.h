@@ -41,10 +41,19 @@ typedef Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> Solver;
 
 using namespace std::chrono;
 
+struct Beta
+{
+	double sufficent{0.9}, necessary{0.1}, artificial{0.5};
+	Beta(const double beta_s, const double beta_n, const double beta_a)
+		: sufficent(beta_s), necessary(beta_n), artificial(beta_a)
+	{
+	}
+};
 struct Cache
 {
 	Eigen::VectorXd x_prev_start, x_cur_start, y_prev_start, y_cur_start;
 	Eigen::VectorXd xU_prev_start, xU_cur_start, xV_prev_start, xV_cur_start;
+	double mu_c;
 };
 
 struct ADMMmodel
@@ -66,7 +75,8 @@ struct Convergeinfo
 class Params
 {
 public:
-	float eta, beta, w, tol;
+	float eta, eta_hat, w, eps, eps_0, theta;
+	Beta beta;
 	int dataidx, max_iter, tau0, record_every, print_every, evaluate_every, fixed_restart_length;
 	std::string data_name;
 	Eigen::VectorXd c, b;
@@ -74,7 +84,10 @@ public:
 	bool verbose, restart, save2file, print_timing;
 	GRBEnv env;
 	Params();
+	void init_w();
+	void update_w(const Cache &);
 	void load_example();
+	void load_pagerank();
 	void load_model(const int &);
 	void set_verbose(const bool &, const bool &);
 };
@@ -102,7 +115,7 @@ public:
 	Iterates(const int &, const int &);
 	Iterates(const int &, const int &, const int &);
 	void update(const bool);
-	void restart();
+	void restart(const Eigen::VectorXd &, const Eigen::VectorXd &);
 	void now_time();
 	float timing();
 	float end();
@@ -157,3 +170,4 @@ void EGMStep(Iterates &, const Params &, RecordIterates &);
 RecordIterates *EGM(const Params &);
 
 void export_xyr(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const double r);
+double PDHGnorm(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const int w);

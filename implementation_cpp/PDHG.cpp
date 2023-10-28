@@ -6,7 +6,7 @@ RecordIterates *PDHG(const Params &p)
 	int size_y = (int)p.b.rows();
 	Iterates iter(size_x, size_y);
 	auto record = new RecordIterates(size_x, size_y, p.max_iter / p.record_every);
-	while (true)
+	while (false)
 	{
 		PDHGStep(iter, p, *record);
 		if (p.restart)
@@ -44,6 +44,34 @@ RecordIterates *PDHG(const Params &p)
 	record->saveConvergeinfo(__func__, p.dataidx, file_name);
 
 	return record;
+}
+
+double PDHGnorm(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const int w)
+{
+	return std::sqrt(w * x.squaredNorm() + (1.0 / w) * y.squaredNorm());
+}
+
+void AdaptivePDHGStep(Iterates &iter, Params &p, RecordIterates &record)
+{
+	Eigen::VectorXd x_prime, y_prime;
+	double eta = p.eta_hat, eta_bar, eta_prime;
+	while (true)
+	{
+		x_prime = (iter.x - (eta / p.w) * (p.c - p.A.transpose() * iter.y)).cwiseMax(0);
+		y_prime = iter.y - (eta * p.w) * (-p.b + p.A * (2 * x_prime - iter.x));
+		eta_bar = std::pow(PDHGnorm(iter.x - x_prime, iter.y - y_prime, p.w), 2.0);
+		eta_prime = std::min((1 - std::pow(iter.count + 1, 0.3)) * eta_bar,
+							 (1 + std::pow(iter.count + 1, -0.6)) * eta);
+		if (eta <= eta_bar)
+		{
+			iter.x = x_prime;
+			iter.y = y_prime;
+			p.eta = eta;
+			p.eta_hat = eta_prime;
+			break;
+		}
+		eta = eta_prime;
+	}
 }
 
 void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
