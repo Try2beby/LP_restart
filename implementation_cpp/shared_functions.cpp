@@ -2,7 +2,7 @@
 
 namespace utils
 {
-	void read_txt(Eigen::SparseMatrix<double, Eigen::RowMajor> &A, const std::string filename)
+	void read_txt(SpMat &A, const std::string filename)
 	{
 		// read a eigen matrix from txt file
 		std::ifstream in(filename);
@@ -26,7 +26,6 @@ namespace utils
 		// std::cout << A.rows() << " " << A.cols() << std::endl;
 		// std::cout << A.nonZeros() << std::endl;
 	}
-
 }
 
 Timer::Timer()
@@ -81,7 +80,7 @@ Iterates::Iterates(const int &Size_x, const int &Size_y) : n(0), t(0), count(1),
 	size_y = Size_y;
 	size_z = size_x + size_y;
 	x = Eigen::VectorXd::Zero(size_x);
-	y = Eigen::VectorXd::Zero(size_y);
+	y = (1.0 / size_y) * Eigen::VectorXd::Ones(size_y);
 	x_hat = Eigen::VectorXd::Zero(size_x);
 	y_hat = Eigen::VectorXd::Zero(size_y);
 	x_bar = Eigen::VectorXd::Zero(size_x);
@@ -134,12 +133,15 @@ float Iterates::end()
 	return duration / 1e3;
 }
 
-void Iterates::update(const bool restart)
+void Iterates::update(const Params &p)
 {
 	if (use_ADMM == false)
 	{
+		cache.eta_sum += p.eta;
+		// x_bar = 1.0 / cache.eta_sum * (x_bar + p.eta * x);
 		x_bar = t * 1.0 / (t + 1) * x_bar + 1.0 / (t + 1) * x_hat;
-		if (not restart)
+
+		if (not p.restart)
 		{
 			cache.x_prev_start = cache.x_cur_start;
 			cache.x_cur_start = this->x;
@@ -149,7 +151,7 @@ void Iterates::update(const bool restart)
 	{
 		xU_bar = t * 1.0 / (t + 1) * xU_bar + 1.0 / (t + 1) * xU_hat;
 		xV_bar = t * 1.0 / (t + 1) * xV_bar + 1.0 / (t + 1) * xV_hat;
-		if (not restart)
+		if (not p.restart)
 		{
 			cache.xU_prev_start = cache.xU_cur_start;
 			cache.xU_cur_start = this->xU;
@@ -157,8 +159,9 @@ void Iterates::update(const bool restart)
 			cache.xV_cur_start = this->xV;
 		}
 	}
+	// y_bar = 1.0 / cache.eta_sum * (y_bar + p.eta * y);
 	y_bar = t * 1.0 / (t + 1) * y_bar + 1.0 / (t + 1) * y_hat;
-	if (not restart)
+	if (not p.restart)
 	{
 		cache.y_prev_start = cache.y_cur_start;
 		cache.y_cur_start = this->y;
@@ -194,43 +197,27 @@ void Iterates::restart(const Eigen::VectorXd &x_c, const Eigen::VectorXd &y_c)
 
 Convergeinfo Iterates::compute_convergence_information(const Params &p)
 {
-	Eigen::VectorXd c = p.c;
-	Eigen::VectorXd b = p.b;
-	Eigen::SparseMatrix<double> A = p.A;
+	Eigen::VectorXd mutiplier, temp;
 
-	if (use_ADMM == false)
-	{
-		Eigen::VectorXd kkt_error_vec(2 * size_x + 2 * size_y + 1);
-		kkt_error_vec << -x, A * x - b, b - A * x, A.transpose() * y - c,
-			c.dot(x) - b.dot(y);
-		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
+	this->convergeinfo.duality_gap = std::abs(p.q.dot(y) - p.c.dot(x)) / (1 + std::abs(p.q.dot(y)) + std::abs(p.c.dot(x)));
 
-		double r{1};
-		if (p.restart)
-		{
-			double r = std::sqrt((x_bar - cache.x_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
-			// this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
-		}
-		else
-		{
-			double r = std::sqrt((x - cache.x_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
-			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x, this->y, r, p);
-			// std::cout << this->count - 1 << " r = " << r << std::endl;
-		}
-	}
-	else
-	{
-		Eigen::VectorXd kkt_error_vec(3 * size_x + 2 * p.b.rows());
-		kkt_error_vec << -xV, A * xU - b, b - A * xU, xU - xV, xV - xU;
-		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
-	}
+	temp = p.q - p.K * x;
+	temp.segment(0, p.m1) = temp.segment(0, p.m1).cwiseMax(0);
+	this->convergeinfo.primal_feasibility = temp.norm() / (1 + p.q.norm());
+
+	temp = p.c - p.K.transpose() * y;
+	mutiplier = temp.cwiseMax(0);
+	this->convergeinfo.dual_feasibility = (temp - mutiplier).norm() / (1 + p.c.norm());
 
 	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
-	if (std::abs(this->convergeinfo.normalized_duality_gap) < p.eps)
+	if (this->convergeinfo.duality_gap < p.eps && this->convergeinfo.primal_feasibility < p.eps && this->convergeinfo.dual_feasibility < p.eps)
 	{
 		this->terminate = true;
 		auto duration = this->end();
 		std::cout << "Iteration terminates at " << this->count - 1 << ", takes " << duration << "s" << std::endl;
+		// print first 10 elements of x, set precision
+		std::cout << std::setprecision(8) << "x: " << x.head(10).transpose() << std::endl;
+		std::cout << std::endl;
 	}
 	return this->convergeinfo;
 }
@@ -238,12 +225,17 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 void Iterates::print_iteration_information(const Params &p)
 {
 	std::cout << "Iteration " << count - 1 << ", ";
-	std::cout << "kkt_error: " << this->convergeinfo.kkt_error << std::endl;
-	std::cout << "normalized_duality_gap: " << this->convergeinfo.normalized_duality_gap << std::endl;
+	std::cout << "duality_gap: " << this->convergeinfo.duality_gap << std::endl;
+	std::cout << "primal_feasibility: " << this->convergeinfo.primal_feasibility << std::endl;
+	std::cout << "dual_feasibility: " << this->convergeinfo.dual_feasibility << std::endl;
+	std::cout << "x.sum " << x.sum() << std::endl;
+	std::cout << "x_org.sum " << (p.D2_cache * x).sum() << std::endl;
+	// std::cout << x.norm() << " " << y.norm() << std::endl;
+	// std::cout << p.eta << " " << p.eta_hat << std::endl;
 
 	if (use_ADMM == false)
 	{
-		std::cout << "obj: " << p.c.dot(x) + p.b.dot(y) - y.transpose() * p.A * x << std::endl;
+		std::cout << "obj: " << p.c.dot(x) + p.q.dot(y) - y.transpose() * p.K * x << std::endl;
 	}
 	else
 	{
@@ -259,9 +251,9 @@ RecordIterates::RecordIterates(const int &Size_x, const int &Size_y, const int &
 	: end_idx(0)
 {
 	Iterates iter(Size_x, Size_y);
-	std::vector<Iterates> aIteratesList(Size_record, iter);
+	// std::vector<Iterates> aIteratesList(Size_record, iter);
 	std::vector<Convergeinfo> aConvergeinfoList(Size_record);
-	IteratesList = aIteratesList;
+	// IteratesList = aIteratesList;
 	ConvergeinfoList = aConvergeinfoList;
 	this->use_ADMM = false;
 }
@@ -279,7 +271,7 @@ RecordIterates::RecordIterates(const int &Repeat_x, const int &Size_x, const int
 
 void RecordIterates::append(const Iterates &iter, const Params &p)
 {
-	IteratesList[end_idx] = iter;
+	// IteratesList[end_idx] = iter;
 	ConvergeinfoList[end_idx] = iter.convergeinfo;
 	end_idx++;
 }
@@ -305,7 +297,7 @@ void RecordIterates::saveConvergeinfo(const std::string method, const int dataid
 		for (int i = 0; i < end_idx; i++)
 		{
 			auto &obj = ConvergeinfoList[i];
-			ofs << std::setprecision(10) << obj.normalized_duality_gap << "," << obj.kkt_error << std::endl;
+			ofs << std::setprecision(10) << obj.duality_gap << " " << obj.primal_feasibility << " " << obj.dual_feasibility << std::endl;
 		}
 		std::cout << "save Convergeinfo done" << std::endl;
 		ofs.close();
@@ -332,10 +324,10 @@ void RecordIterates::saveRestart_idx(const std::string method, const int dataidx
 		std::cout << "Unable to open file" << std::endl;
 }
 
-Params::Params() : env(GRBEnv()), eta(0), eta_hat{1e-1}, w(1), eps(1e-7), eps_0(1e-7),
+Params::Params() : env(GRBEnv()), eta(0), eta_hat{1e-1}, w(1), eps(1e-8), eps_0(1e-7),
 				   beta(0.9, 0.1, 0.5), theta(0.5),
 				   max_iter(static_cast<int>(5e5)), tau0(1), verbose(false), restart(true),
-				   record_every(30), print_every(100), evaluate_every(30), dataidx(0),
+				   record_every(40), print_every(100), evaluate_every(40), dataidx(0),
 				   save2file(true), print_timing(false), fixed_restart_length(-1)
 {
 	env.set(GRB_IntParam_OutputFlag, verbose);
@@ -344,10 +336,10 @@ Params::Params() : env(GRBEnv()), eta(0), eta_hat{1e-1}, w(1), eps(1e-7), eps_0(
 
 void Params::init_w()
 {
-	double c_norm = this->c.norm(), b_norm = this->b.norm();
-	if (c_norm > eps_0 && b_norm > eps_0)
+	double c_norm = this->c.norm(), q_norm = this->q.norm();
+	if (c_norm > eps_0 && q_norm > eps_0)
 	{
-		this->w = c_norm / b_norm;
+		this->w = c_norm / q_norm;
 	}
 }
 
@@ -357,7 +349,7 @@ void Params::update_w(const Cache &cache)
 	double delta_y = (cache.y_prev_start - cache.y_cur_start).norm();
 	if (delta_x > eps_0 && delta_y > eps_0)
 	{
-		this->w = std::exp(theta * std::log(delta_x / delta_y) + (1 - theta) * std::log(this->w));
+		this->w = std::exp(theta * std::log(delta_y / delta_x) + (1 - theta) * std::log(this->w));
 	}
 }
 
@@ -386,11 +378,100 @@ void Params::load_example()
 
 void Params::load_pagerank()
 {
-	Eigen::SparseMatrix<double, Eigen::RowMajor> A_tmp(1e4, 1e4);
-	utils::read_txt(A_tmp, projectpath + "/" + datapath + "graph.txt");
-	A = A_tmp;
+	n = 1e5;
+	double lambda = 0.85;
+	SpMat A_tmp(n + 1, n);
+	utils::read_txt(A_tmp, projectpath + "/" + datapath + "graph_1e5.txt");
+	this->A = A_tmp;
+	this->q = ((1 - lambda) / n) * Eigen::VectorXd::Ones(n + 1);
+	this->q[n] = 1;
+	this->c = Eigen::VectorXd::Zero(n);
 
+	// set K^T to be (I_n - lambda * A^T, 1_n)
+	SpMat K_tmp(n + 1, n);
+	for (int i = 0; i < n; i++)
+	{
+		K_tmp.insert(i, i) = 1;
+	}
+	K_tmp = K_tmp - lambda * A_tmp;
+	for (int i = 0; i < n; i++)
+	{
+		K_tmp.insert(n, i) = 1;
+	}
+	K = K_tmp;
+
+	this->m1 = n;
+	this->m2 = 1;
+
+	// print shape and nnz of K
+	std::cout << "K shape: " << K.rows() << " " << K.cols() << std::endl;
+	std::cout << "K nnz: " << K.nonZeros() << std::endl;
 	std::cout << "PageRank model loaded." << std::endl;
+}
+
+void Params::scaling()
+{
+	// Ruiz scaling
+	SpMat D1(m1 + m2, m1 + m2), D2(n, n), temp;
+	SpMat D1cache(m1 + m2, m1 + m2), D2cache(n, n);
+	for (int i = 0; i < m1 + m2; i++)
+	{
+		D1cache.insert(i, i) = 1;
+	}
+	for (int i = 0; i < n; i++)
+	{
+		D2cache.insert(i, i) = 1;
+	}
+	Eigen::VectorXd temp_vec;
+
+	for (int ii = 0; ii < 10; ii++)
+	{
+		for (int j = 0; j < K.outerSize(); ++j)
+		{
+			double max_norm = 0;
+			for (Eigen::SparseMatrix<double, Eigen::ColMajor>::InnerIterator it(K, j); it; ++it)
+			{
+				max_norm = std::max(max_norm, std::abs(it.value()));
+			}
+			D2.coeffRef(j, j) = 1.0 / std::sqrt(max_norm);
+			D2cache.coeffRef(j, j) *= 1.0 / std::sqrt(max_norm);
+		}
+		temp = K.transpose();
+		for (int j = 0; j < temp.outerSize(); ++j)
+		{
+			double max_norm = 0;
+			for (Eigen::SparseMatrix<double, Eigen::ColMajor>::InnerIterator it(temp, j); it; ++it)
+			{
+				max_norm = std::max(max_norm, std::abs(it.value()));
+			}
+			D1.coeffRef(j, j) = 1.0 / std::sqrt(max_norm);
+			D1cache.coeffRef(j, j) *= 1.0 / std::sqrt(max_norm);
+		}
+		K = D1 * K * D2;
+		c = D2 * c;
+		q = D1 * q;
+	}
+
+	// Pock Chambolle scaling
+	temp_vec = K.cwiseAbs() * Eigen::VectorXd::Ones(K.cols());
+	for (int i = 0; i < temp_vec.size(); i++)
+	{
+		D1.coeffRef(i, i) = 1.0 / std::sqrt(temp_vec(i));
+		D1cache.coeffRef(i, i) *= 1.0 / std::sqrt(temp_vec(i));
+	}
+	temp_vec = K.transpose().cwiseAbs() * Eigen::VectorXd::Ones(K.rows());
+	for (int i = 0; i < temp_vec.size(); i++)
+	{
+		D2.coeffRef(i, i) = 1.0 / std::sqrt(temp_vec(i));
+		D2cache.coeffRef(i, i) *= 1.0 / std::sqrt(temp_vec(i));
+	}
+
+	this->D1_cache = D1cache;
+	this->D2_cache = D2cache;
+
+	K = D1 * K * D2;
+	c = D2 * c;
+	q = D1 * q;
 }
 
 void Params::load_model(const int &dataidx)
@@ -512,11 +593,11 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 									  const double &r, const Params &p)
 {
 	int size_x = (int)p.c.rows();
-	int size_y = (int)p.b.rows();
-	double constant = p.c.dot(x0) - p.b.dot(y0);
+	int size_y = (int)p.q.rows();
+	double constant = p.c.dot(x0) - p.q.dot(y0);
 
 	Eigen::VectorXd g(size_x + size_y);
-	g << p.c - p.A.transpose() * y0, p.A * x0 - p.b;
+	g << p.c - p.K.transpose() * y0, p.K * x0 - p.q;
 
 	Eigen::VectorXd l = Eigen::VectorXd::Zero(size_x + size_y);
 	// set last size_y entries to -inf
@@ -601,14 +682,14 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	return (model.get(GRB_DoubleAttr_ObjVal) + constant) / r;
 }
 
-void AdaptiveRestarts(Iterates &iter, const Params &p,
+void AdaptiveRestarts(Iterates &iter, Params &p,
 					  RecordIterates &record)
 {
 	if ((iter.count - 1) % p.evaluate_every != 0)
 		return;
 
 	bool restart = false;
-	if (iter.t > p.beta.artificial)
+	if (iter.t > p.beta.artificial * iter.count)
 	{
 		restart = true;
 	}
@@ -636,11 +717,14 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 	}
 	mu_c = std::min(mu_1, mu_2);
 
-	double r3, r4, mu_3, mu_4;
+	double r3, mu_3{0};
 	// ||z^n,0-z^n-1,0||
-	r3 = PDHGnorm(iter.cache.x_prev_start - iter.cache.x_cur_start, iter.cache.y_prev_start - iter.cache.y_cur_start, p.w);
-	// mu_3 = std::pow(compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p), 1.0 * iter.n);
-	mu_3 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p);
+	if (iter.n >= 1)
+	{
+		r3 = PDHGnorm(iter.cache.x_prev_start - iter.cache.x_cur_start, iter.cache.y_prev_start - iter.cache.y_cur_start, p.w);
+		// mu_3 = std::pow(compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p), 1.0 * iter.n);
+		mu_3 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p);
+	}
 
 	// ||z_c - z^n,0||
 	// r4 = PDHGnorm(iter.cache.x_c - iter.cache.x_cur_start, iter.cache.y_c - iter.cache.y_cur_start, p.w);
@@ -649,10 +733,10 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 	{
 		restart = true;
 	}
-	else if (mu_c <= p.beta.necessary * mu_3 && mu_c > iter.cache.mu_c)
-	{
-		restart = true;
-	}
+	// else if (mu_c <= p.beta.necessary * mu_3 && mu_c > iter.cache.mu_c)
+	// {
+	// 	restart = true;
+	// }
 	iter.cache.mu_c = mu_c;
 
 	if (restart == true)
@@ -667,6 +751,10 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 
 		iter.compute_convergence_information(p);
 		iter.restart(x_c, y_c);
+		if (p.primal_weight_update)
+		{
+			p.update_w(iter.cache);
+		}
 	}
 }
 
@@ -765,7 +853,7 @@ double GetOptimalw(Params &p, RecordIterates *(*method)(const Params &))
 		p.w = w_candidates[i];
 		std::cout << "testing w=4^" << i - 5 << std::endl;
 		record = method(p);
-		kkt_error = record->ConvergeinfoList[record->end_idx - 1].kkt_error;
+		kkt_error = record->ConvergeinfoList[record->end_idx - 1].dual_feasibility;
 		if (kkt_error < best_kkt_error)
 		{
 			best_kkt_error = kkt_error;

@@ -10,14 +10,14 @@
 #include <algorithm>
 #include <gurobi_c++.h>
 #include "config.h"
+#include "eigen3/Eigen/Core"
+#include "eigen3/Eigen/Sparse"
 
 // #define EIGEN_USE_MKL_ALL
 // #define EIGEN_VECTORIZE_SSE4_2
 // #define EIGEN_DONT_PARALLELIZE
-#define EIGEN_USE_BLAS
+// #define EIGEN_USE_BLAS
 
-#include "eigen3/Eigen/Core"
-#include "eigen3/Eigen/Sparse"
 // #include "eigen3/Eigen/PardisoSupport"
 
 // #include <boost/archive/xml_oarchive.hpp>
@@ -39,6 +39,9 @@ typedef Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> Solver;
 // BiCGSTAB
 // typedef Eigen::BiCGSTAB<Eigen::SparseMatrix<double>, Eigen::IncompleteLUT<double>> Solver;
 
+typedef Eigen::SparseMatrix<double> SpMat;
+typedef Eigen::SparseMatrix<double, Eigen::RowMajor> SpMatRow;
+
 using namespace std::chrono;
 
 struct Beta
@@ -53,7 +56,7 @@ struct Cache
 {
 	Eigen::VectorXd x_prev_start, x_cur_start, y_prev_start, y_cur_start;
 	Eigen::VectorXd xU_prev_start, xU_cur_start, xV_prev_start, xV_cur_start;
-	double mu_c;
+	double mu_c, eta_sum;
 };
 
 struct ADMMmodel
@@ -63,13 +66,7 @@ struct ADMMmodel
 
 struct Convergeinfo
 {
-	double normalized_duality_gap{-1}, kkt_error{-1};
-	/*template <class Archive>
-	void serialize(Archive& ar, const unsigned int version)
-	{
-		ar& BOOST_SERIALIZATION_NVP(normalized_duality_gap);
-		ar& BOOST_SERIALIZATION_NVP(kkt_error);
-	}*/
+	double duality_gap, primal_feasibility, dual_feasibility;
 };
 
 class Params
@@ -78,16 +75,18 @@ public:
 	float eta, eta_hat, w, eps, eps_0, theta;
 	Beta beta;
 	int dataidx, max_iter, tau0, record_every, print_every, evaluate_every, fixed_restart_length;
+	int m1, m2, n;
 	std::string data_name;
-	Eigen::VectorXd c, b;
-	Eigen::SparseMatrix<double, Eigen::RowMajor> A;
-	bool verbose, restart, save2file, print_timing;
+	Eigen::VectorXd c, b, q;
+	SpMat A, K, D2_cache, D1_cache;
+	bool verbose, restart, save2file, print_timing, adaptive_step_size, primal_weight_update, precondition;
 	GRBEnv env;
 	Params();
 	void init_w();
 	void update_w(const Cache &);
 	void load_example();
 	void load_pagerank();
+	void scaling();
 	void load_model(const int &);
 	void set_verbose(const bool &, const bool &);
 };
@@ -114,7 +113,7 @@ public:
 	high_resolution_clock::time_point time, start_time;
 	Iterates(const int &, const int &);
 	Iterates(const int &, const int &, const int &);
-	void update(const bool);
+	void update(const Params &);
 	void restart(const Eigen::VectorXd &, const Eigen::VectorXd &);
 	void now_time();
 	float timing();
@@ -145,7 +144,7 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &, const Eigen::Vect
 Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &g, const Eigen::VectorXd &l,
 											const Eigen::VectorXd &z, const double &r);
 
-void AdaptiveRestarts(Iterates &, const Params &, RecordIterates &);
+void AdaptiveRestarts(Iterates &, Params &, RecordIterates &);
 void FixedFrequencyRestart(Iterates &, const Params &, RecordIterates &);
 
 double PowerIteration(const Eigen::SparseMatrix<double> &, const bool &);
@@ -164,7 +163,7 @@ Eigen::VectorXd update_x(const Eigen::VectorXd &, const double &, const Eigen::V
 void generate_update_model(const Params &, std::vector<GRBModel> &);
 
 void PDHGStep(Iterates &, const Params &, RecordIterates &);
-RecordIterates *PDHG(const Params &);
+RecordIterates *PDHG(Params &);
 
 void EGMStep(Iterates &, const Params &, RecordIterates &);
 RecordIterates *EGM(const Params &);
