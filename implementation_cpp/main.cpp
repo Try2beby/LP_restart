@@ -25,20 +25,21 @@ int main(int argc, char *argv[])
 				std::string(argv[4]) + "_" + std::string(argv[6]) + "_" +
 				std::string(argv[8]) + ".txt";
 	std::filesystem::create_directories(projectpath + outputpath);
-	std::ofstream out(path, std::ios::app);
+	std::ofstream out(path);
 	std::cout.rdbuf(out.rdbuf());
 
 	Params p;
 	Method method;
 	process_argument(argc, argv, method, p);
 
-	p.max_iter = 5000;
+	// p.max_iter = 5000;
 	// p.max_iter = 1e4;
-	// p.max_iter = 5e5;
+	p.tol = 1e-6;
+	p.max_iter = 5e5;
 	p.print_every = 100;
 	p.save2file = true;
 	p.print_timing = false;
-	p.set_verbose(1, 1);
+	p.set_verbose(1, 0);
 	p.load_model(p.dataidx);
 	Eigen::SparseMatrix<double, Eigen::ColMajor> AAT = p.A * p.A.transpose();
 	double sigma_max = std::sqrt(PowerIteration(AAT, 1)); // 1 for verbose

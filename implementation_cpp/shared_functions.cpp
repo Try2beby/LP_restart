@@ -138,7 +138,7 @@ void Iterates::update(const bool restart)
 	count++;
 }
 
-void Iterates::restart()
+void Iterates::restart(const Params &p)
 {
 	n++;
 	t = 0;
@@ -161,7 +161,12 @@ void Iterates::restart()
 	y = y_bar;
 	cache.y_prev_start = cache.y_cur_start;
 	cache.y_cur_start = this->y;
+
+	double r2 = std::sqrt((cache.x_prev_start - cache.x_cur_start).squaredNorm() + (cache.y_prev_start - cache.y_cur_start).squaredNorm());
+	cache.gap_cur_prev_start = compute_normalized_duality_gap(cache.x_cur_start, cache.y_cur_start, r2, p);
+	compute_normalized_duality_gap(cache.x_cur_start, cache.y_cur_start, r2, p, 0);
 }
+
 Convergeinfo Iterates::compute_convergence_information(const Params &p)
 {
 	Eigen::VectorXd c = p.c;
@@ -179,7 +184,8 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 		if (p.restart)
 		{
 			double r = std::sqrt((x_bar - cache.x_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
-			// this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
+			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
+			compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p, 0);
 		}
 		else
 		{
@@ -466,9 +472,13 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	z0 << x0, y0;
 	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
 	std::cout << std::setprecision(8) << "Trust  gap obj:" << (-z_hat.dot(g) + constant) / r << " ";
-	std::cout << std::setprecision(16) << "cons vio: ||min(x,0)|| " << z_hat.head(size_x).cwiseMin(0).norm() << " ";
-	std::cout << std::setprecision(16) << "max(||z-z0||-r,0) " << std::max((z_hat - z0).norm() - r, 0.0) << " ";
-	std::cout << std::setprecision(8) << "r: " << r << std::endl;
+	std::cout << "cons vio: ||min(x,0)|| " << z_hat.head(size_x).cwiseMin(0).norm() << " ";
+	std::cout << "||z-z0||-r " << (z_hat - z0).norm() - r << " ";
+	std::cout << "r: " << r << std::endl;
+	if (p.save2file)
+	{
+		save_obj_residual("trust", (-z_hat.dot(g) + constant) / r, (z_hat - z0).norm() - r);
+	}
 
 	return (-g.dot(z_hat) + constant) / r;
 }
@@ -479,18 +489,23 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	int size_x = (int)p.c.rows();
 	int size_y = (int)p.b.rows();
 
+	Eigen::VectorXd x_coeff = p.A.transpose() * y0 - p.c;
 	Eigen::VectorXd y_coeff = p.b - p.A * x0;
-	Eigen::VectorXd x_coeff = y0.transpose() * p.A - p.c.transpose();
 
 	double constant = p.c.dot(x0) - p.b.dot(y0);
 
 	GRBModel model = GRBModel(p.env);
 	// set logfile, use first 6 numbers in r as filename
 	std::filesystem::create_directory(projectpath + logpath + "gurobi/");
-	model.set(GRB_StringParam_LogFile, projectpath + logpath + "gurobi/" + std::to_string(r).substr(0, 6) + ".log");
+	std::string filepath_name = projectpath + logpath + "gurobi/" + std::to_string(r).substr(0, 6) + ".log";
+	model.set(GRB_StringParam_LogFile, filepath_name);
 
 	// Create variables
-	GRBVar *x = model.addVars(size_x, GRB_CONTINUOUS);
+	GRBVar *x = new GRBVar[size_x];
+	for (int i = 0; i < size_x; i++)
+	{
+		x[i] = model.addVar(-x0(i), GRB_INFINITY, 0.0, GRB_CONTINUOUS);
+	}
 	GRBVar *y = new GRBVar[size_y];
 	for (int i = 0; i < size_y; i++)
 	{
@@ -503,19 +518,20 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	objExpr.addTerms(x_coeff.data(), x, size_x);
 
 	// Set objective
-	model.setObjective(objExpr, GRB_MAXIMIZE);
+	// model.setObjective(objExpr, GRB_MAXIMIZE);
+	model.setObjective(objExpr + x_coeff.dot(x0) + y_coeff.dot(y0), GRB_MAXIMIZE);
 
 	// Create constraints
 	GRBQuadExpr ConstrExpr = GRBQuadExpr();
 	Eigen::VectorXd x_quaCoeff = Eigen::VectorXd::Ones(size_x);
 	Eigen::VectorXd y_quaCoeff = Eigen::VectorXd::Ones(size_y);
-	Eigen::VectorXd x_linCoeff = -2 * x0;
-	Eigen::VectorXd y_linCoeff = -2 * y0;
+	// Eigen::VectorXd x_linCoeff = -2 * x0;
+	// Eigen::VectorXd y_linCoeff = -2 * y0;
 	ConstrExpr.addTerms(x_quaCoeff.data(), x, x, size_x);
 	ConstrExpr.addTerms(y_quaCoeff.data(), y, y, size_y);
-	ConstrExpr.addTerms(x_linCoeff.data(), x, size_x);
-	ConstrExpr.addTerms(y_linCoeff.data(), y, size_y);
-	ConstrExpr += x0.squaredNorm() + y0.squaredNorm();
+	// ConstrExpr.addTerms(x_linCoeff.data(), x, size_x);
+	// ConstrExpr.addTerms(y_linCoeff.data(), y, size_y);
+	// ConstrExpr += x0.squaredNorm() + y0.squaredNorm();
 
 	// Add constraints
 	model.addQConstr(ConstrExpr, GRB_LESS_EQUAL, r * r);
@@ -526,16 +542,26 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	// get solution
 	Eigen::VectorXd x_sol = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_X, x, size_x), size_x);
 	Eigen::VectorXd y_sol = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_X, y, size_y), size_y);
-	std::cout << std::setprecision(16) << "cons vio: ||min(x,0)|| " << x_sol.cwiseMin(0).norm() << " ";
-	std::cout << std::setprecision(16) << "max(||z-z0||-r,0) " << std::max(std::sqrt((x_sol - x0).squaredNorm() + (y_sol - y0).squaredNorm()) - r, 0.0) << " ";
-	std::cout << std::setprecision(8) << "r: " << r << std::endl;
-	std::cout << std::setprecision(16) << "||z-z0||-r " << std::sqrt((x_sol - x0).squaredNorm() + (y_sol - y0).squaredNorm()) - r << " ";
-	double report_ConstrVio = model.get(GRB_DoubleAttr_ConstrVio);
-	if (report_ConstrVio > 1e-1)
+	std::cout << "cons vio: ||min(x,0)|| " << (x_sol + x0).cwiseMin(0).norm() << " ";
+	std::cout << "||z-z0||-r " << std::sqrt(x_sol.squaredNorm() + y_sol.squaredNorm()) - r << " ";
+	std::cout << "r: " << r << std::endl;
+	if (p.save2file)
 	{
-		export_xyr(x0, y0, r);
+		save_obj_residual("gurobi", (model.get(GRB_DoubleAttr_ObjVal) + constant) / r, std::sqrt(x_sol.squaredNorm() + y_sol.squaredNorm()) - r);
 	}
-	std::cout << std::setprecision(16) << "model report ConstrVio " << model.get(GRB_DoubleAttr_ConstrVio) << std::endl;
+
+	std::cout << std::endl;
+	// double report_ConstrVio = model.get(GRB_DoubleAttr_ConstrVio);
+	if (std::sqrt(x_sol.squaredNorm() + y_sol.squaredNorm()) - r > 1e-3)
+	{
+		// export_xyr(x0, y0, r);
+	}
+	else
+	{
+		// delete the log file
+		std::filesystem::remove(filepath_name);
+	}
+	// std::cout << "model report ConstrVio " << model.get(GRB_DoubleAttr_ConstrVio) << std::endl;
 
 	return (model.get(GRB_DoubleAttr_ObjVal) + constant) / r;
 }
@@ -559,13 +585,11 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 		// ||z_bar^n,t-z^n,0||
 		double r1 = std::sqrt((iter.x_bar - iter.cache.x_cur_start).squaredNorm() + (iter.y_bar - iter.cache.y_cur_start).squaredNorm());
 		// ||z^n,0-z^n-1,0||
-		double r2 = std::sqrt((iter.cache.x_prev_start - iter.cache.x_cur_start).squaredNorm() + (iter.cache.y_prev_start - iter.cache.y_cur_start).squaredNorm());
 
 		double duality_gap1 = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p);
 		compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p, 0);
-		double duality_gap2 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r2, p);
-		compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r2, p, 0);
-		if (duality_gap1 <= p.beta * duality_gap2)
+
+		if (duality_gap1 <= p.beta * iter.cache.gap_cur_prev_start)
 		{
 			restart = true;
 		}
@@ -582,7 +606,7 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 		// if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
 
 		iter.compute_convergence_information(p);
-		iter.restart();
+		iter.restart(p);
 	}
 }
 
@@ -597,7 +621,7 @@ void FixedFrequencyRestart(Iterates &iter, const Params &p,
 			std::cout << "restart at " << iter.count - 1 << std::endl;
 			iter.print_iteration_information(p);
 		}
-		iter.restart();
+		iter.restart(p);
 		if ((iter.count - 1) % p.record_every == 0)
 			record.append(iter, p);
 	}
@@ -700,8 +724,21 @@ void export_xyr(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const double
 	if (out.is_open())
 	{
 		out << std::setprecision(15) << x.transpose() << std::endl;
-		out << std::setprecision(15) << y.transpose() << std::endl;
-		out << std::setprecision(15) << r << std::endl;
+		out << y.transpose() << std::endl;
+		out << r << std::endl;
+		out.close();
+	}
+	else
+		std::cout << "Unable to open file" << std::endl;
+}
+
+void save_obj_residual(const std::string method, const double obj, const double residual)
+{
+	auto path = projectpath + outputpath + method + "_obj_residual.txt";
+	std::ofstream out(path, std::ios::app);
+	if (out.is_open())
+	{
+		out << std::setprecision(15) << obj << " " << residual << std::endl;
 		out.close();
 	}
 	else

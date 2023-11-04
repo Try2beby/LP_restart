@@ -45,6 +45,7 @@ struct Cache
 {
 	Eigen::VectorXd x_prev_start, x_cur_start, y_prev_start, y_cur_start;
 	Eigen::VectorXd xU_prev_start, xU_cur_start, xV_prev_start, xV_cur_start;
+	double gap_cur_prev_start;
 };
 
 struct ADMMmodel
@@ -102,7 +103,7 @@ public:
 	Iterates(const int &, const int &);
 	Iterates(const int &, const int &, const int &);
 	void update(const bool);
-	void restart();
+	void restart(const Params &);
 	void now_time();
 	float timing();
 	float end();
@@ -157,3 +158,4 @@ void EGMStep(Iterates &, const Params &, RecordIterates &);
 RecordIterates *EGM(const Params &);
 
 void export_xyr(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const double r);
+void save_obj_residual(const std::string method, const double obj, const double residual);
