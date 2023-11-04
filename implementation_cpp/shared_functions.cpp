@@ -477,7 +477,8 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	std::cout << "r: " << r << std::endl;
 	if (p.save2file)
 	{
-		save_obj_residual("trust", (-z_hat.dot(g) + constant) / r, (z_hat - z0).norm() - r);
+		save_obj_residual("trust", (-z_hat.dot(g) + constant) / r,
+						  (z_hat - z0).norm() - r, 0);
 	}
 
 	return (-g.dot(z_hat) + constant) / r;
@@ -547,11 +548,15 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	std::cout << "r: " << r << std::endl;
 	if (p.save2file)
 	{
-		save_obj_residual("gurobi", (model.get(GRB_DoubleAttr_ObjVal) + constant) / r, std::sqrt(x_sol.squaredNorm() + y_sol.squaredNorm()) - r);
+		save_obj_residual("gurobi", (model.get(GRB_DoubleAttr_ObjVal) + constant) / r,
+						  std::sqrt(x_sol.squaredNorm() + y_sol.squaredNorm()) - r,
+						  model.get(GRB_IntAttr_Status));
 	}
 
 	std::cout << std::endl;
 	// double report_ConstrVio = model.get(GRB_DoubleAttr_ConstrVio);
+	// get model status
+	// int status = model.get(GRB_IntAttr_Status);
 	if (std::sqrt(x_sol.squaredNorm() + y_sol.squaredNorm()) - r > 1e-3)
 	{
 		// export_xyr(x0, y0, r);
@@ -732,13 +737,13 @@ void export_xyr(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const double
 		std::cout << "Unable to open file" << std::endl;
 }
 
-void save_obj_residual(const std::string method, const double obj, const double residual)
+void save_obj_residual(const std::string method, const double obj, const double residual, const int status = 0)
 {
 	auto path = projectpath + outputpath + method + "_obj_residual.txt";
 	std::ofstream out(path, std::ios::app);
 	if (out.is_open())
 	{
-		out << std::setprecision(15) << obj << " " << residual << std::endl;
+		out << std::setprecision(15) << obj << " " << residual << " " << status << std::endl;
 		out.close();
 	}
 	else

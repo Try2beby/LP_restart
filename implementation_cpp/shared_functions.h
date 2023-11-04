@@ -158,4 +158,4 @@ void EGMStep(Iterates &, const Params &, RecordIterates &);
 RecordIterates *EGM(const Params &);
 
 void export_xyr(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const double r);
-void save_obj_residual(const std::string method, const double obj, const double residual);
+void save_obj_residual(const std::string method, const double obj, const double residual, const int status);
