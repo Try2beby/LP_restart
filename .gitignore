@@ -10,6 +10,9 @@ x64
 build/
 debug/
 
+# data folder
+data/
+
 # log folder
 log/
 
