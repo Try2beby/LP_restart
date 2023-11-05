@@ -38,7 +38,7 @@ find_package(GUROBI REQUIRED)
 include_directories(${GUROBI_INCLUDE_DIRS})
 
 # list source files here
-set(sources main.cpp PDHG.cpp EGM.cpp ADMM.cpp shared_functions.cpp shared_functions.h)
+set(sources main.cpp PDHG.cpp ADMM.cpp shared_functions.cpp shared_functions.h)
 
 add_executable(${CMAKE_PROJECT_NAME} ${sources})
 

@@ -1,7 +1,7 @@
 #include "shared_functions.h"
 
 typedef RecordIterates *(*Method)(const Params &);
-std::map<std::string, Method> method_map = {{"ADMM", ADMM}, {"PDHG", PDHG}, {"EGM", EGM}};
+std::map<std::string, Method> method_map = {{"ADMM", ADMM}, {"PDHG", PDHG}};
 
 void process_argument(int argc, char *argv[], Method &m, Params &p);
 
@@ -32,20 +32,20 @@ int main(int argc, char *argv[])
 	Method method;
 	process_argument(argc, argv, method, p);
 
-	// p.max_iter = 5000;
+	p.max_iter = 6e4;
 	// p.max_iter = 1e4;
+	// p.max_iter = 5e5;
 	p.tol = 1e-6;
-	p.max_iter = 5e5;
 	p.print_every = 100;
 	p.save2file = true;
 	p.print_timing = false;
 	p.set_verbose(1, 0);
 	p.load_model(p.dataidx);
-	Eigen::SparseMatrix<double, Eigen::ColMajor> AAT = p.A * p.A.transpose();
-	double sigma_max = std::sqrt(PowerIteration(AAT, 1)); // 1 for verbose
-	p.eta = 0.9 / sigma_max;
+	// Eigen::SparseMatrix<double, Eigen::ColMajor> AAT = p.A * p.A.transpose();
+	// double sigma_max = std::sqrt(PowerIteration(AAT, 1)); // 1 for verbose
+	// p.eta = 0.9 / sigma_max;
 	// p.eta = 1e-1;
-	// p.eta = 10;
+	p.eta = 100;
 	// auto w = GetOptimalw(p, PDHG);
 	p.w = std::pow(4, 2);
 	auto record = method(p);
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
 void process_argument(int argc, char *argv[], Method &m, Params &p)
 {
-	std::map<std::string, int> arg_map = {{"-d", 0}, {"-r", 1}, {"-l", -1}};
+	std::map<std::string, int> arg_map = {{"-d", 0}, {"-r", 1}, {"-l", -1}, {"-tol", -4}};
 	for (int i = 3; i < argc; i += 2)
 	{
 		arg_map[argv[i]] = atoi(argv[i + 1]);
@@ -70,4 +70,13 @@ void process_argument(int argc, char *argv[], Method &m, Params &p)
 	p.dataidx = arg_map["-d"];
 	p.restart = arg_map["-r"];
 	p.fixed_restart_length = arg_map["-l"];
+	p.tol = std::pow(10, arg_map["-tol"]);
+	if (argv[2] == "ADMM")
+	{
+		p.use_ADMM = true;
+	}
+	else
+	{
+		p.use_ADMM = false;
+	}
 }

@@ -1,0 +1,2300 @@
+Model loaded.
+A rows: 1820 A cols: 4150
+AAT number of nonzeros: 72220
+factorize done, takes 218284 milliseconds
+Iteration 100, kkt_error: 0.688296
+normalized_duality_gap: 1.62124
+obj: 332.529
+Iterations take 5.086s
+
+Iteration 200, kkt_error: 0.201105
+normalized_duality_gap: 0.831864
+obj: 332.568
+Iterations take 0.155s
+
+Iteration 300, kkt_error: 0.0888232
+normalized_duality_gap: 0.557697
+obj: 332.577
+Iterations take 0.161s
+
+Iteration 400, kkt_error: 0.0527521
+normalized_duality_gap: 0.419827
+obj: 332.574
+Iterations take 0.16s
+
+Iteration 500, kkt_error: 0.0341931
+normalized_duality_gap: 0.33622
+obj: 332.569
+Iterations take 0.155s
+
+Iteration 600, kkt_error: 0.0241982
+normalized_duality_gap: 0.280759
+obj: 332.567
+Iterations take 0.156s
+
+Iteration 700, kkt_error: 0.0183828
+normalized_duality_gap: 0.240807
+obj: 332.567
+Iterations take 0.167s
+
+Iteration 800, kkt_error: 0.0126787
+normalized_duality_gap: 0.211029
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 900, kkt_error: 0.0105873
+normalized_duality_gap: 0.187691
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 1000, kkt_error: 0.00842375
+normalized_duality_gap: 0.169078
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 1100, kkt_error: 0.0069248
+normalized_duality_gap: 0.153634
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 1200, kkt_error: 0.00730264
+normalized_duality_gap: 0.140836
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 1300, kkt_error: 0.00633264
+normalized_duality_gap: 0.130018
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 1400, kkt_error: 0.0053261
+normalized_duality_gap: 0.120753
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 1500, kkt_error: 0.004161
+normalized_duality_gap: 0.112691
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 1600, kkt_error: 0.00368123
+normalized_duality_gap: 0.105665
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 1700, kkt_error: 0.00318639
+normalized_duality_gap: 0.0994467
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 1800, kkt_error: 0.00301581
+normalized_duality_gap: 0.0939018
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 1900, kkt_error: 0.00266634
+normalized_duality_gap: 0.08894
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 2000, kkt_error: 0.00305386
+normalized_duality_gap: 0.0844905
+obj: 332.566
+Iterations take 0.167s
+
+Iteration 2100, kkt_error: 0.00257663
+normalized_duality_gap: 0.0804995
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 2200, kkt_error: 0.00199757
+normalized_duality_gap: 0.0768372
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 2300, kkt_error: 0.00215181
+normalized_duality_gap: 0.0735069
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 2400, kkt_error: 0.00208349
+normalized_duality_gap: 0.0704468
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 2500, kkt_error: 0.00196522
+normalized_duality_gap: 0.0676291
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 2600, kkt_error: 0.00157999
+normalized_duality_gap: 0.0650258
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 2700, kkt_error: 0.00145164
+normalized_duality_gap: 0.0626074
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 2800, kkt_error: 0.00161947
+normalized_duality_gap: 0.0603656
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 2900, kkt_error: 0.00152232
+normalized_duality_gap: 0.058283
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 3000, kkt_error: 0.00120329
+normalized_duality_gap: 0.0563489
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 3100, kkt_error: 0.00119978
+normalized_duality_gap: 0.0545365
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 3200, kkt_error: 0.00111571
+normalized_duality_gap: 0.0528331
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 3300, kkt_error: 0.00121763
+normalized_duality_gap: 0.0512305
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 3400, kkt_error: 0.00121462
+normalized_duality_gap: 0.0497265
+obj: 332.566
+Iterations take 0.167s
+
+Iteration 3500, kkt_error: 0.00122563
+normalized_duality_gap: 0.0483054
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 3600, kkt_error: 0.000903179
+normalized_duality_gap: 0.0469601
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 3700, kkt_error: 0.00093231
+normalized_duality_gap: 0.045687
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 3800, kkt_error: 0.00108377
+normalized_duality_gap: 0.0444877
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 3900, kkt_error: 0.00119212
+normalized_duality_gap: 0.0433477
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 4000, kkt_error: 0.00103052
+normalized_duality_gap: 0.0422677
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 4100, kkt_error: 0.000702622
+normalized_duality_gap: 0.0412359
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 4200, kkt_error: 0.000892559
+normalized_duality_gap: 0.0402531
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 4300, kkt_error: 0.000920385
+normalized_duality_gap: 0.0393175
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 4400, kkt_error: 0.000929773
+normalized_duality_gap: 0.0384251
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 4500, kkt_error: 0.000668877
+normalized_duality_gap: 0.0375701
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 4600, kkt_error: 0.000749408
+normalized_duality_gap: 0.0367518
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 4700, kkt_error: 0.000929272
+normalized_duality_gap: 0.0359683
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 4800, kkt_error: 0.000999335
+normalized_duality_gap: 0.0352205
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 4900, kkt_error: 0.000752114
+normalized_duality_gap: 0.0345023
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 5000, kkt_error: 0.000476987
+normalized_duality_gap: 0.0338129
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 5100, kkt_error: 0.000732725
+normalized_duality_gap: 0.0331499
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 5200, kkt_error: 0.000901872
+normalized_duality_gap: 0.0325142
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 5300, kkt_error: 0.000851807
+normalized_duality_gap: 0.0319013
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 5400, kkt_error: 0.000456162
+normalized_duality_gap: 0.0313108
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 5500, kkt_error: 0.00042919
+normalized_duality_gap: 0.0307396
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 5600, kkt_error: 0.000745408
+normalized_duality_gap: 0.0301902
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 5700, kkt_error: 0.000861249
+normalized_duality_gap: 0.0296602
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 5800, kkt_error: 0.000700749
+normalized_duality_gap: 0.0291495
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 5900, kkt_error: 0.000480751
+normalized_duality_gap: 0.028656
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 6000, kkt_error: 0.000647578
+normalized_duality_gap: 0.0281791
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 6100, kkt_error: 0.000821594
+normalized_duality_gap: 0.027718
+obj: 332.566
+Iterations take 0.167s
+
+Iteration 6200, kkt_error: 0.000729006
+normalized_duality_gap: 0.0272716
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 6300, kkt_error: 0.000467583
+normalized_duality_gap: 0.0268382
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 6400, kkt_error: 0.000498234
+normalized_duality_gap: 0.0264178
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 6500, kkt_error: 0.000756465
+normalized_duality_gap: 0.0260102
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 6600, kkt_error: 0.000818988
+normalized_duality_gap: 0.0256153
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 6700, kkt_error: 0.000597699
+normalized_duality_gap: 0.0252333
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 6800, kkt_error: 0.000428666
+normalized_duality_gap: 0.0248636
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 6900, kkt_error: 0.000619275
+normalized_duality_gap: 0.0245037
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 7000, kkt_error: 0.000781121
+normalized_duality_gap: 0.0241544
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 7100, kkt_error: 0.000704448
+normalized_duality_gap: 0.0238145
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 7200, kkt_error: 0.000402737
+normalized_duality_gap: 0.0234838
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 7300, kkt_error: 0.000408453
+normalized_duality_gap: 0.023161
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 7400, kkt_error: 0.000680419
+normalized_duality_gap: 0.022847
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 7500, kkt_error: 0.000770653
+normalized_duality_gap: 0.0225422
+obj: 332.566
+Iterations take 0.167s
+
+Iteration 7600, kkt_error: 0.000561259
+normalized_duality_gap: 0.0222463
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 7700, kkt_error: 0.000436853
+normalized_duality_gap: 0.0219585
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 7800, kkt_error: 0.000621568
+normalized_duality_gap: 0.0216778
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 7900, kkt_error: 0.000723885
+normalized_duality_gap: 0.0214035
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 8000, kkt_error: 0.000596811
+normalized_duality_gap: 0.0211356
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 8100, kkt_error: 0.000377163
+normalized_duality_gap: 0.0208739
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 8200, kkt_error: 0.000520442
+normalized_duality_gap: 0.0206186
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 8300, kkt_error: 0.000693384
+normalized_duality_gap: 0.0203696
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 8400, kkt_error: 0.000652742
+normalized_duality_gap: 0.0201268
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 8500, kkt_error: 0.000484051
+normalized_duality_gap: 0.0198907
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 8600, kkt_error: 0.000467428
+normalized_duality_gap: 0.0196604
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 8700, kkt_error: 0.000536593
+normalized_duality_gap: 0.0194349
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 8800, kkt_error: 0.000610908
+normalized_duality_gap: 0.0192141
+obj: 332.566
+Iterations take 0.167s
+
+Iteration 8900, kkt_error: 0.00056568
+normalized_duality_gap: 0.0189977
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 9000, kkt_error: 0.000349957
+normalized_duality_gap: 0.0187866
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 9100, kkt_error: 0.000391997
+normalized_duality_gap: 0.0185799
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 9200, kkt_error: 0.000528535
+normalized_duality_gap: 0.0183776
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 9300, kkt_error: 0.000579325
+normalized_duality_gap: 0.0181798
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 9400, kkt_error: 0.000482969
+normalized_duality_gap: 0.0179868
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 9500, kkt_error: 0.000428723
+normalized_duality_gap: 0.0177983
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 9600, kkt_error: 0.000511982
+normalized_duality_gap: 0.0176131
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 9700, kkt_error: 0.000529665
+normalized_duality_gap: 0.0174316
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 9800, kkt_error: 0.000480474
+normalized_duality_gap: 0.0172532
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 9900, kkt_error: 0.000387423
+normalized_duality_gap: 0.0170787
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 10000, kkt_error: 0.000420548
+normalized_duality_gap: 0.016908
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 10100, kkt_error: 0.000534412
+normalized_duality_gap: 0.0167404
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 10200, kkt_error: 0.000511338
+normalized_duality_gap: 0.0165759
+obj: 332.566
+Iterations take 0.167s
+
+Iteration 10300, kkt_error: 0.00039876
+normalized_duality_gap: 0.016415
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 10400, kkt_error: 0.000405243
+normalized_duality_gap: 0.0162577
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 10500, kkt_error: 0.000533127
+normalized_duality_gap: 0.016103
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 10600, kkt_error: 0.00053054
+normalized_duality_gap: 0.0159512
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 10700, kkt_error: 0.000410215
+normalized_duality_gap: 0.0158021
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 10800, kkt_error: 0.000314564
+normalized_duality_gap: 0.0156556
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 10900, kkt_error: 0.000421855
+normalized_duality_gap: 0.0155121
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 11000, kkt_error: 0.000519265
+normalized_duality_gap: 0.0153712
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 11100, kkt_error: 0.000471579
+normalized_duality_gap: 0.0152325
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 11200, kkt_error: 0.000409043
+normalized_duality_gap: 0.0150963
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 11300, kkt_error: 0.000426989
+normalized_duality_gap: 0.014963
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 11400, kkt_error: 0.00051386
+normalized_duality_gap: 0.0148322
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 11500, kkt_error: 0.000473174
+normalized_duality_gap: 0.0147033
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 11600, kkt_error: 0.000354508
+normalized_duality_gap: 0.0145764
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 11700, kkt_error: 0.00039056
+normalized_duality_gap: 0.0144515
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 11800, kkt_error: 0.000471605
+normalized_duality_gap: 0.0143289
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 11900, kkt_error: 0.000485009
+normalized_duality_gap: 0.0142084
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 12000, kkt_error: 0.000368589
+normalized_duality_gap: 0.0140897
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 12100, kkt_error: 0.000384762
+normalized_duality_gap: 0.0139732
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 12200, kkt_error: 0.000443293
+normalized_duality_gap: 0.0138589
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 12300, kkt_error: 0.000492441
+normalized_duality_gap: 0.0137467
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 12400, kkt_error: 0.000433656
+normalized_duality_gap: 0.0136361
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 12500, kkt_error: 0.000314373
+normalized_duality_gap: 0.0135269
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 12600, kkt_error: 0.000313238
+normalized_duality_gap: 0.0134193
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 12700, kkt_error: 0.000415239
+normalized_duality_gap: 0.0133135
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 12800, kkt_error: 0.000441185
+normalized_duality_gap: 0.0132093
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 12900, kkt_error: 0.000374081
+normalized_duality_gap: 0.0131069
+obj: 332.566
+Iterations take 0.167s
+
+Iteration 13000, kkt_error: 0.000356145
+normalized_duality_gap: 0.0130062
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 13100, kkt_error: 0.000412396
+normalized_duality_gap: 0.0129071
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 13200, kkt_error: 0.000461722
+normalized_duality_gap: 0.0128097
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 13300, kkt_error: 0.000406491
+normalized_duality_gap: 0.0127136
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 13400, kkt_error: 0.000287815
+normalized_duality_gap: 0.0126185
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 13500, kkt_error: 0.000341728
+normalized_duality_gap: 0.0125246
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 13600, kkt_error: 0.000446685
+normalized_duality_gap: 0.0124323
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 13700, kkt_error: 0.000412364
+normalized_duality_gap: 0.0123415
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 13800, kkt_error: 0.000279313
+normalized_duality_gap: 0.0122521
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 13900, kkt_error: 0.000291949
+normalized_duality_gap: 0.0121641
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 14000, kkt_error: 0.000452308
+normalized_duality_gap: 0.0120773
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 14100, kkt_error: 0.000487752
+normalized_duality_gap: 0.0119918
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 14200, kkt_error: 0.000375945
+normalized_duality_gap: 0.0119074
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 14300, kkt_error: 0.000210209
+normalized_duality_gap: 0.011824
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 14400, kkt_error: 0.000293462
+normalized_duality_gap: 0.0117417
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 14500, kkt_error: 0.000439211
+normalized_duality_gap: 0.0116607
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 14600, kkt_error: 0.000406157
+normalized_duality_gap: 0.011581
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 14700, kkt_error: 0.000270335
+normalized_duality_gap: 0.0115024
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 14800, kkt_error: 0.000294239
+normalized_duality_gap: 0.0114248
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 14900, kkt_error: 0.000424843
+normalized_duality_gap: 0.0113481
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 15000, kkt_error: 0.000443928
+normalized_duality_gap: 0.0112725
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 15100, kkt_error: 0.000345633
+normalized_duality_gap: 0.0111978
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 15200, kkt_error: 0.000256412
+normalized_duality_gap: 0.011124
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 15300, kkt_error: 0.000334369
+normalized_duality_gap: 0.0110512
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 15400, kkt_error: 0.000422135
+normalized_duality_gap: 0.0109793
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 15500, kkt_error: 0.000358945
+normalized_duality_gap: 0.0109085
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 15600, kkt_error: 0.000214238
+normalized_duality_gap: 0.0108388
+obj: 332.566
+Iterations take 0.167s
+
+Iteration 15700, kkt_error: 0.00027977
+normalized_duality_gap: 0.0107698
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 15800, kkt_error: 0.000438997
+normalized_duality_gap: 0.0107015
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 15900, kkt_error: 0.00046448
+normalized_duality_gap: 0.0106342
+obj: 332.566
+Iterations take 0.165s
+
+Iteration 16000, kkt_error: 0.000328669
+normalized_duality_gap: 0.0105677
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 16100, kkt_error: 0.000184316
+normalized_duality_gap: 0.010502
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 16200, kkt_error: 0.000293505
+normalized_duality_gap: 0.0104373
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 16300, kkt_error: 0.000423415
+normalized_duality_gap: 0.0103732
+obj: 332.566
+Iterations take 0.155s
+
+restart at 16384
+Iteration 16384, kkt_error: 0.000399158
+normalized_duality_gap: 0.0103201
+obj: 332.566
+Iterations take 0.138s
+
+Iteration 16400, kkt_error: 0.0263749
+normalized_duality_gap: 0.0443122
+obj: 332.566
+Iterations take 0.023s
+
+Iteration 16500, kkt_error: 0.00787625
+normalized_duality_gap: 0.00796487
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 16600, kkt_error: 0.00474754
+normalized_duality_gap: 0.0043822
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 16700, kkt_error: 0.00415452
+normalized_duality_gap: 0.00315273
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 16800, kkt_error: 0.00357254
+normalized_duality_gap: 0.0024091
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 16900, kkt_error: 0.00299653
+normalized_duality_gap: 0.00185857
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 17000, kkt_error: 0.00234835
+normalized_duality_gap: 0.00150905
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 17100, kkt_error: 0.00223853
+normalized_duality_gap: 0.00123058
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 17200, kkt_error: 0.00216721
+normalized_duality_gap: 0.000981718
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 17300, kkt_error: 0.00185469
+normalized_duality_gap: 0.000965184
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 17400, kkt_error: 0.00179393
+normalized_duality_gap: 0.000845842
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 17500, kkt_error: 0.00144269
+normalized_duality_gap: 0.000833415
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 17600, kkt_error: 0.0015303
+normalized_duality_gap: 0.000764141
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 17700, kkt_error: 0.00126441
+normalized_duality_gap: 0.000752183
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 17800, kkt_error: 0.00135202
+normalized_duality_gap: 0.000697966
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 17900, kkt_error: 0.0010951
+normalized_duality_gap: 0.000642569
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 18000, kkt_error: 0.000929887
+normalized_duality_gap: 0.000561275
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 18100, kkt_error: 0.0010331
+normalized_duality_gap: 0.000523995
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 18200, kkt_error: 0.00105451
+normalized_duality_gap: 0.000487183
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 18300, kkt_error: 0.00105648
+normalized_duality_gap: 0.000464046
+obj: 332.566
+Iterations take 0.169s
+
+Iteration 18400, kkt_error: 0.000753308
+normalized_duality_gap: 0.000445341
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 18500, kkt_error: 0.000930037
+normalized_duality_gap: 0.000445159
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 18600, kkt_error: 0.0009036
+normalized_duality_gap: 0.000434638
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 18700, kkt_error: 0.000986412
+normalized_duality_gap: 0.000428256
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 18800, kkt_error: 0.000829969
+normalized_duality_gap: 0.000398538
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 18900, kkt_error: 0.000707834
+normalized_duality_gap: 0.000379359
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 19000, kkt_error: 0.000756
+normalized_duality_gap: 0.000350136
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 19100, kkt_error: 0.000819085
+normalized_duality_gap: 0.000339232
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 19200, kkt_error: 0.000798106
+normalized_duality_gap: 0.000322567
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 19300, kkt_error: 0.000635164
+normalized_duality_gap: 0.000318489
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 19400, kkt_error: 0.00075411
+normalized_duality_gap: 0.000316707
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 19500, kkt_error: 0.000636067
+normalized_duality_gap: 0.000318749
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 19600, kkt_error: 0.000787984
+normalized_duality_gap: 0.000313892
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 19700, kkt_error: 0.000743671
+normalized_duality_gap: 0.000302833
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 19800, kkt_error: 0.000642635
+normalized_duality_gap: 0.000280715
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 19900, kkt_error: 0.000495964
+normalized_duality_gap: 0.000258685
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 20000, kkt_error: 0.000690823
+normalized_duality_gap: 0.000242522
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 20100, kkt_error: 0.00077516
+normalized_duality_gap: 0.000234808
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 20200, kkt_error: 0.00054857
+normalized_duality_gap: 0.000227169
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 20300, kkt_error: 0.000570494
+normalized_duality_gap: 0.000228885
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 20400, kkt_error: 0.000521252
+normalized_duality_gap: 0.000228575
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 20500, kkt_error: 0.000792904
+normalized_duality_gap: 0.000230784
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 20600, kkt_error: 0.000657505
+normalized_duality_gap: 0.000220359
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 20700, kkt_error: 0.000525797
+normalized_duality_gap: 0.000207669
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 20800, kkt_error: 0.000411013
+normalized_duality_gap: 0.000196074
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 20900, kkt_error: 0.00072129
+normalized_duality_gap: 0.000191006
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 21000, kkt_error: 0.0006597
+normalized_duality_gap: 0.000185757
+obj: 332.566
+Iterations take 0.169s
+
+Iteration 21100, kkt_error: 0.000455082
+normalized_duality_gap: 0.000185509
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 21200, kkt_error: 0.000534429
+normalized_duality_gap: 0.000188297
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 21300, kkt_error: 0.000568657
+normalized_duality_gap: 0.000193089
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 21400, kkt_error: 0.000682908
+normalized_duality_gap: 0.000193692
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 21500, kkt_error: 0.000576036
+normalized_duality_gap: 0.000188489
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 21600, kkt_error: 0.000544501
+normalized_duality_gap: 0.000178644
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 21700, kkt_error: 0.00045086
+normalized_duality_gap: 0.00016859
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 21800, kkt_error: 0.000609866
+normalized_duality_gap: 0.000160417
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 21900, kkt_error: 0.000543336
+normalized_duality_gap: 0.000156277
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 22000, kkt_error: 0.000526292
+normalized_duality_gap: 0.000154669
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 22100, kkt_error: 0.000520876
+normalized_duality_gap: 0.000156803
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 22200, kkt_error: 0.000474589
+normalized_duality_gap: 0.000157504
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 22300, kkt_error: 0.000565439
+normalized_duality_gap: 0.00015766
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 22400, kkt_error: 0.000590415
+normalized_duality_gap: 0.000155507
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 22500, kkt_error: 0.000539163
+normalized_duality_gap: 0.000150642
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 22600, kkt_error: 0.000332825
+normalized_duality_gap: 0.000144495
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 22700, kkt_error: 0.000545118
+normalized_duality_gap: 0.000142072
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 22800, kkt_error: 0.000560682
+normalized_duality_gap: 0.000139774
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 22900, kkt_error: 0.000517918
+normalized_duality_gap: 0.000139591
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 23000, kkt_error: 0.000396366
+normalized_duality_gap: 0.000140833
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 23100, kkt_error: 0.000448171
+normalized_duality_gap: 0.000143323
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 23200, kkt_error: 0.000591009
+normalized_duality_gap: 0.000144574
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 23300, kkt_error: 0.000544406
+normalized_duality_gap: 0.000143596
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 23400, kkt_error: 0.000472283
+normalized_duality_gap: 0.000139145
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 23500, kkt_error: 0.000349241
+normalized_duality_gap: 0.000133322
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 23600, kkt_error: 0.000541734
+normalized_duality_gap: 0.00012818
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 23700, kkt_error: 0.000474088
+normalized_duality_gap: 0.000124125
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 23800, kkt_error: 0.000436116
+normalized_duality_gap: 0.00012098
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 23900, kkt_error: 0.000407346
+normalized_duality_gap: 0.000120236
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 24000, kkt_error: 0.000489047
+normalized_duality_gap: 0.000120898
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 24100, kkt_error: 0.000452356
+normalized_duality_gap: 0.000120853
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 24200, kkt_error: 0.000478051
+normalized_duality_gap: 0.000119565
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 24300, kkt_error: 0.000495728
+normalized_duality_gap: 0.000117061
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 24400, kkt_error: 0.000425319
+normalized_duality_gap: 0.000113104
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 24500, kkt_error: 0.000431628
+normalized_duality_gap: 0.000108979
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 24600, kkt_error: 0.00038392
+normalized_duality_gap: 0.000105927
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 24700, kkt_error: 0.000476532
+normalized_duality_gap: 0.000105378
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 24800, kkt_error: 0.000435167
+normalized_duality_gap: 0.000105684
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 24900, kkt_error: 0.000415864
+normalized_duality_gap: 0.000107119
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 25000, kkt_error: 0.00037306
+normalized_duality_gap: 0.000108809
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 25100, kkt_error: 0.00051672
+normalized_duality_gap: 0.000109478
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 25200, kkt_error: 0.000515512
+normalized_duality_gap: 0.000107023
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 25300, kkt_error: 0.000370227
+normalized_duality_gap: 0.000102968
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 25400, kkt_error: 0.000404041
+normalized_duality_gap: 9.87427e-05
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 25500, kkt_error: 0.000424637
+normalized_duality_gap: 9.53074e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 25600, kkt_error: 0.000447673
+normalized_duality_gap: 9.38235e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 25700, kkt_error: 0.000375117
+normalized_duality_gap: 9.36613e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 25800, kkt_error: 0.000427305
+normalized_duality_gap: 9.43501e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 25900, kkt_error: 0.000420158
+normalized_duality_gap: 9.50146e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 26000, kkt_error: 0.000458848
+normalized_duality_gap: 9.47545e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 26100, kkt_error: 0.00043
+normalized_duality_gap: 9.31185e-05
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 26200, kkt_error: 0.000420314
+normalized_duality_gap: 9.08647e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 26300, kkt_error: 0.00044136
+normalized_duality_gap: 8.89279e-05
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 26400, kkt_error: 0.000344027
+normalized_duality_gap: 8.66499e-05
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 26500, kkt_error: 0.000424386
+normalized_duality_gap: 8.59553e-05
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 26600, kkt_error: 0.000309431
+normalized_duality_gap: 8.78181e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 26700, kkt_error: 0.000414117
+normalized_duality_gap: 8.9562e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 26800, kkt_error: 0.00034282
+normalized_duality_gap: 8.96836e-05
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 26900, kkt_error: 0.000364309
+normalized_duality_gap: 9.00966e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 27000, kkt_error: 0.000430263
+normalized_duality_gap: 8.97973e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 27100, kkt_error: 0.000423602
+normalized_duality_gap: 8.77184e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 27200, kkt_error: 0.00030097
+normalized_duality_gap: 8.48074e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 27300, kkt_error: 0.000285453
+normalized_duality_gap: 8.35917e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 27400, kkt_error: 0.0003851
+normalized_duality_gap: 8.25873e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 27500, kkt_error: 0.000384054
+normalized_duality_gap: 8.17805e-05
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 27600, kkt_error: 0.00030684
+normalized_duality_gap: 8.18012e-05
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 27700, kkt_error: 0.000290097
+normalized_duality_gap: 8.17693e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 27800, kkt_error: 0.000380248
+normalized_duality_gap: 8.15423e-05
+obj: 332.566
+Iterations take 0.169s
+
+Iteration 27900, kkt_error: 0.000381964
+normalized_duality_gap: 8.0806e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 28000, kkt_error: 0.000388377
+normalized_duality_gap: 7.97501e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 28100, kkt_error: 0.000237241
+normalized_duality_gap: 7.7873e-05
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 28200, kkt_error: 0.000338807
+normalized_duality_gap: 7.64995e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 28300, kkt_error: 0.000346065
+normalized_duality_gap: 7.59207e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 28400, kkt_error: 0.000306294
+normalized_duality_gap: 7.5177e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 28500, kkt_error: 0.00032644
+normalized_duality_gap: 7.49213e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 28600, kkt_error: 0.000314287
+normalized_duality_gap: 7.53544e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 28700, kkt_error: 0.000337435
+normalized_duality_gap: 7.58897e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 28800, kkt_error: 0.000335608
+normalized_duality_gap: 7.53632e-05
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 28900, kkt_error: 0.000384328
+normalized_duality_gap: 7.44544e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 29000, kkt_error: 0.000328191
+normalized_duality_gap: 7.28817e-05
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 29100, kkt_error: 0.00025363
+normalized_duality_gap: 7.03082e-05
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 29200, kkt_error: 0.000256316
+normalized_duality_gap: 6.8498e-05
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 29300, kkt_error: 0.000366115
+normalized_duality_gap: 6.79301e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 29400, kkt_error: 0.000346325
+normalized_duality_gap: 6.73012e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 29500, kkt_error: 0.000270195
+normalized_duality_gap: 6.69449e-05
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 29600, kkt_error: 0.000258474
+normalized_duality_gap: 6.74168e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 29700, kkt_error: 0.000368547
+normalized_duality_gap: 6.75435e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 29800, kkt_error: 0.000415712
+normalized_duality_gap: 6.67676e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 29900, kkt_error: 0.000261296
+normalized_duality_gap: 6.56905e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 30000, kkt_error: 0.000215736
+normalized_duality_gap: 6.44798e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 30100, kkt_error: 0.000288542
+normalized_duality_gap: 6.36286e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 30200, kkt_error: 0.000360035
+normalized_duality_gap: 6.35265e-05
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 30300, kkt_error: 0.000296462
+normalized_duality_gap: 6.39033e-05
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 30400, kkt_error: 0.000224963
+normalized_duality_gap: 6.43464e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 30500, kkt_error: 0.000296188
+normalized_duality_gap: 6.49805e-05
+obj: 332.566
+Iterations take 0.169s
+
+Iteration 30600, kkt_error: 0.000353603
+normalized_duality_gap: 6.55807e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 30700, kkt_error: 0.000346839
+normalized_duality_gap: 6.50539e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 30800, kkt_error: 0.000279868
+normalized_duality_gap: 6.368e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 30900, kkt_error: 0.000263062
+normalized_duality_gap: 6.23856e-05
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 31000, kkt_error: 0.000248992
+normalized_duality_gap: 6.12808e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 31100, kkt_error: 0.000288869
+normalized_duality_gap: 6.05461e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 31200, kkt_error: 0.00030005
+normalized_duality_gap: 6.047e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 31300, kkt_error: 0.000306321
+normalized_duality_gap: 6.06909e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 31400, kkt_error: 0.000229461
+normalized_duality_gap: 6.05826e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 31500, kkt_error: 0.000276425
+normalized_duality_gap: 6.06434e-05
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 31600, kkt_error: 0.000361589
+normalized_duality_gap: 6.07975e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 31700, kkt_error: 0.000317476
+normalized_duality_gap: 6.02981e-05
+obj: 332.566
+Iterations take 0.16s
+
+Iteration 31800, kkt_error: 0.000220686
+normalized_duality_gap: 5.93873e-05
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 31900, kkt_error: 0.000163931
+normalized_duality_gap: 5.89357e-05
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 32000, kkt_error: 0.000304375
+normalized_duality_gap: 5.87887e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 32100, kkt_error: 0.000335897
+normalized_duality_gap: 5.84907e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 32200, kkt_error: 0.000255742
+normalized_duality_gap: 5.84425e-05
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 32300, kkt_error: 0.000178741
+normalized_duality_gap: 5.85787e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 32400, kkt_error: 0.000322144
+normalized_duality_gap: 5.87514e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 32500, kkt_error: 0.000376286
+normalized_duality_gap: 5.87801e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 32600, kkt_error: 0.000294464
+normalized_duality_gap: 5.81526e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 32700, kkt_error: 0.000192209
+normalized_duality_gap: 5.69104e-05
+obj: 332.566
+Iterations take 0.163s
+
+restart at 32768
+Iteration 32768, kkt_error: 0.00020425
+normalized_duality_gap: 5.60241e-05
+obj: 332.566
+Iterations take 0.106s
+
+Iteration 32800, kkt_error: 5.8128e-05
+normalized_duality_gap: 0.00011939
+obj: 332.566
+Iterations take 0.048s
+
+Iteration 32900, kkt_error: 4.90694e-05
+normalized_duality_gap: 7.76549e-05
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 33000, kkt_error: 3.7027e-05
+normalized_duality_gap: 6.12601e-05
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 33100, kkt_error: 3.75074e-05
+normalized_duality_gap: 6.08593e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 33200, kkt_error: 4.07425e-05
+normalized_duality_gap: 5.87905e-05
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 33300, kkt_error: 3.51658e-05
+normalized_duality_gap: 5.14287e-05
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 33400, kkt_error: 3.68205e-05
+normalized_duality_gap: 4.40982e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 33500, kkt_error: 3.19796e-05
+normalized_duality_gap: 3.82757e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 33600, kkt_error: 3.22552e-05
+normalized_duality_gap: 3.33812e-05
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 33700, kkt_error: 3.63162e-05
+normalized_duality_gap: 2.95065e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 33800, kkt_error: 3.33516e-05
+normalized_duality_gap: 2.66205e-05
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 33900, kkt_error: 2.79606e-05
+normalized_duality_gap: 2.38751e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 34000, kkt_error: 2.71146e-05
+normalized_duality_gap: 2.2161e-05
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 34100, kkt_error: 3.34628e-05
+normalized_duality_gap: 2.09793e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 34200, kkt_error: 3.10861e-05
+normalized_duality_gap: 1.89813e-05
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 34300, kkt_error: 2.81899e-05
+normalized_duality_gap: 1.64686e-05
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 34400, kkt_error: 3.20784e-05
+normalized_duality_gap: 1.34528e-05
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 34500, kkt_error: 2.75908e-05
+normalized_duality_gap: 1.02026e-05
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 34600, kkt_error: 2.68785e-05
+normalized_duality_gap: 8.06637e-06
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 34700, kkt_error: 2.75076e-05
+normalized_duality_gap: 7.21314e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 34800, kkt_error: 2.32586e-05
+normalized_duality_gap: 7.24847e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 34900, kkt_error: 2.31047e-05
+normalized_duality_gap: 8.13805e-06
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 35000, kkt_error: 2.3235e-05
+normalized_duality_gap: 8.73559e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 35100, kkt_error: 2.59571e-05
+normalized_duality_gap: 8.87589e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 35200, kkt_error: 2.65631e-05
+normalized_duality_gap: 9.03784e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 35300, kkt_error: 2.5251e-05
+normalized_duality_gap: 8.55058e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 35400, kkt_error: 2.58994e-05
+normalized_duality_gap: 7.86175e-06
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 35500, kkt_error: 2.41393e-05
+normalized_duality_gap: 7.7076e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 35600, kkt_error: 2.51998e-05
+normalized_duality_gap: 7.52411e-06
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 35700, kkt_error: 2.69379e-05
+normalized_duality_gap: 7.28494e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 35800, kkt_error: 2.33612e-05
+normalized_duality_gap: 7.32128e-06
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 35900, kkt_error: 2.24508e-05
+normalized_duality_gap: 7.37649e-06
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 36000, kkt_error: 2.59316e-05
+normalized_duality_gap: 7.30517e-06
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 36100, kkt_error: 2.71389e-05
+normalized_duality_gap: 7.20984e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 36200, kkt_error: 2.70447e-05
+normalized_duality_gap: 6.62797e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 36300, kkt_error: 2.53332e-05
+normalized_duality_gap: 5.63121e-06
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 36400, kkt_error: 2.33558e-05
+normalized_duality_gap: 4.92651e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 36500, kkt_error: 2.41132e-05
+normalized_duality_gap: 4.62225e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 36600, kkt_error: 2.45068e-05
+normalized_duality_gap: 4.54632e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 36700, kkt_error: 2.38251e-05
+normalized_duality_gap: 4.66286e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 36800, kkt_error: 1.58835e-05
+normalized_duality_gap: 4.70075e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 36900, kkt_error: 1.79586e-05
+normalized_duality_gap: 4.79421e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 37000, kkt_error: 2.54882e-05
+normalized_duality_gap: 4.99533e-06
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 37100, kkt_error: 2.49087e-05
+normalized_duality_gap: 4.91237e-06
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 37200, kkt_error: 2.23998e-05
+normalized_duality_gap: 4.54694e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 37300, kkt_error: 1.75168e-05
+normalized_duality_gap: 4.25729e-06
+obj: 332.566
+Iterations take 0.169s
+
+Iteration 37400, kkt_error: 2.03162e-05
+normalized_duality_gap: 4.14312e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 37500, kkt_error: 2.40772e-05
+normalized_duality_gap: 4.1703e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 37600, kkt_error: 2.2166e-05
+normalized_duality_gap: 4.22426e-06
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 37700, kkt_error: 1.58366e-05
+normalized_duality_gap: 4.27009e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 37800, kkt_error: 1.781e-05
+normalized_duality_gap: 4.57892e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 37900, kkt_error: 2.7244e-05
+normalized_duality_gap: 4.93665e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 38000, kkt_error: 2.76876e-05
+normalized_duality_gap: 4.94466e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 38100, kkt_error: 2.18294e-05
+normalized_duality_gap: 4.70273e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 38200, kkt_error: 2.00906e-05
+normalized_duality_gap: 4.50943e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 38300, kkt_error: 2.21948e-05
+normalized_duality_gap: 4.42933e-06
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 38400, kkt_error: 2.40338e-05
+normalized_duality_gap: 4.46677e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 38500, kkt_error: 2.40172e-05
+normalized_duality_gap: 4.47101e-06
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 38600, kkt_error: 1.64367e-05
+normalized_duality_gap: 4.31527e-06
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 38700, kkt_error: 1.59195e-05
+normalized_duality_gap: 4.25038e-06
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 38800, kkt_error: 2.44291e-05
+normalized_duality_gap: 4.28443e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 38900, kkt_error: 2.59674e-05
+normalized_duality_gap: 4.13174e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 39000, kkt_error: 2.07288e-05
+normalized_duality_gap: 3.77276e-06
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 39100, kkt_error: 1.62789e-05
+normalized_duality_gap: 3.36066e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 39200, kkt_error: 1.76035e-05
+normalized_duality_gap: 2.94653e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 39300, kkt_error: 2.18314e-05
+normalized_duality_gap: 2.58358e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 39400, kkt_error: 2.13e-05
+normalized_duality_gap: 2.22386e-06
+obj: 332.566
+Iterations take 0.163s
+
+Iteration 39500, kkt_error: 1.3578e-05
+normalized_duality_gap: 1.83777e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 39600, kkt_error: 1.03204e-05
+normalized_duality_gap: 1.85543e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 39700, kkt_error: 2.15827e-05
+normalized_duality_gap: 2.27874e-06
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 39800, kkt_error: 2.62799e-05
+normalized_duality_gap: 2.54461e-06
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 39900, kkt_error: 2.13553e-05
+normalized_duality_gap: 2.5541e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 40000, kkt_error: 1.83945e-05
+normalized_duality_gap: 2.54816e-06
+obj: 332.566
+Iterations take 0.169s
+
+Iteration 40100, kkt_error: 1.96014e-05
+normalized_duality_gap: 2.67319e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 40200, kkt_error: 2.38989e-05
+normalized_duality_gap: 2.86665e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 40300, kkt_error: 2.40394e-05
+normalized_duality_gap: 2.96473e-06
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 40400, kkt_error: 1.71722e-05
+normalized_duality_gap: 2.96895e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 40500, kkt_error: 1.42797e-05
+normalized_duality_gap: 3.06123e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 40600, kkt_error: 2.22902e-05
+normalized_duality_gap: 3.23747e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 40700, kkt_error: 2.57329e-05
+normalized_duality_gap: 3.32404e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 40800, kkt_error: 2.12289e-05
+normalized_duality_gap: 3.24159e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 40900, kkt_error: 1.70079e-05
+normalized_duality_gap: 3.01225e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 41000, kkt_error: 1.81305e-05
+normalized_duality_gap: 2.70033e-06
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 41100, kkt_error: 2.03609e-05
+normalized_duality_gap: 2.33801e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 41200, kkt_error: 2.06246e-05
+normalized_duality_gap: 1.86344e-06
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 41300, kkt_error: 1.54896e-05
+normalized_duality_gap: 1.33485e-06
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 41400, kkt_error: 9.93808e-06
+normalized_duality_gap: 1.13774e-06
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 41500, kkt_error: 1.73684e-05
+normalized_duality_gap: 1.39278e-06
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 41600, kkt_error: 2.26409e-05
+normalized_duality_gap: 1.68069e-06
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 41700, kkt_error: 2.0701e-05
+normalized_duality_gap: 1.83701e-06
+obj: 332.566
+Iterations take 0.167s
+
+Iteration 41800, kkt_error: 1.73725e-05
+normalized_duality_gap: 1.90499e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 41900, kkt_error: 1.71521e-05
+normalized_duality_gap: 1.9946e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 42000, kkt_error: 1.94547e-05
+normalized_duality_gap: 2.16183e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 42100, kkt_error: 2.12178e-05
+normalized_duality_gap: 2.32095e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 42200, kkt_error: 1.78087e-05
+normalized_duality_gap: 2.44471e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 42300, kkt_error: 1.43094e-05
+normalized_duality_gap: 2.63052e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 42400, kkt_error: 2.02085e-05
+normalized_duality_gap: 2.88658e-06
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 42500, kkt_error: 2.46765e-05
+normalized_duality_gap: 3.09952e-06
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 42600, kkt_error: 2.3596e-05
+normalized_duality_gap: 3.1838e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 42700, kkt_error: 2.04809e-05
+normalized_duality_gap: 3.12777e-06
+obj: 332.566
+Iterations take 0.169s
+
+Iteration 42800, kkt_error: 2.00988e-05
+normalized_duality_gap: 2.95202e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 42900, kkt_error: 2.02183e-05
+normalized_duality_gap: 2.67751e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 43000, kkt_error: 1.96861e-05
+normalized_duality_gap: 2.32415e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 43100, kkt_error: 1.73376e-05
+normalized_duality_gap: 1.94762e-06
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 43200, kkt_error: 1.3649e-05
+normalized_duality_gap: 1.65151e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 43300, kkt_error: 1.63088e-05
+normalized_duality_gap: 1.51789e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 43400, kkt_error: 1.95737e-05
+normalized_duality_gap: 1.48945e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 43500, kkt_error: 1.95176e-05
+normalized_duality_gap: 1.43957e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 43600, kkt_error: 1.87487e-05
+normalized_duality_gap: 1.32824e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 43700, kkt_error: 1.72101e-05
+normalized_duality_gap: 1.19289e-06
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 43800, kkt_error: 1.62636e-05
+normalized_duality_gap: 1.08425e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 43900, kkt_error: 1.69182e-05
+normalized_duality_gap: 1.06666e-06
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 44000, kkt_error: 1.75922e-05
+normalized_duality_gap: 1.18668e-06
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 44100, kkt_error: 1.57268e-05
+normalized_duality_gap: 1.41342e-06
+obj: 332.566
+Iterations take 0.168s
+
+Iteration 44200, kkt_error: 1.6689e-05
+normalized_duality_gap: 1.71567e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 44300, kkt_error: 1.8894e-05
+normalized_duality_gap: 2.03827e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 44400, kkt_error: 2.0524e-05
+normalized_duality_gap: 2.28787e-06
+obj: 332.566
+Iterations take 0.166s
+
+Iteration 44500, kkt_error: 2.15012e-05
+normalized_duality_gap: 2.39748e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 44600, kkt_error: 1.99864e-05
+normalized_duality_gap: 2.35921e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 44700, kkt_error: 1.81346e-05
+normalized_duality_gap: 2.20241e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 44800, kkt_error: 1.91043e-05
+normalized_duality_gap: 1.97745e-06
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 44900, kkt_error: 2.01736e-05
+normalized_duality_gap: 1.74416e-06
+obj: 332.566
+Iterations take 0.164s
+
+Iteration 45000, kkt_error: 1.83383e-05
+normalized_duality_gap: 1.55064e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 45100, kkt_error: 1.72041e-05
+normalized_duality_gap: 1.44344e-06
+obj: 332.566
+Iterations take 0.162s
+
+Iteration 45200, kkt_error: 1.75945e-05
+normalized_duality_gap: 1.42745e-06
+obj: 332.566
+Iterations take 0.161s
+
+Iteration 45300, kkt_error: 1.94054e-05
+normalized_duality_gap: 1.43716e-06
+obj: 332.566
+Iterations take 0.155s
+
+Iteration 45400, kkt_error: 2.06328e-05
+normalized_duality_gap: 1.38983e-06
+obj: 332.566
+Iterations take 0.156s
+
+Iteration 45500, kkt_error: 1.91815e-05
+normalized_duality_gap: 1.23614e-06
+obj: 332.566
+Iterations take 0.168s
+
+Iteration terminates at 45600, takes 77.616s
+Iteration 45600, kkt_error: 1.47392e-05
+normalized_duality_gap: 9.92575e-07
+obj: 332.566
+Iterations take 0.155s
+
+save Convergeinfo done
+
+

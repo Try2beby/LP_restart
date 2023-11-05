@@ -162,9 +162,12 @@ void Iterates::restart(const Params &p)
 	cache.y_prev_start = cache.y_cur_start;
 	cache.y_cur_start = this->y;
 
-	double r2 = std::sqrt((cache.x_prev_start - cache.x_cur_start).squaredNorm() + (cache.y_prev_start - cache.y_cur_start).squaredNorm());
-	cache.gap_cur_prev_start = compute_normalized_duality_gap(cache.x_cur_start, cache.y_cur_start, r2, p);
-	compute_normalized_duality_gap(cache.x_cur_start, cache.y_cur_start, r2, p, 0);
+	if (use_ADMM == false)
+	{
+		double r2 = std::sqrt((cache.x_prev_start - cache.x_cur_start).squaredNorm() + (cache.y_prev_start - cache.y_cur_start).squaredNorm());
+		cache.gap_cur_prev_start = compute_normalized_duality_gap(cache.x_cur_start, cache.y_cur_start, r2, p);
+		// compute_normalized_duality_gap(cache.x_cur_start, cache.y_cur_start, r2, p, 0);
+	}
 }
 
 Convergeinfo Iterates::compute_convergence_information(const Params &p)
@@ -185,7 +188,7 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 		{
 			double r = std::sqrt((x_bar - cache.x_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
 			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
-			compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p, 0);
+			// compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p, 0);
 		}
 		else
 		{
@@ -199,6 +202,17 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 		Eigen::VectorXd kkt_error_vec(3 * size_x + 2 * p.b.rows());
 		kkt_error_vec << -xV, A * xU - b, b - A * xU, xU - xV, xV - xU;
 		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
+		double r{1};
+		if (p.restart)
+		{
+			double r = std::sqrt((xV_bar - cache.xV_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
+			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->xV_bar, this->y_bar, -(y_bar + c), (xV_bar - xU_bar), r, p);
+		}
+		else
+		{
+			double r = std::sqrt((xV - cache.xV_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
+			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->xV, this->y, -(y + c), (xV - xU), r, p);
+		}
 	}
 
 	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
@@ -223,7 +237,7 @@ void Iterates::print_iteration_information(const Params &p)
 	}
 	else
 	{
-		std::cout << xU.norm() << " " << xV.norm() << " " << (xU - xV).norm() << " " << y.norm() << std::endl;
+		// std::cout << xU.norm() << " " << xV.norm() << " " << (xU - xV).norm() << " " << y.norm() << std::endl;
 		std::cout << "obj: " << p.c.dot(xV) - y.dot(xU - xV) << std::endl;
 	}
 
@@ -454,9 +468,46 @@ Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eige
 	return z_hat;
 }
 
+/**
+ * @brief Computes the normalized duality gap for ADMM algo.
+ *
+ * @param x0 First vector parameter.
+ * @param y0 Second vector parameter.
+ * @param x_coeff Coefficient for x. x_coeff = -(y_bar + c)
+ * @param y_coeff Coefficient for y. y_coeff = (xV_bar - xU_bar)
+ * @param r Scalar parameter.
+ * @param p Parameter structure.
+ * @return The computed normalized duality gap.
+ */
+double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::VectorXd &y0,
+									  const Eigen::VectorXd &x_coeff, const Eigen::VectorXd &y_coeff,
+									  const double &r, const Params &p)
+{
+	// x_coeff = -(y_bar + c)
+	// y_coeff = (xV_bar - xU_bar)
+
+	int size_x = (int)p.c.rows();
+	int size_y = size_x;
+	double constant = -x_coeff.dot(x0) - y_coeff.dot(y0);
+
+	Eigen::VectorXd g(size_x + size_y);
+	g << -x_coeff, -y_coeff;
+
+	Eigen::VectorXd l = Eigen::VectorXd::Zero(size_x + size_y);
+	// set last size_y entries to -inf
+	l.tail(size_y) = Eigen::VectorXd::Constant(size_y, -std::numeric_limits<double>::infinity());
+
+	Eigen::VectorXd z0(size_x + size_y);
+	z0 << x0, y0;
+	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
+
+	return (-g.dot(z_hat) + constant) / r;
+}
+
 double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::VectorXd &y0,
 									  const double &r, const Params &p)
 {
+
 	int size_x = (int)p.c.rows();
 	int size_y = (int)p.b.rows();
 	double constant = p.c.dot(x0) - p.b.dot(y0);
@@ -587,7 +638,7 @@ void AdaptiveRestarts(Iterates &iter, const Params &p,
 		// ||z^n,0-z^n-1,0||
 
 		double duality_gap1 = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p);
-		compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p, 0);
+		// compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r1, p, 0);
 
 		if (duality_gap1 <= p.beta * iter.cache.gap_cur_prev_start)
 		{

@@ -72,7 +72,7 @@ public:
 	std::string data_name;
 	Eigen::VectorXd c, b;
 	Eigen::SparseMatrix<double, Eigen::RowMajor> A;
-	bool verbose, restart, save2file, print_timing;
+	bool verbose, restart, save2file, print_timing, use_ADMM;
 	GRBEnv env;
 	Params();
 	void load_example();
@@ -130,6 +130,10 @@ public:
 
 double compute_normalized_duality_gap(const Eigen::VectorXd &, const Eigen::VectorXd &, const double &, const Params &);
 double compute_normalized_duality_gap(const Eigen::VectorXd &, const Eigen::VectorXd &, const double &r, const Params &p, const bool use_Gurobi);
+double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::VectorXd &y0,
+									  const Eigen::VectorXd &x_coeff, const Eigen::VectorXd &y_coeff,
+									  const double &r, const Params &p);
+
 Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &g, const Eigen::VectorXd &l,
 											const Eigen::VectorXd &z, const double &r);
 
