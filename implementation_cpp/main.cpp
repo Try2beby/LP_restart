@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
 	Method method;
 	process_argument(argc, argv, method, p);
 
-	p.max_iter = 6e4;
-	// p.max_iter = 1e4;
+	// p.max_iter = 5e3;
+	p.max_iter = 2e5;
 	// p.max_iter = 5e5;
 	p.tol = 1e-6;
 	p.print_every = 100;

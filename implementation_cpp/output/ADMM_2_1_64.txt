@@ -1,0 +1,188 @@
+Model loaded.
+A rows: 19728 A cols: 20448
+AAT number of nonzeros: 856720
+factorize done, takes 5.90984e+08 milliseconds
+restart at 64
+Iteration 64, kkt_error: 0.713645
+normalized_duality_gap: 3.04098
+obj: 219.757
+Iterations take 608.968s
+
+Iteration 100, kkt_error: 0.971283
+normalized_duality_gap: 3.43568
+obj: 219.271
+Iterations take 9.651s
+
+restart at 128
+Iteration 128, kkt_error: 0.555763
+normalized_duality_gap: 2.6704
+obj: 217.628
+Iterations take 7.717s
+
+restart at 192
+Iteration 192, kkt_error: 0.0467401
+normalized_duality_gap: 1.85223
+obj: 216.608
+Iterations take 17.353s
+
+Iteration 200, kkt_error: 0.691831
+normalized_duality_gap: 2.12329
+obj: 217.355
+Iterations take 1.93s
+
+restart at 256
+Iteration 256, kkt_error: 0.231293
+normalized_duality_gap: 1.47663
+obj: 215.833
+Iterations take 15.41s
+
+Iteration 300, kkt_error: 0.0638912
+normalized_duality_gap: 1.23625
+obj: 215.694
+Iterations take 11.842s
+
+restart at 320
+Iteration 320, kkt_error: 0.00317293
+normalized_duality_gap: 1.12128
+obj: 215.461
+Iterations take 5.502s
+
+restart at 384
+Iteration 384, kkt_error: 0.0636255
+normalized_duality_gap: 0.987388
+obj: 215.088
+Iterations take 17.345s
+
+Iteration 400, kkt_error: 0.0218677
+normalized_duality_gap: 1.07965
+obj: 215.275
+Iterations take 4.143s
+
+restart at 448
+Iteration 448, kkt_error: 0.0784606
+normalized_duality_gap: 0.74949
+obj: 214.953
+Iterations take 13.202s
+
+Iteration 500, kkt_error: 0.0726665
+normalized_duality_gap: 0.661439
+obj: 214.867
+Iterations take 14.037s
+
+restart at 512
+Iteration 512, kkt_error: 0.0415067
+normalized_duality_gap: 0.659687
+obj: 214.816
+Iterations take 3.323s
+
+restart at 576
+Iteration 576, kkt_error: 0.0043084
+normalized_duality_gap: 0.6532
+obj: 214.679
+Iterations take 17.344s
+
+Iteration 600, kkt_error: 0.00125261
+normalized_duality_gap: 0.653197
+obj: 214.714
+Iterations take 6.324s
+
+restart at 640
+Iteration 640, kkt_error: 0.000139087
+normalized_duality_gap: 0.653197
+obj: 214.543
+Iterations take 11.028s
+
+Iteration 700, kkt_error: 2.37006e-06
+normalized_duality_gap: 0.653197
+obj: 214.423
+Iterations take 16.256s
+
+restart at 704
+Iteration 704, kkt_error: 1.7372e-05
+normalized_duality_gap: 0.653197
+obj: 214.406
+Iterations take 1.097s
+
+restart at 768
+Iteration 768, kkt_error: 3.12046e-07
+normalized_duality_gap: 0.653197
+obj: 214.27
+Iterations take 17.378s
+
+Iteration 800, kkt_error: 1.94146e-07
+normalized_duality_gap: 0.653197
+obj: 214.27
+Iterations take 8.528s
+
+restart at 832
+Iteration 832, kkt_error: 6.68892e-08
+normalized_duality_gap: 0.653197
+obj: 214.133
+Iterations take 8.807s
+
+restart at 896
+Iteration 896, kkt_error: 0.0614944
+normalized_duality_gap: 0.652269
+obj: 213.998
+Iterations take 17.327s
+
+Iteration 900, kkt_error: 0.00058582
+normalized_duality_gap: 0.653202
+obj: 214.116
+Iterations take 0.824s
+
+restart at 960
+Iteration 960, kkt_error: 0.129746
+normalized_duality_gap: 0.254107
+obj: 213.999
+Iterations take 16.542s
+
+Iteration 1000, kkt_error: 0.082617
+normalized_duality_gap: 0.093711
+obj: 213.999
+Iterations take 10.766s
+
+restart at 1024
+Iteration 1024, kkt_error: 0.0626463
+normalized_duality_gap: 0.0463652
+obj: 214
+Iterations take 6.624s
+
+restart at 1088
+Iteration 1088, kkt_error: 0.00603486
+normalized_duality_gap: 0.001725
+obj: 214
+Iterations take 17.354s
+
+Iteration 1100, kkt_error: 0.000474963
+normalized_duality_gap: 0.00127772
+obj: 214
+Iterations take 3.022s
+
+restart at 1152
+Iteration 1152, kkt_error: 0.000493294
+normalized_duality_gap: 0.000141602
+obj: 214
+Iterations take 14.229s
+
+Iteration 1200, kkt_error: 1.00253e-06
+normalized_duality_gap: 1.39002e-05
+obj: 214
+Iterations take 12.869s
+
+restart at 1216
+Iteration 1216, kkt_error: 1.36894e-05
+normalized_duality_gap: 1.16068e-05
+obj: 214
+Iterations take 4.371s
+
+Iteration terminates at 1280, takes 938.38s
+restart at 1280
+Iteration 1280, kkt_error: 2.70289e-06
+normalized_duality_gap: 3.13364e-07
+obj: 214
+Iterations take 17.252s
+
+save Convergeinfo done
+
+

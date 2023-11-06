@@ -3,7 +3,7 @@
 # This script is used to run the program
 # ./build/LP_restart -m PDHG -d 3 -r [0,1] -l [-1,[16384,65536,262144]]
 
-dataidx=1
+dataidx=3
 # method=PDHG
 method=ADMM
 
@@ -17,9 +17,9 @@ declare -a restart_length_array
 # restart_length_array=(16384 65536 262144)
 
 # ADMM
-restart_length_array=(1024 4096 16384)
+# restart_length_array=(1024 4096 16384)
 # restart_length_array=(16 64 256)
-# restart_length_array=(4096 16384 65536)
+restart_length_array=(4096 16384 65536)
 
 max_parallel_jobs=4
 count=0
