@@ -34,11 +34,38 @@ RecordIterates *ADMM(const Params &p)
 	{
 		// ADMMStep(iter, p, *record, model);
 		ADMMStep(iter, p, *record, solver);
-		// AdaptiveRestarts(iter, p, *record);
-		// FixedFrequencyRestart(iter, p, *record, 16);
+		if (p.restart)
+		{
+			if (p.fixed_restart_length == -1)
+			{
+				AdaptiveRestarts(iter, p, *record);
+			}
+			else
+			{
+				FixedFrequencyRestart(iter, p, *record);
+			}
+		}
 		if (iter.terminate || iter.count > p.max_iter)
 			break;
 	}
+	std::string file_name{"foo"};
+	if (p.restart)
+	{
+		if (p.fixed_restart_length == -1)
+		{
+			file_name = "adaptive_restarts";
+			// record->saveRestart_idx(__func__, p.dataidx, file_name);
+		}
+		else
+		{
+			file_name = "fixed_restarts_" + std::to_string(p.fixed_restart_length);
+		}
+	}
+	else
+	{
+		file_name = "no_restarts";
+	}
+	record->saveConvergeinfo(__func__, p.dataidx, file_name);
 
 	return record;
 }
@@ -50,37 +77,37 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 	Eigen::VectorXd xV_prev = iter.xV;
 	Eigen::VectorXd y_prev = iter.y;
 
-	// iter.xU = p.A.transpose() * solver.solve(p.b +
-	// 										 p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) -
-	// 		  (-xV_prev - (1.0 / p.eta) * y_prev);
+	iter.xU = p.A.transpose() * solver.solve(p.b +
+											 p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) -
+			  (-xV_prev - (1.0 / p.eta) * y_prev);
 
 	// step by step
-	Timer timer;
-	Eigen::VectorXd xU = p.b + p.A * (-xV_prev - (1.0 / p.eta) * y_prev);
-	// print xU.norm()
-	std::cout << "xU1.norm(): " << xU.norm() << std::endl;
-	timer.timing();
+	// Timer timer;
+	// Eigen::VectorXd xU = p.b + p.A * (-xV_prev - (1.0 / p.eta) * y_prev);
+	// // print xU.norm()
+	// std::cout << "xU1.norm(): " << xU.norm() << std::endl;
+	// timer.timing();
 
-	xU = solver.solve(xU);
-	// print xU.norm()
-	std::cout << "xU2.norm(): " << xU.norm() << std::endl;
-	// print first 5 elements of xU
-	// std::cout << "xU2.head(5): " << xU.tail(5).transpose() << std::endl;
-	timer.timing();
+	// xU = solver.solve(xU);
+	// // print xU.norm()
+	// std::cout << "xU2.norm(): " << xU.norm() << std::endl;
+	// // print first 5 elements of xU
+	// // std::cout << "xU2.head(5): " << xU.tail(5).transpose() << std::endl;
+	// timer.timing();
 
-	xU = p.A.transpose() * xU;
-	// print xU.norm()
-	std::cout << "xU3.norm(): " << xU.norm() << std::endl;
-	// print first 5 elements of xU
-	// std::cout << "xU3.head(5): " << xU.tail(5).transpose() << std::endl;
-	timer.timing();
+	// xU = p.A.transpose() * xU;
+	// // print xU.norm()
+	// std::cout << "xU3.norm(): " << xU.norm() << std::endl;
+	// // print first 5 elements of xU
+	// // std::cout << "xU3.head(5): " << xU.tail(5).transpose() << std::endl;
+	// timer.timing();
 
-	iter.xU = xU - (-xV_prev - (1.0 / p.eta) * y_prev);
-	// print xU.norm()
-	// std::cout << "xU4.norm(): " << xU.Norm() << std::endl;
-	timer.timing();
+	// iter.xU = xU - (-xV_prev - (1.0 / p.eta) * y_prev);
+	// // print xU.norm()
+	// // std::cout << "xU4.norm(): " << xU.Norm() << std::endl;
+	// timer.timing();
 
-	timer.save(__func__, p, iter.count);
+	// timer.save(__func__, p, iter.count);
 	// if (p.verbose && (iter.count - 1) % p.print_every == 0)
 	// 	std::cout << "solver.solve() takes " << duration << " milliseconds" << std::endl;
 

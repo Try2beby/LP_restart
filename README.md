@@ -148,24 +148,14 @@ $$
 
 | <img width=300px src="./implementation_cpp/fig/PDHG/qap10.png" alt="qap10.png"> | <img width=300px src="./implementation_cpp/fig/PDHG/qap15.png" alt="qap15.png"> |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| <img width=300px src="./implementation_cpp/fig/PDHG/nug08-3rd.png" alt="nug08-3rd.png"> |  <img width=300px src="./implementation_cpp/fig/PDHG/nug20.png" alt="nug20.png">  
-|
+| <img width=300px src="./implementation_cpp/fig/PDHG/nug08-3rd.png" alt="nug08-3rd.png"> |  <img width=300px src="./implementation_cpp/fig/PDHG/nug20.png" alt="nug20.png">  |
 
 ### ADMM
 
-### EGM
+| <img width=300px src="./implementation_cpp/fig/ADMM/qap10.png" alt="qap10.png"> | <img width=300px src="./implementation_cpp/fig/ADMM/qap15.png" alt="qap15.png"> |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| <img width=300px src="./implementation_cpp/fig/ADMM/nug08-3rd.png" alt="nug08-3rd.png"> |  <img width=300px src="./implementation_cpp/fig/ADMM/nug20.png" alt="nug20.png">  |
 
-<table>
-<tr>
-<td>
-<img src="./implementation_cpp/fig/EGM/qap10.png" alt="qap10.png"></td>
-<td>
-<img src="./implementation_cpp/fig/EGM/qap10.png" alt="qap15.png"></td>
-</tr>
-<tr>
-<td><img src="./implementation_cpp/fig/EGM/nug08-3rd.png" alt="nug08-3rd.png"></td>
-<td><img src="./implementation_cpp/fig/EGM/nug20.png" alt="nug20.png"></td>
-</table>
 
 ## Related links
 

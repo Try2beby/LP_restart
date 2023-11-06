@@ -16,6 +16,9 @@ data/
 # log folder
 log/
 
+# data folder
+data/
+
 # files
 *.exe
 test*

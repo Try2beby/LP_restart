@@ -57,6 +57,7 @@ struct Cache
 {
 	Eigen::VectorXd x_prev_start, x_cur_start, y_prev_start, y_cur_start;
 	Eigen::VectorXd xU_prev_start, xU_cur_start, xV_prev_start, xV_cur_start;
+	double gap_cur_prev_start;
 	double mu_c, eta_sum;
 };
 
@@ -80,7 +81,7 @@ public:
 	std::string data_name;
 	Eigen::VectorXd c, b, q;
 	SpMat A, K, D2_cache, D1_cache;
-	bool verbose, restart, save2file, print_timing, adaptive_step_size, primal_weight_update, precondition;
+	bool verbose, restart, save2file, print_timing, adaptive_step_size, primal_weight_update, precondition, use_ADMM;
 	GRBEnv env;
 	Params();
 	void init_w();
@@ -142,6 +143,10 @@ public:
 
 double compute_normalized_duality_gap(const Eigen::VectorXd &, const Eigen::VectorXd &, const double &, const Params &);
 double compute_normalized_duality_gap(const Eigen::VectorXd &, const Eigen::VectorXd &, const double &r, const Params &p, const bool use_Gurobi);
+double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::VectorXd &y0,
+									  const Eigen::VectorXd &x_coeff, const Eigen::VectorXd &y_coeff,
+									  const double &r, const Params &p);
+
 Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &g, const Eigen::VectorXd &l,
 											const Eigen::VectorXd &z, const double &r);
 

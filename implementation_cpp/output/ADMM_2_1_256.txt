@@ -1,0 +1,140 @@
+Model loaded.
+A rows: 19728 A cols: 20448
+AAT number of nonzeros: 856720
+factorize done, takes 5.91007e+08 milliseconds
+Iteration 100, kkt_error: 0.511308
+normalized_duality_gap: 2.30177
+obj: 217.532
+Iterations take 618.982s
+
+Iteration 200, kkt_error: 0.0594261
+normalized_duality_gap: 1.46258
+obj: 215.377
+Iterations take 27.611s
+
+restart at 256
+Iteration 256, kkt_error: 0.10811
+normalized_duality_gap: 1.21884
+obj: 214.956
+Iterations take 15.465s
+
+Iteration 300, kkt_error: 0.340626
+normalized_duality_gap: 1.82425
+obj: 215.762
+Iterations take 11.899s
+
+Iteration 400, kkt_error: 0.0204521
+normalized_duality_gap: 0.969982
+obj: 214.888
+Iterations take 27.631s
+
+Iteration 500, kkt_error: 0.00174608
+normalized_duality_gap: 0.764442
+obj: 214.461
+Iterations take 27.605s
+
+restart at 512
+Iteration 512, kkt_error: 0.00107722
+normalized_duality_gap: 0.750549
+obj: 214.41
+Iterations take 3.31s
+
+Iteration 600, kkt_error: 0.0172843
+normalized_duality_gap: 0.678481
+obj: 214.581
+Iterations take 23.997s
+
+Iteration 700, kkt_error: 0.00027056
+normalized_duality_gap: 0.622182
+obj: 214.154
+Iterations take 27.626s
+
+restart at 768
+Iteration 768, kkt_error: 0.108958
+normalized_duality_gap: 0.536214
+obj: 213.999
+Iterations take 18.816s
+
+Iteration 800, kkt_error: 0.00792352
+normalized_duality_gap: 0.653298
+obj: 214.282
+Iterations take 8.569s
+
+Iteration 900, kkt_error: 0.150747
+normalized_duality_gap: 0.500802
+obj: 213.999
+Iterations take 27.637s
+
+Iteration 1000, kkt_error: 0.0116506
+normalized_duality_gap: 0.251486
+obj: 214
+Iterations take 27.682s
+
+restart at 1024
+Iteration 1024, kkt_error: 0.0020658
+normalized_duality_gap: 0.226301
+obj: 214
+Iterations take 6.632s
+
+Iteration 1100, kkt_error: 0.00146928
+normalized_duality_gap: 0.13753
+obj: 214
+Iterations take 20.736s
+
+Iteration 1200, kkt_error: 0.0023158
+normalized_duality_gap: 0.0543726
+obj: 214
+Iterations take 27.662s
+
+restart at 1280
+Iteration 1280, kkt_error: 0.00129474
+normalized_duality_gap: 0.0369272
+obj: 214
+Iterations take 22.015s
+
+Iteration 1300, kkt_error: 0.00219616
+normalized_duality_gap: 0.0144049
+obj: 214
+Iterations take 5.125s
+
+Iteration 1400, kkt_error: 0.000998215
+normalized_duality_gap: 0.00216943
+obj: 214
+Iterations take 27.055s
+
+Iteration 1500, kkt_error: 0.000159893
+normalized_duality_gap: 0.0012046
+obj: 214
+Iterations take 27.037s
+
+restart at 1536
+Iteration 1536, kkt_error: 0.000105345
+normalized_duality_gap: 0.00102946
+obj: 214
+Iterations take 9.734s
+
+Iteration 1600, kkt_error: 0.000216878
+normalized_duality_gap: 2.28155e-05
+obj: 214
+Iterations take 17.032s
+
+Iteration 1700, kkt_error: 1.98113e-05
+normalized_duality_gap: 1.65182e-05
+obj: 214
+Iterations take 27.038s
+
+restart at 1792
+Iteration 1792, kkt_error: 1.24648e-06
+normalized_duality_gap: 1.01724e-05
+obj: 214
+Iterations take 24.899s
+
+Iteration 1800, kkt_error: 7.06294e-06
+normalized_duality_gap: 1.67282e-05
+obj: 214
+Iterations take 1.899s
+
+Iteration terminates at 1890, takes 1108.07s
+save Convergeinfo done
+
+
