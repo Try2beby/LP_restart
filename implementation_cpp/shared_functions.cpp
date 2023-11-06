@@ -381,7 +381,7 @@ void Params::load_pagerank()
 	n = 1e5;
 	double lambda = 0.85;
 	SpMat A_tmp(n + 1, n);
-	utils::read_txt(A_tmp, projectpath + "/" + datapath + "graph_1e5.txt");
+	utils::read_txt(A_tmp, projectpath + datapath + pagerankpath + this->data_name);
 	this->A = A_tmp;
 	this->q = ((1 - lambda) / n) * Eigen::VectorXd::Ones(n + 1);
 	this->q[n] = 1;

@@ -29,6 +29,7 @@ const std::vector<std::string> Data = {"qap10", "qap15", "nug08-3rd", "nug20"};
 const std::string cachepath = "cache/";
 const std::string cachesuffix = ".txt";
 const std::string datapath = "data/";
+const std::string pagerankpath = "pagerank/";
 const std::string datasuffix = ".mps";
 const std::string logpath = "log/";
 const std::string outputpath = "output/";
