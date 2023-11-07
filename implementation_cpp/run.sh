@@ -1,32 +1,20 @@
 #!/usr/bin/bash
 
 # This script is used to run the program
-# ./build/LP_restart -m PDHG -d 3 -r [0,1] -l [-1,[16384,65536,262144]]
+# eg: ./build/LP_restart method ADMM restart 1 primal_weight_update 1 scaling 0 adaptive_step_size 0 tol -8 data_name n15-3
 
-dataidx=3
-# method=PDHG
+# define a string array for data name
+# neos-506428 neos-932816 physiciansched6-2 n15-3 ns2118727
+declare -a data_name_array=("neos-506428" "neos-932816" "physiciansched6-2" "n15-3" "ns2118727")
+
 method=ADMM
 
-# ./build/LP_restart -m ${method} -d ${dataidx} -r 0 -l -1
-# ./build/LP_restart -m ${method} -d ${dataidx} -r 1 -l -1
-
-declare -a restart_length_array
-# PDHG
-# restart_length_array=(4096 16384 65536)
-# restart_length_array=(64 256 1024)
-# restart_length_array=(16384 65536 262144)
-
-# ADMM
-# restart_length_array=(1024 4096 16384)
-# restart_length_array=(16 64 256)
-restart_length_array=(4096 16384 65536)
-
-max_parallel_jobs=4
+max_parallel_jobs=5
 count=0
 
-for i in "${restart_length_array[@]}"
+for i in "${data_name_array[@]}"
 do
-    ./build/LP_restart -m ${method} -d ${dataidx} -r 1 -l $i &
+    ./build/LP_restart method $method restart 1 primal_weight_update 1 scaling 0 adaptive_step_size 0 tol -8 data_name $i &
     ((count++))
     if ((count == max_parallel_jobs)); then
         wait

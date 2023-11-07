@@ -33,6 +33,7 @@ const std::string pagerankpath = "pagerank/";
 const std::string datasuffix = ".mps";
 const std::string logpath = "log/";
 const std::string outputpath = "output/";
+const std::string presolvedpath = "presolved/";
 
 // typedef Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> Solver;
 typedef Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> Solver;
@@ -78,7 +79,7 @@ public:
 	Beta beta;
 	int dataidx, max_iter, tau0, record_every, print_every, evaluate_every, fixed_restart_length;
 	int m1, m2, n;
-	std::string data_name;
+	std::string data_name, outfile_name;
 	Eigen::VectorXd c, b, q;
 	SpMat A, K, D2_cache, D1_cache;
 	bool verbose, restart, save2file, print_timing, adaptive_step_size, primal_weight_update, precondition, use_ADMM;
@@ -89,7 +90,7 @@ public:
 	void load_example();
 	void load_pagerank();
 	void scaling();
-	void load_model(const int &);
+	void load_model();
 	void set_verbose(const bool &, const bool &);
 };
 
@@ -137,8 +138,8 @@ public:
 	RecordIterates(const int &, const int &, const int &, const int &);
 	void append(const Iterates &, const Params &);
 	Iterates operator[](const int &);
-	void saveConvergeinfo(const std::string, const int, const std::string);
-	void saveRestart_idx(const std::string, const int, const std::string);
+	void saveConvergeinfo(const std::string, const std::string, const std::string);
+	void saveRestart_idx(const std::string, const std::string, const std::string);
 };
 
 double compute_normalized_duality_gap(const Eigen::VectorXd &, const Eigen::VectorXd &, const double &, const Params &);
@@ -160,7 +161,7 @@ Eigen::VectorXd compute_F(const Eigen::VectorXd &, const Eigen::VectorXd &, cons
 double GetOptimalw(Params &p, RecordIterates *(*method)(const Params &));
 void GetBestFixedRestartLength(Params &, RecordIterates (*method)(const Params &));
 
-RecordIterates *ADMM(const Params &);
+RecordIterates *ADMM(Params &);
 void ADMMStep(Iterates &, const Params &, RecordIterates &, std::vector<GRBModel> &);
 void ADMMStep(Iterates &iter, const Params &, RecordIterates &,
 			  Solver &);
@@ -176,3 +177,4 @@ RecordIterates *EGM(const Params &);
 
 void export_xyr(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const double r);
 double PDHGnorm(const Eigen::VectorXd &x, const Eigen::VectorXd &y, const int w);
+void save_obj_residual(const std::string method, const double obj, const double residual);

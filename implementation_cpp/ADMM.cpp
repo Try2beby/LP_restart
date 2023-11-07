@@ -1,6 +1,6 @@
 #include "shared_functions.h"
 
-RecordIterates *ADMM(const Params &p)
+RecordIterates *ADMM(Params &p)
 {
 	auto size_x = (int)p.c.rows();
 	auto size_y = size_x;
@@ -9,18 +9,18 @@ RecordIterates *ADMM(const Params &p)
 
 	std::vector<GRBModel> model;
 	generate_update_model(p, model);
-	Eigen::SparseMatrix<double> AAT = p.A * p.A.transpose();
+	Eigen::SparseMatrix<double> KKT = p.K * p.K.transpose();
 	if (p.verbose)
 	{
-		// print A rows and cols
-		std::cout << "A rows: " << p.A.rows() << " A cols: " << p.A.cols() << std::endl;
-		// print nnz of AAT
-		std::cout << "AAT number of nonzeros: " << AAT.nonZeros() << std::endl;
+		// print K rows and cols
+		std::cout << "K rows: " << p.K.rows() << " K cols: " << p.K.cols() << std::endl;
+		// print nnz of KKT
+		std::cout << "KKT number of nonzeros: " << KKT.nonZeros() << std::endl;
 	}
 	Solver solver;
 
 	Timer timer;
-	solver.compute(AAT);
+	solver.compute(KKT);
 	if (solver.info() != Eigen::Success)
 	{
 		std::cout << "factorize failed" << std::endl;
@@ -54,7 +54,7 @@ RecordIterates *ADMM(const Params &p)
 		if (p.fixed_restart_length == -1)
 		{
 			file_name = "adaptive_restarts";
-			// record->saveRestart_idx(__func__, p.dataidx, file_name);
+			record->saveRestart_idx(__func__, p.data_name, file_name);
 		}
 		else
 		{
@@ -65,7 +65,7 @@ RecordIterates *ADMM(const Params &p)
 	{
 		file_name = "no_restarts";
 	}
-	record->saveConvergeinfo(__func__, p.dataidx, file_name);
+	record->saveConvergeinfo(__func__, p.data_name, file_name);
 
 	return record;
 }
@@ -117,7 +117,7 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 	iter.xV_hat = iter.xV;
 	iter.y_hat = y_prev - p.eta * (iter.xU - xV_prev);
 
-	iter.update(p.restart);
+	iter.update(p);
 
 	auto count = iter.count;
 	if ((count - 1) % p.record_every == 0 || (count - 1) % p.print_every == 0)
@@ -149,7 +149,7 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 	iter.xV_hat = iter.xV;
 	iter.y_hat = y_prev - p.eta * (iter.xU - xV_prev);
 
-	iter.update(p.restart);
+	iter.update(p);
 
 	auto count = iter.count;
 	if ((count - 1) % p.record_every == 0 || (count - 1) % p.print_every == 0)
@@ -175,10 +175,10 @@ void generate_update_model(const Params &p, std::vector<GRBModel> &model)
 	for (int i = 0; i < p.A.rows(); i++)
 	{
 		GRBLinExpr expr;
-		for (Eigen::SparseMatrix<double, Eigen::RowMajor>::InnerIterator it(p.A, i); it; ++it)
-		{
-			expr += it.value() * xU[it.col()];
-		}
+		// for (Eigen::SparseMatrix<double, Eigen::RowMajor>::InnerIterator it(p.A, i); it; ++it)
+		// {
+		// 	expr += it.value() * xU[it.col()];
+		// }
 		model_xU.addConstr(expr == p.b[i]);
 	}
 	model_xU.update();

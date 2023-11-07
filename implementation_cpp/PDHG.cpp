@@ -35,7 +35,7 @@ RecordIterates *PDHG(Params &p)
 		if (p.fixed_restart_length == -1)
 		{
 			file_name = "adaptive_restarts";
-			record->saveRestart_idx(__func__, p.dataidx, file_name);
+			record->saveRestart_idx(__func__, p.data_name, file_name);
 		}
 		else
 		{
@@ -46,7 +46,7 @@ RecordIterates *PDHG(Params &p)
 	{
 		file_name = "no_restarts";
 	}
-	// record->saveConvergeinfo(__func__, p.dataidx, file_name);
+	record->saveConvergeinfo(__func__, p.data_name, file_name);
 
 	return record;
 }
@@ -110,12 +110,10 @@ void AdaptivePDHGStep(Iterates &iter, Params &p, RecordIterates &record)
 
 void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 {
-	Timer timer;
 	Eigen::VectorXd x_new = (iter.x - (p.eta / p.w) * (p.c - p.K.transpose() * iter.y)).cwiseMax(0);
 	Eigen::VectorXd y_new = iter.y - (p.eta * p.w) * (-p.q + p.K * (2 * x_new - iter.x));
 	// std::cout << eta << " " << p.w << " " << p.q(p.m1) << std::endl;
 	y_new.segment(0, p.m1) = y_new.segment(0, p.m1).cwiseMax(0);
-	timer.timing();
 
 	iter.x = x_new;
 	iter.y = y_new;
@@ -124,9 +122,6 @@ void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 	iter.x_hat = x_new;
 	iter.y_hat = y_new;
 	iter.update(p);
-	timer.timing();
-
-	timer.save(__func__, p, iter.count);
 
 	auto count = iter.count;
 	if ((count - 1) % p.record_every == 0 || (count - 1) % p.print_every == 0)

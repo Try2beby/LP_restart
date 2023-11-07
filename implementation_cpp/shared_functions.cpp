@@ -26,6 +26,12 @@ namespace utils
 		// std::cout << A.rows() << " " << A.cols() << std::endl;
 		// std::cout << A.nonZeros() << std::endl;
 	}
+
+	bool endsWith(const std::string &str, const std::string &suffix)
+	{
+		return str.size() >= suffix.size() &&
+			   str.rfind(suffix) == (str.size() - suffix.size());
+	}
 }
 
 Timer::Timer()
@@ -196,48 +202,6 @@ void Iterates::restart(const Eigen::VectorXd &x_c, const Eigen::VectorXd &y_c)
 }
 Convergeinfo Iterates::compute_convergence_information(const Params &p)
 {
-	Eigen::VectorXd c = p.c;
-	Eigen::VectorXd b = p.b;
-	Eigen::SparseMatrix<double> A = p.A;
-
-	if (use_ADMM == false)
-	{
-		Eigen::VectorXd kkt_error_vec(2 * size_x + 2 * size_y + 1);
-		kkt_error_vec << -x, A * x - b, b - A * x, A.transpose() * y - c,
-			c.dot(x) - b.dot(y);
-		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
-
-		double r{1};
-		if (p.restart)
-		{
-			double r = std::sqrt((x_bar - cache.x_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
-			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p);
-			// compute_normalized_duality_gap(this->x_bar, this->y_bar, r, p, 0);
-		}
-		else
-		{
-			double r = std::sqrt((x - cache.x_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
-			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->x, this->y, r, p);
-			// std::cout << this->count - 1 << " r = " << r << std::endl;
-		}
-	}
-	else
-	{
-		Eigen::VectorXd kkt_error_vec(3 * size_x + 2 * p.b.rows());
-		kkt_error_vec << -xV, A * xU - b, b - A * xU, xU - xV, xV - xU;
-		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
-		double r{1};
-		if (p.restart)
-		{
-			double r = std::sqrt((xV_bar - cache.xV_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
-			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->xV_bar, this->y_bar, -(y_bar + c), (xV_bar - xU_bar), r, p);
-		}
-		else
-		{
-			double r = std::sqrt((xV - cache.xV_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
-			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->xV, this->y, -(y + c), (xV - xU), r, p);
-		}
-	}
 	Eigen::VectorXd mutiplier, temp;
 
 	this->convergeinfo.duality_gap = std::abs(p.q.dot(y) - p.c.dot(x)) / (1 + std::abs(p.q.dot(y)) + std::abs(p.c.dot(x)));
@@ -326,9 +290,9 @@ Iterates RecordIterates::operator[](const int &i)
 	return IteratesList[i];
 }
 
-void RecordIterates::saveConvergeinfo(const std::string method, const int dataidx, const std::string filename)
+void RecordIterates::saveConvergeinfo(const std::string method, const std::string data_name, const std::string filename)
 {
-	auto path = projectpath + cachepath + method + "/" + Data[dataidx] + "/";
+	auto path = projectpath + cachepath + method + "/" + data_name + "/";
 	std::filesystem::create_directories(path);
 	std::ofstream ofs(path + filename + cachesuffix);
 	if (ofs.is_open())
@@ -347,9 +311,9 @@ void RecordIterates::saveConvergeinfo(const std::string method, const int dataid
 		std::cout << "Unable to open file" << std::endl;
 }
 
-void RecordIterates::saveRestart_idx(const std::string method, const int dataidx, const std::string filename)
+void RecordIterates::saveRestart_idx(const std::string method, const std::string data_name, const std::string filename)
 {
-	auto path = projectpath + cachepath + method + "/" + Data[dataidx] + "/";
+	auto path = projectpath + cachepath + method + "/" + data_name + "/";
 	std::filesystem::create_directories(path);
 	std::ofstream ofs(path + filename + "_restart_idx" + cachesuffix);
 	if (ofs.is_open())
@@ -417,6 +381,15 @@ void Params::load_example()
 	// solution is (4, 1, 0, 0, 0)
 }
 
+// load LP problem in form:
+// min c^T x
+// s.t. Gx >= h
+//      Ax = b
+//      lb <= x <= ub
+// where c in R^n, G in R^{m1 x n}, h in R^{m1}
+// A in R^{m2 x n}, b in R^{m2}
+// lb in R^{n}, ub in R^{n}
+
 void Params::load_pagerank()
 {
 	n = 1e5;
@@ -455,6 +428,8 @@ void Params::scaling()
 	// Ruiz scaling
 	SpMat D1(m1 + m2, m1 + m2), D2(n, n), temp;
 	SpMat D1cache(m1 + m2, m1 + m2), D2cache(n, n);
+	double eps = 1e-8;
+
 	for (int i = 0; i < m1 + m2; i++)
 	{
 		D1cache.insert(i, i) = 1;
@@ -474,8 +449,8 @@ void Params::scaling()
 			{
 				max_norm = std::max(max_norm, std::abs(it.value()));
 			}
-			D2.coeffRef(j, j) = 1.0 / std::sqrt(max_norm);
-			D2cache.coeffRef(j, j) *= 1.0 / std::sqrt(max_norm);
+			D2.coeffRef(j, j) = 1.0 / (std::sqrt(max_norm) + eps);
+			D2cache.coeffRef(j, j) *= 1.0 / (std::sqrt(max_norm) + eps);
 		}
 		temp = K.transpose();
 		for (int j = 0; j < temp.outerSize(); ++j)
@@ -485,8 +460,8 @@ void Params::scaling()
 			{
 				max_norm = std::max(max_norm, std::abs(it.value()));
 			}
-			D1.coeffRef(j, j) = 1.0 / std::sqrt(max_norm);
-			D1cache.coeffRef(j, j) *= 1.0 / std::sqrt(max_norm);
+			D1.coeffRef(j, j) = 1.0 / (std::sqrt(max_norm) + eps);
+			D1cache.coeffRef(j, j) *= 1.0 / (std::sqrt(max_norm) + eps);
 		}
 		K = D1 * K * D2;
 		c = D2 * c;
@@ -497,14 +472,14 @@ void Params::scaling()
 	temp_vec = K.cwiseAbs() * Eigen::VectorXd::Ones(K.cols());
 	for (int i = 0; i < temp_vec.size(); i++)
 	{
-		D1.coeffRef(i, i) = 1.0 / std::sqrt(temp_vec(i));
-		D1cache.coeffRef(i, i) *= 1.0 / std::sqrt(temp_vec(i));
+		D1.coeffRef(i, i) = 1.0 / (std::sqrt(temp_vec(i)) + eps);
+		D1cache.coeffRef(i, i) *= 1.0 / (std::sqrt(temp_vec(i)) + eps);
 	}
 	temp_vec = K.transpose().cwiseAbs() * Eigen::VectorXd::Ones(K.rows());
 	for (int i = 0; i < temp_vec.size(); i++)
 	{
-		D2.coeffRef(i, i) = 1.0 / std::sqrt(temp_vec(i));
-		D2cache.coeffRef(i, i) *= 1.0 / std::sqrt(temp_vec(i));
+		D2.coeffRef(i, i) = 1.0 / (std::sqrt(temp_vec(i)) + eps);
+		D2cache.coeffRef(i, i) *= 1.0 / (std::sqrt(temp_vec(i)) + eps);
 	}
 
 	this->D1_cache = D1cache;
@@ -515,11 +490,43 @@ void Params::scaling()
 	q = D1 * q;
 }
 
-void Params::load_model(const int &dataidx)
+void Params::load_model()
 {
-	this->dataidx = dataidx;
-	this->data_name = Data[dataidx];
-	GRBModel model = GRBModel(env, projectpath + "/" + datapath + Data[dataidx] + datasuffix);
+	std::cout << "Loading model..." << std::endl;
+
+	auto full_path = projectpath + datapath + cachepath + presolvedpath;
+	auto _full_path = projectpath + datapath;
+	auto path = full_path;
+	if (utils::endsWith(this->data_name, datasuffix))
+	{
+		full_path += this->data_name;
+		_full_path += this->data_name;
+		// drop data suffix
+		this->data_name = this->data_name.substr(0, this->data_name.size() - datasuffix.size());
+	}
+	else
+	{
+		full_path += this->data_name + datasuffix;
+		_full_path += this->data_name + datasuffix;
+	}
+
+	// if full_path exists, let path = full_path, else let path = _full_path
+	if (std::filesystem::exists(full_path))
+	{
+		path = full_path;
+	}
+	else if (std::filesystem::exists(_full_path))
+	{
+		path = _full_path;
+	}
+	else
+	{
+		std::cout << "File not found!" << std::endl;
+		exit(1);
+	}
+
+	GRBModel model = GRBModel(env, path);
+
 	// model.optimize();
 	// Get the number of variables in the model.
 	int numVars = model.get(GRB_IntAttr_NumVars);
@@ -534,7 +541,7 @@ void Params::load_model(const int &dataidx)
 	c = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_Obj, Vars, numVars), numVars);
 
 	// Get the matrix A, use sparse representation.
-	Eigen::SparseMatrix<double, Eigen::RowMajor> A_tmp(numConstraints, numVars);
+	SpMat A_tmp(numConstraints, numVars);
 	std::vector<Eigen::Triplet<double>> triplets;
 
 	for (int i = 0; i < numConstraints; i++)
@@ -556,6 +563,12 @@ void Params::load_model(const int &dataidx)
 	b = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_RHS,
 											  model.getConstrs(), numConstraints),
 									numConstraints);
+
+	n = numVars;
+	m1 = 0;
+	m2 = numConstraints;
+	K = A;
+	q = b;
 
 	std::cout << "Model loaded." << std::endl;
 }
@@ -684,14 +697,14 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	Eigen::VectorXd z0(size_x + size_y);
 	z0 << x0, y0;
 	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
-	std::cout << std::setprecision(8) << "Trust  gap obj:" << (-z_hat.dot(g) + constant) / r << " ";
-	std::cout << "cons vio: ||min(x,0)|| " << z_hat.head(size_x).cwiseMin(0).norm() << " ";
-	std::cout << "||z-z0||-r " << (z_hat - z0).norm() - r << " ";
-	std::cout << "r: " << r << std::endl;
-	if (p.save2file)
-	{
-		save_obj_residual("trust", (-z_hat.dot(g) + constant) / r, (z_hat - z0).norm() - r);
-	}
+	// std::cout << std::setprecision(8) << "Trust  gap obj:" << (-z_hat.dot(g) + constant) / r << " ";
+	// std::cout << "cons vio: ||min(x,0)|| " << z_hat.head(size_x).cwiseMin(0).norm() << " ";
+	// std::cout << "||z-z0||-r " << (z_hat - z0).norm() - r << " ";
+	// std::cout << "r: " << r << std::endl;
+	// if (p.save2file)
+	// {
+	// 	save_obj_residual("trust", (-z_hat.dot(g) + constant) / r, (z_hat - z0).norm() - r);
+	// }
 
 	return (-g.dot(z_hat) + constant) / r;
 }
