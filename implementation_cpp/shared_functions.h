@@ -69,7 +69,7 @@ struct ADMMmodel
 
 struct Convergeinfo
 {
-	double duality_gap, primal_feasibility, dual_feasibility;
+	double duality_gap, primal_feasibility, dual_feasibility, kkt_error, normalized_duality_gap;
 };
 
 class Params
@@ -152,7 +152,7 @@ Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &g, const Eige
 											const Eigen::VectorXd &z, const double &r);
 
 void AdaptiveRestarts(Iterates &, Params &, RecordIterates &);
-void FixedFrequencyRestart(Iterates &, const Params &, RecordIterates &);
+void FixedFrequencyRestart(Iterates &, Params &, RecordIterates &);
 
 double PowerIteration(const Eigen::SparseMatrix<double> &, const bool &);
 

@@ -23,7 +23,8 @@ int main(int argc, char *argv[])
 	std::ofstream out(path + p.outfile_name);
 	std::cout.rdbuf(out.rdbuf()); // redirect std::cout to out.txt!
 
-	p.max_iter = 10e5;
+	p.max_iter = 15e4;
+	// p.max_iter = 6e4;
 	p.print_every = 100;
 	p.save2file = 0;
 	p.print_timing = false;
@@ -39,14 +40,14 @@ int main(int argc, char *argv[])
 	SpMat KKT = p.K * p.K.transpose();
 	double sigma_max = std::sqrt(PowerIteration(KKT, 1)); // 1 for verbose
 	std::cout << "sigma_max " << sigma_max << std::endl;
-	p.eta = 0.9 / sigma_max;
-	// p.eta = 1e-3;
+	// p.eta = 0.9 / sigma_max;
+	p.eta = 10;
 	// p.eta_hat = 1 / (p.K.cwiseAbs() * Eigen::VectorXd::Ones(p.K.cols())).maxCoeff();
 	// std::cout << p.eta_hat << std::endl;
 	// p.eta_hat = 5e-4;
 	auto record = m(p);
 	delete record;
-
+	std::cout << "all done" << std::endl;
 	// close output file
 	out.close();
 
@@ -62,7 +63,8 @@ void process_argument(int argc, char *argv[], Params &p, Method &m)
 												  {"scaling", "0"},
 												  {"tol", "-8"},
 												  {"data_name", "foo"},
-												  {"method", "PDHG"}};
+												  {"method", "PDHG"},
+												  {"fixed_restart_length", "-1"}};
 
 	std::map<std::string, std::string> abr_map = {{"adaptive_step_size", "a"},
 												  {"restart", "r"},
@@ -71,7 +73,8 @@ void process_argument(int argc, char *argv[], Params &p, Method &m)
 												  {"scaling", "s"},
 												  {"tol", "t"},
 												  {"data_name", "d"},
-												  {"method", "m"}};
+												  {"method", "m"},
+												  {"fixed_restart_length", "f"}};
 
 	for (int i = 1; i < argc; i += 2)
 	{
@@ -80,10 +83,15 @@ void process_argument(int argc, char *argv[], Params &p, Method &m)
 	m = method_map[arg_map["method"]];
 	p.adaptive_step_size = std::stoi(arg_map["adaptive_step_size"]);
 	p.restart = std::stoi(arg_map["restart"]);
+	p.fixed_restart_length = std::stoi(arg_map["fixed_restart_length"]);
 	p.primal_weight_update = std::stoi(arg_map["primal_weight_update"]);
 	p.precondition = std::stoi(arg_map["scaling"]);
 	p.eps = std::pow(10, std::stoi(arg_map["tol"]));
 	p.data_name = arg_map["data_name"];
 	// set output file name as restart+primal_weight_update+scaling+tol
-	p.outfile_name = abr_map["restart"] + arg_map["restart"] + "_" + abr_map["primal_weight_update"] + arg_map["primal_weight_update"] + "_" + abr_map["scaling"] + arg_map["scaling"] + "_" + abr_map["tol"] + arg_map["tol"] + ".txt";
+	p.outfile_name = abr_map["restart"] + arg_map["restart"] +
+					 "_" + abr_map["fixed_restart_length"] + arg_map["fixed_restart_length"] +
+					 "_" + abr_map["primal_weight_update"] + arg_map["primal_weight_update"] +
+					 "_" + abr_map["scaling"] + arg_map["scaling"] +
+					 "_" + abr_map["tol"] + arg_map["tol"] + ".txt";
 }

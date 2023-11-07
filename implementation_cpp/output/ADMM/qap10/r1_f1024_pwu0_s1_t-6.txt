@@ -1,0 +1,4275 @@
+Loading model...
+Model loaded.
+c norm: 1192.76 q norm: 4.47214
+scaled c norm: 596.379 scaled q norm: 1.41421
+Power Iteration Converged in 50 iterations.
+sigma_max 1
+K rows: 1820 K cols: 4150
+KKT number of nonzeros: 72220
+factorize done, takes 219356 milliseconds
+Iteration 100, kkt_error: 520.9
+gap: 0.79387
+xU.norm() 6.10195 xV.norm() 6.09943 xU-xV.norm() 0.175021
+obj: 329.008
+Iterations take 0.379 s
+
+Iteration 200, kkt_error: 516.029
+gap: 0.452154
+xU.norm() 6.71474 xV.norm() 6.71461 xU-xV.norm() 0.0419757
+obj: 331.88
+Iterations take 0.154 s
+
+Iteration 300, kkt_error: 515.259
+gap: 0.311897
+xU.norm() 6.80032 xV.norm() 6.80028 xU-xV.norm() 0.0216252
+obj: 332.324
+Iterations take 0.154 s
+
+Iteration 400, kkt_error: 514.96
+gap: 0.236957
+xU.norm() 6.77734 xV.norm() 6.77732 xU-xV.norm() 0.0142232
+obj: 332.48
+Iterations take 0.154 s
+
+Iteration 500, kkt_error: 514.746
+gap: 0.191297
+xU.norm() 6.78246 xV.norm() 6.78246 xU-xV.norm() 0.00842603
+obj: 332.542
+Iterations take 0.154 s
+
+Iteration 600, kkt_error: 514.65
+gap: 0.160243
+xU.norm() 6.77253 xV.norm() 6.77252 xU-xV.norm() 0.00590068
+obj: 332.558
+Iterations take 0.154 s
+
+Iteration 700, kkt_error: 514.582
+gap: 0.138262
+xU.norm() 6.81274 xV.norm() 6.81274 xU-xV.norm() 0.0040527
+obj: 332.562
+Iterations take 0.154 s
+
+Iteration 800, kkt_error: 514.549
+gap: 0.121688
+xU.norm() 6.85745 xV.norm() 6.85745 xU-xV.norm() 0.00312069
+obj: 332.565
+Iterations take 0.154 s
+
+Iteration 900, kkt_error: 514.519
+gap: 0.108496
+xU.norm() 6.8709 xV.norm() 6.8709 xU-xV.norm() 0.0023147
+obj: 332.565
+Iterations take 0.154 s
+
+Iteration 1000, kkt_error: 514.499
+gap: 0.0978813
+xU.norm() 6.88228 xV.norm() 6.88228 xU-xV.norm() 0.00183671
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 1024
+Iteration 1024, kkt_error: 514.494
+gap: 0.0956344
+xU.norm() 6.88359 xV.norm() 6.88359 xU-xV.norm() 0.00171271
+obj: 332.566
+Iterations take 0.037 s
+
+Iteration 1100, kkt_error: 515.352
+gap: 0.0783592
+xU.norm() 6.79319 xV.norm() 6.79315 xU-xV.norm() 0.0238773
+obj: 332.458
+Iterations take 0.116 s
+
+Iteration 1200, kkt_error: 514.83
+gap: 0.0353144
+xU.norm() 6.79443 xV.norm() 6.79443 xU-xV.norm() 0.0105233
+obj: 332.543
+Iterations take 0.154 s
+
+Iteration 1300, kkt_error: 514.656
+gap: 0.0219754
+xU.norm() 6.77186 xV.norm() 6.77186 xU-xV.norm() 0.0060397
+obj: 332.56
+Iterations take 0.154 s
+
+Iteration 1400, kkt_error: 514.576
+gap: 0.0175079
+xU.norm() 6.82321 xV.norm() 6.82321 xU-xV.norm() 0.00396428
+obj: 332.564
+Iterations take 0.154 s
+
+Iteration 1500, kkt_error: 514.555
+gap: 0.0150872
+xU.norm() 6.86109 xV.norm() 6.86109 xU-xV.norm() 0.00327485
+obj: 332.565
+Iterations take 0.154 s
+
+Iteration 1600, kkt_error: 514.522
+gap: 0.0129696
+xU.norm() 6.87695 xV.norm() 6.87695 xU-xV.norm() 0.00235739
+obj: 332.565
+Iterations take 0.154 s
+
+Iteration 1700, kkt_error: 514.495
+gap: 0.0113049
+xU.norm() 6.88083 xV.norm() 6.88083 xU-xV.norm() 0.00175622
+obj: 332.567
+Iterations take 0.154 s
+
+Iteration 1800, kkt_error: 514.474
+gap: 0.00996096
+xU.norm() 6.87531 xV.norm() 6.87531 xU-xV.norm() 0.00123884
+obj: 332.567
+Iterations take 0.154 s
+
+Iteration 1900, kkt_error: 514.469
+gap: 0.0089898
+xU.norm() 6.87273 xV.norm() 6.87273 xU-xV.norm() 0.00104004
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 2000, kkt_error: 514.467
+gap: 0.00820142
+xU.norm() 6.87199 xV.norm() 6.87199 xU-xV.norm() 0.000998392
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 2048
+Iteration 2048, kkt_error: 514.463
+gap: 0.00787204
+xU.norm() 6.87428 xV.norm() 6.87428 xU-xV.norm() 0.00091048
+obj: 332.566
+Iterations take 0.074 s
+
+Iteration 2100, kkt_error: 514.589
+gap: 0.0227045
+xU.norm() 6.85393 xV.norm() 6.85393 xU-xV.norm() 0.00420964
+obj: 332.565
+Iterations take 0.079 s
+
+Iteration 2200, kkt_error: 514.521
+gap: 0.0125939
+xU.norm() 6.86232 xV.norm() 6.86232 xU-xV.norm() 0.00238347
+obj: 332.565
+Iterations take 0.154 s
+
+Iteration 2300, kkt_error: 514.499
+gap: 0.00849188
+xU.norm() 6.87564 xV.norm() 6.87564 xU-xV.norm() 0.00186014
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 2400, kkt_error: 514.475
+gap: 0.0066071
+xU.norm() 6.87453 xV.norm() 6.87453 xU-xV.norm() 0.00123622
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 2500, kkt_error: 514.466
+gap: 0.00599241
+xU.norm() 6.87772 xV.norm() 6.87772 xU-xV.norm() 0.00100173
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 2600, kkt_error: 514.462
+gap: 0.00515103
+xU.norm() 6.87069 xV.norm() 6.87069 xU-xV.norm() 0.000892894
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 2700, kkt_error: 514.458
+gap: 0.00454134
+xU.norm() 6.87465 xV.norm() 6.87465 xU-xV.norm() 0.000785088
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 2800, kkt_error: 514.45
+gap: 0.00376145
+xU.norm() 6.87407 xV.norm() 6.87407 xU-xV.norm() 0.000588818
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 2900, kkt_error: 514.449
+gap: 0.00327266
+xU.norm() 6.87507 xV.norm() 6.87507 xU-xV.norm() 0.00055292
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 3000, kkt_error: 514.446
+gap: 0.00298619
+xU.norm() 6.87574 xV.norm() 6.87574 xU-xV.norm() 0.000500877
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 3072
+Iteration 3072, kkt_error: 514.447
+gap: 0.00285485
+xU.norm() 6.87157 xV.norm() 6.87157 xU-xV.norm() 0.000512501
+obj: 332.566
+Iterations take 0.111 s
+
+Iteration 3100, kkt_error: 514.465
+gap: 0.00683684
+xU.norm() 6.87477 xV.norm() 6.87477 xU-xV.norm() 0.000951135
+obj: 332.566
+Iterations take 0.042 s
+
+Iteration 3200, kkt_error: 514.45
+gap: 0.00373219
+xU.norm() 6.87544 xV.norm() 6.87544 xU-xV.norm() 0.000590307
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 3300, kkt_error: 514.446
+gap: 0.00320158
+xU.norm() 6.87381 xV.norm() 6.87381 xU-xV.norm() 0.000481287
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 3400, kkt_error: 514.445
+gap: 0.00284638
+xU.norm() 6.8735 xV.norm() 6.8735 xU-xV.norm() 0.000470629
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 3500, kkt_error: 514.443
+gap: 0.00251838
+xU.norm() 6.87261 xV.norm() 6.87261 xU-xV.norm() 0.000399383
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 3600, kkt_error: 514.44
+gap: 0.00228661
+xU.norm() 6.87415 xV.norm() 6.87415 xU-xV.norm() 0.000327084
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 3700, kkt_error: 514.44
+gap: 0.00218408
+xU.norm() 6.87432 xV.norm() 6.87432 xU-xV.norm() 0.000334013
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 3800, kkt_error: 514.44
+gap: 0.00213936
+xU.norm() 6.87203 xV.norm() 6.87203 xU-xV.norm() 0.000324954
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 3900, kkt_error: 514.438
+gap: 0.00210928
+xU.norm() 6.87174 xV.norm() 6.87174 xU-xV.norm() 0.000294176
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 4000, kkt_error: 514.437
+gap: 0.00207503
+xU.norm() 6.8711 xV.norm() 6.8711 xU-xV.norm() 0.000259155
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 4096
+Iteration 4096, kkt_error: 514.437
+gap: 0.00201348
+xU.norm() 6.87043 xV.norm() 6.87043 xU-xV.norm() 0.000252201
+obj: 332.566
+Iterations take 0.148 s
+
+Iteration 4100, kkt_error: 514.444
+gap: 0.00376039
+xU.norm() 6.87293 xV.norm() 6.87293 xU-xV.norm() 0.000426806
+obj: 332.566
+Iterations take 0.005 s
+
+Iteration 4200, kkt_error: 514.437
+gap: 0.00223518
+xU.norm() 6.87289 xV.norm() 6.87289 xU-xV.norm() 0.000242246
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 4300, kkt_error: 514.436
+gap: 0.00214285
+xU.norm() 6.87256 xV.norm() 6.87256 xU-xV.norm() 0.000233962
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 4400, kkt_error: 514.435
+gap: 0.00206284
+xU.norm() 6.87189 xV.norm() 6.87189 xU-xV.norm() 0.000216326
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 4500, kkt_error: 514.434
+gap: 0.00201765
+xU.norm() 6.87141 xV.norm() 6.87141 xU-xV.norm() 0.000185805
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 4600, kkt_error: 514.434
+gap: 0.00197856
+xU.norm() 6.87089 xV.norm() 6.87089 xU-xV.norm() 0.000176341
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 4700, kkt_error: 514.434
+gap: 0.00191984
+xU.norm() 6.8701 xV.norm() 6.8701 xU-xV.norm() 0.000173882
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 4800, kkt_error: 514.434
+gap: 0.00185095
+xU.norm() 6.86839 xV.norm() 6.86839 xU-xV.norm() 0.000182179
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 4900, kkt_error: 514.436
+gap: 0.00175995
+xU.norm() 6.86722 xV.norm() 6.86722 xU-xV.norm() 0.000218387
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 5000, kkt_error: 514.435
+gap: 0.0016312
+xU.norm() 6.86729 xV.norm() 6.86729 xU-xV.norm() 0.000205614
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 5100, kkt_error: 514.435
+gap: 0.00148615
+xU.norm() 6.86854 xV.norm() 6.86854 xU-xV.norm() 0.00020211
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 5120
+Iteration 5120, kkt_error: 514.435
+gap: 0.00145721
+xU.norm() 6.86858 xV.norm() 6.86858 xU-xV.norm() 0.000203143
+obj: 332.566
+Iterations take 0.031 s
+
+Iteration 5200, kkt_error: 514.433
+gap: 0.00161455
+xU.norm() 6.87028 xV.norm() 6.87028 xU-xV.norm() 0.000154129
+obj: 332.566
+Iterations take 0.122 s
+
+Iteration 5300, kkt_error: 514.432
+gap: 0.00151406
+xU.norm() 6.86886 xV.norm() 6.86886 xU-xV.norm() 0.000130544
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 5400, kkt_error: 514.433
+gap: 0.00145565
+xU.norm() 6.86921 xV.norm() 6.86921 xU-xV.norm() 0.000141785
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 5500, kkt_error: 514.433
+gap: 0.00137047
+xU.norm() 6.8686 xV.norm() 6.8686 xU-xV.norm() 0.000144976
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 5600, kkt_error: 514.433
+gap: 0.00124322
+xU.norm() 6.86834 xV.norm() 6.86834 xU-xV.norm() 0.000143003
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 5700, kkt_error: 514.433
+gap: 0.00109246
+xU.norm() 6.86877 xV.norm() 6.86877 xU-xV.norm() 0.000145396
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 5800, kkt_error: 514.432
+gap: 0.000940758
+xU.norm() 6.86911 xV.norm() 6.86911 xU-xV.norm() 0.000127173
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 5900, kkt_error: 514.431
+gap: 0.00081047
+xU.norm() 6.86938 xV.norm() 6.86938 xU-xV.norm() 0.000110604
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 6000, kkt_error: 514.431
+gap: 0.000703978
+xU.norm() 6.86876 xV.norm() 6.86876 xU-xV.norm() 0.000110962
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 6100, kkt_error: 514.432
+gap: 0.000603121
+xU.norm() 6.86977 xV.norm() 6.86977 xU-xV.norm() 0.00011478
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 6144
+Iteration 6144, kkt_error: 514.432
+gap: 0.000560201
+xU.norm() 6.87013 xV.norm() 6.87013 xU-xV.norm() 0.000113724
+obj: 332.566
+Iterations take 0.068 s
+
+Iteration 6200, kkt_error: 514.433
+gap: 0.00102906
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 0.000152499
+obj: 332.566
+Iterations take 0.085 s
+
+Iteration 6300, kkt_error: 514.432
+gap: 0.000751828
+xU.norm() 6.86881 xV.norm() 6.86881 xU-xV.norm() 0.000114983
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 6400, kkt_error: 514.432
+gap: 0.000636641
+xU.norm() 6.86933 xV.norm() 6.86933 xU-xV.norm() 0.000113188
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 6500, kkt_error: 514.431
+gap: 0.000539573
+xU.norm() 6.86963 xV.norm() 6.86963 xU-xV.norm() 0.000108483
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 6600, kkt_error: 514.431
+gap: 0.000470678
+xU.norm() 6.87004 xV.norm() 6.87004 xU-xV.norm() 9.53572e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 6700, kkt_error: 514.431
+gap: 0.000418954
+xU.norm() 6.8698 xV.norm() 6.8698 xU-xV.norm() 0.000102043
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 6800, kkt_error: 514.431
+gap: 0.000357768
+xU.norm() 6.86947 xV.norm() 6.86947 xU-xV.norm() 8.91367e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 6900, kkt_error: 514.431
+gap: 0.00030271
+xU.norm() 6.86964 xV.norm() 6.86964 xU-xV.norm() 9.75472e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 7000, kkt_error: 514.43
+gap: 0.000258596
+xU.norm() 6.86974 xV.norm() 6.86974 xU-xV.norm() 8.21641e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 7100, kkt_error: 514.43
+gap: 0.000221338
+xU.norm() 6.86987 xV.norm() 6.86987 xU-xV.norm() 8.32951e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 7168
+Iteration 7168, kkt_error: 514.43
+gap: 0.000196662
+xU.norm() 6.8701 xV.norm() 6.8701 xU-xV.norm() 7.97698e-05
+obj: 332.566
+Iterations take 0.105 s
+
+Iteration 7200, kkt_error: 514.43
+gap: 0.000240576
+xU.norm() 6.86966 xV.norm() 6.86966 xU-xV.norm() 6.63825e-05
+obj: 332.566
+Iterations take 0.047 s
+
+Iteration 7300, kkt_error: 514.43
+gap: 0.000162328
+xU.norm() 6.86969 xV.norm() 6.86969 xU-xV.norm() 6.22446e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 7400, kkt_error: 514.43
+gap: 0.000135116
+xU.norm() 6.86966 xV.norm() 6.86966 xU-xV.norm() 6.17581e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 7500, kkt_error: 514.43
+gap: 0.000108281
+xU.norm() 6.86964 xV.norm() 6.86964 xU-xV.norm() 6.11623e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 7600, kkt_error: 514.429
+gap: 8.75442e-05
+xU.norm() 6.86961 xV.norm() 6.86961 xU-xV.norm() 5.83141e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 7700, kkt_error: 514.429
+gap: 8.51137e-05
+xU.norm() 6.86959 xV.norm() 6.86959 xU-xV.norm() 5.26724e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 7800, kkt_error: 514.429
+gap: 0.000108051
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 4.75719e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 7900, kkt_error: 514.429
+gap: 0.000138255
+xU.norm() 6.86952 xV.norm() 6.86952 xU-xV.norm() 4.27125e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 8000, kkt_error: 514.429
+gap: 0.000167241
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 3.90945e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 8100, kkt_error: 514.429
+gap: 0.00019273
+xU.norm() 6.86941 xV.norm() 6.86941 xU-xV.norm() 3.88272e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 8192
+Iteration 8192, kkt_error: 514.429
+gap: 0.00021098
+xU.norm() 6.86938 xV.norm() 6.86938 xU-xV.norm() 4.18403e-05
+obj: 332.566
+Iterations take 0.142 s
+
+Iteration 8200, kkt_error: 514.429
+gap: 0.000384649
+xU.norm() 6.86959 xV.norm() 6.86959 xU-xV.norm() 6.24872e-05
+obj: 332.566
+Iterations take 0.011 s
+
+Iteration 8300, kkt_error: 514.429
+gap: 0.000201336
+xU.norm() 6.86952 xV.norm() 6.86952 xU-xV.norm() 4.63614e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 8400, kkt_error: 514.429
+gap: 0.000225072
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 4.13701e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 8500, kkt_error: 514.429
+gap: 0.000247066
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 3.79798e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 8600, kkt_error: 514.429
+gap: 0.000262977
+xU.norm() 6.86963 xV.norm() 6.86963 xU-xV.norm() 3.72577e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 8700, kkt_error: 514.429
+gap: 0.000271108
+xU.norm() 6.86962 xV.norm() 6.86962 xU-xV.norm() 3.8218e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 8800, kkt_error: 514.429
+gap: 0.000272457
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.97723e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 8900, kkt_error: 514.429
+gap: 0.000267618
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 4.24903e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 9000, kkt_error: 514.429
+gap: 0.000256974
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 4.43708e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 9100, kkt_error: 514.429
+gap: 0.000241672
+xU.norm() 6.86974 xV.norm() 6.86974 xU-xV.norm() 4.47887e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 9200, kkt_error: 514.429
+gap: 0.000223267
+xU.norm() 6.86968 xV.norm() 6.86968 xU-xV.norm() 4.44691e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 9216
+Iteration 9216, kkt_error: 514.429
+gap: 0.000220128
+xU.norm() 6.86968 xV.norm() 6.86968 xU-xV.norm() 4.40672e-05
+obj: 332.566
+Iterations take 0.025 s
+
+Iteration 9300, kkt_error: 514.429
+gap: 0.000216317
+xU.norm() 6.8696 xV.norm() 6.8696 xU-xV.norm() 3.62838e-05
+obj: 332.566
+Iterations take 0.128 s
+
+Iteration 9400, kkt_error: 514.429
+gap: 0.000204006
+xU.norm() 6.86962 xV.norm() 6.86962 xU-xV.norm() 3.75173e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 9500, kkt_error: 514.429
+gap: 0.000189175
+xU.norm() 6.86962 xV.norm() 6.86962 xU-xV.norm() 3.86664e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 9600, kkt_error: 514.429
+gap: 0.000172683
+xU.norm() 6.86964 xV.norm() 6.86964 xU-xV.norm() 3.91773e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 9700, kkt_error: 514.429
+gap: 0.000155782
+xU.norm() 6.86963 xV.norm() 6.86963 xU-xV.norm() 3.81681e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 9800, kkt_error: 514.429
+gap: 0.000140315
+xU.norm() 6.8696 xV.norm() 6.8696 xU-xV.norm() 3.78319e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 9900, kkt_error: 514.429
+gap: 0.000126389
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.7e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 10000, kkt_error: 514.428
+gap: 0.000114506
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 3.44657e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 10100, kkt_error: 514.428
+gap: 0.000106403
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 3.10628e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 10200, kkt_error: 514.428
+gap: 0.000102538
+xU.norm() 6.8696 xV.norm() 6.8696 xU-xV.norm() 3.16983e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 10240
+Iteration 10240, kkt_error: 514.428
+gap: 0.000101407
+xU.norm() 6.86959 xV.norm() 6.86959 xU-xV.norm() 3.23423e-05
+obj: 332.566
+Iterations take 0.062 s
+
+Iteration 10300, kkt_error: 514.429
+gap: 0.000114764
+xU.norm() 6.86962 xV.norm() 6.86962 xU-xV.norm() 3.9306e-05
+obj: 332.566
+Iterations take 0.091 s
+
+Iteration 10400, kkt_error: 514.429
+gap: 9.76897e-05
+xU.norm() 6.86959 xV.norm() 6.86959 xU-xV.norm() 3.68388e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 10500, kkt_error: 514.429
+gap: 9.25596e-05
+xU.norm() 6.86959 xV.norm() 6.86959 xU-xV.norm() 3.59423e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 10600, kkt_error: 514.428
+gap: 9.12264e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 3.25711e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 10700, kkt_error: 514.428
+gap: 9.42484e-05
+xU.norm() 6.86951 xV.norm() 6.86951 xU-xV.norm() 3.07889e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 10800, kkt_error: 514.428
+gap: 9.66832e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.12657e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 10900, kkt_error: 514.428
+gap: 9.3606e-05
+xU.norm() 6.86945 xV.norm() 6.86945 xU-xV.norm() 3.19613e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 11000, kkt_error: 514.428
+gap: 8.45533e-05
+xU.norm() 6.8695 xV.norm() 6.8695 xU-xV.norm() 3.08181e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 11100, kkt_error: 514.428
+gap: 7.40212e-05
+xU.norm() 6.86951 xV.norm() 6.86951 xU-xV.norm() 2.87121e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 11200, kkt_error: 514.428
+gap: 6.5591e-05
+xU.norm() 6.86952 xV.norm() 6.86952 xU-xV.norm() 2.82884e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 11264
+Iteration 11264, kkt_error: 514.428
+gap: 6.16281e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.66647e-05
+obj: 332.566
+Iterations take 0.099 s
+
+Iteration 11300, kkt_error: 514.428
+gap: 9.46123e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.08197e-05
+obj: 332.566
+Iterations take 0.054 s
+
+Iteration 11400, kkt_error: 514.428
+gap: 5.35008e-05
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 2.7293e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 11500, kkt_error: 514.428
+gap: 6.05223e-05
+xU.norm() 6.86951 xV.norm() 6.86951 xU-xV.norm() 2.5516e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 11600, kkt_error: 514.428
+gap: 7.29788e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.42482e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 11700, kkt_error: 514.428
+gap: 8.37453e-05
+xU.norm() 6.86947 xV.norm() 6.86947 xU-xV.norm() 2.27978e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 11800, kkt_error: 514.428
+gap: 9.39319e-05
+xU.norm() 6.86952 xV.norm() 6.86952 xU-xV.norm() 2.12726e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 11900, kkt_error: 514.428
+gap: 0.000103887
+xU.norm() 6.86947 xV.norm() 6.86947 xU-xV.norm() 1.92256e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 12000, kkt_error: 514.428
+gap: 0.000113699
+xU.norm() 6.86952 xV.norm() 6.86952 xU-xV.norm() 1.75283e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 12100, kkt_error: 514.428
+gap: 0.00012288
+xU.norm() 6.86951 xV.norm() 6.86951 xU-xV.norm() 1.63898e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 12200, kkt_error: 514.428
+gap: 0.000131126
+xU.norm() 6.86945 xV.norm() 6.86945 xU-xV.norm() 1.51284e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 12288
+Iteration 12288, kkt_error: 514.428
+gap: 0.000137509
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 1.42209e-05
+obj: 332.566
+Iterations take 0.136 s
+
+Iteration 12300, kkt_error: 514.428
+gap: 0.000143402
+xU.norm() 6.8695 xV.norm() 6.8695 xU-xV.norm() 1.92088e-05
+obj: 332.566
+Iterations take 0.017 s
+
+Iteration 12400, kkt_error: 514.428
+gap: 0.000150311
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 1.74727e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 12500, kkt_error: 514.428
+gap: 0.000157718
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 1.58949e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 12600, kkt_error: 514.428
+gap: 0.000164412
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 1.43666e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 12700, kkt_error: 514.428
+gap: 0.000170374
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 1.29173e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 12800, kkt_error: 514.428
+gap: 0.000175594
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 1.14839e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 12900, kkt_error: 514.428
+gap: 0.000180016
+xU.norm() 6.86948 xV.norm() 6.86948 xU-xV.norm() 1.00275e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 13000, kkt_error: 514.428
+gap: 0.000183832
+xU.norm() 6.86948 xV.norm() 6.86948 xU-xV.norm() 8.71357e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 13100, kkt_error: 514.427
+gap: 0.000187069
+xU.norm() 6.86948 xV.norm() 6.86948 xU-xV.norm() 7.4354e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 13200, kkt_error: 514.427
+gap: 0.00018974
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 6.10934e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 13300, kkt_error: 514.427
+gap: 0.000191921
+xU.norm() 6.86951 xV.norm() 6.86951 xU-xV.norm() 5.25951e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 13312
+Iteration 13312, kkt_error: 514.427
+gap: 0.000192152
+xU.norm() 6.86951 xV.norm() 6.86951 xU-xV.norm() 5.21111e-06
+obj: 332.566
+Iterations take 0.018 s
+
+Iteration 13400, kkt_error: 514.428
+gap: 0.000197358
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 9.18954e-06
+obj: 332.566
+Iterations take 0.134 s
+
+Iteration 13500, kkt_error: 514.427
+gap: 0.000200118
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 7.58274e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 13600, kkt_error: 514.427
+gap: 0.000202647
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 6.02988e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 13700, kkt_error: 514.427
+gap: 0.000204615
+xU.norm() 6.86949 xV.norm() 6.86949 xU-xV.norm() 4.76726e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 13800, kkt_error: 514.427
+gap: 0.000206089
+xU.norm() 6.8695 xV.norm() 6.8695 xU-xV.norm() 3.99316e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 13900, kkt_error: 514.427
+gap: 0.000206991
+xU.norm() 6.86951 xV.norm() 6.86951 xU-xV.norm() 4.39237e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 14000, kkt_error: 514.427
+gap: 0.00020724
+xU.norm() 6.86952 xV.norm() 6.86952 xU-xV.norm() 5.83506e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 14100, kkt_error: 514.427
+gap: 0.000206762
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 7.84112e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 14200, kkt_error: 514.428
+gap: 0.000205484
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.99937e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 14300, kkt_error: 514.428
+gap: 0.000203359
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.21882e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 14336
+Iteration 14336, kkt_error: 514.428
+gap: 0.000202378
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.29571e-05
+obj: 332.566
+Iterations take 0.056 s
+
+Iteration 14400, kkt_error: 514.427
+gap: 0.000202598
+xU.norm() 6.86951 xV.norm() 6.86951 xU-xV.norm() 3.5487e-06
+obj: 332.566
+Iterations take 0.097 s
+
+Iteration 14500, kkt_error: 514.427
+gap: 0.000200779
+xU.norm() 6.86952 xV.norm() 6.86952 xU-xV.norm() 5.11897e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 14600, kkt_error: 514.427
+gap: 0.000198412
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 7.11055e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 14700, kkt_error: 514.428
+gap: 0.000195213
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 9.19066e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 14800, kkt_error: 514.428
+gap: 0.000191097
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.12367e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 14900, kkt_error: 514.428
+gap: 0.000186054
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.31475e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 15000, kkt_error: 514.428
+gap: 0.000180166
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.48625e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 15100, kkt_error: 514.428
+gap: 0.000173449
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.63864e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 15200, kkt_error: 514.428
+gap: 0.000166009
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.76625e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 15300, kkt_error: 514.428
+gap: 0.000157933
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.86769e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 15360
+Iteration 15360, kkt_error: 514.428
+gap: 0.000152812
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.9154e-05
+obj: 332.566
+Iterations take 0.093 s
+
+Iteration 15400, kkt_error: 514.428
+gap: 0.000150863
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.21521e-05
+obj: 332.566
+Iterations take 0.06 s
+
+Iteration 15500, kkt_error: 514.428
+gap: 0.000143382
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.3762e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 15600, kkt_error: 514.428
+gap: 0.000135316
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.51838e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 15700, kkt_error: 514.428
+gap: 0.000126712
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.64147e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 15800, kkt_error: 514.428
+gap: 0.00011765
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.74049e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 15900, kkt_error: 514.428
+gap: 0.00010823
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.81524e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 16000, kkt_error: 514.428
+gap: 9.85384e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.86412e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 16100, kkt_error: 514.428
+gap: 8.8681e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.88861e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 16200, kkt_error: 514.428
+gap: 7.87362e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.88802e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 16300, kkt_error: 514.428
+gap: 6.8786e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.85379e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 16384
+Iteration 16384, kkt_error: 514.428
+gap: 6.05014e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.81235e-05
+obj: 332.566
+Iterations take 0.13 s
+
+Iteration 16400, kkt_error: 514.428
+gap: 5.99599e-05
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.70142e-05
+obj: 332.566
+Iterations take 0.023 s
+
+Iteration 16500, kkt_error: 514.428
+gap: 5.03953e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.7506e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 16600, kkt_error: 514.428
+gap: 4.13993e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.77815e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 16700, kkt_error: 514.428
+gap: 3.306e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.78174e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 16800, kkt_error: 514.428
+gap: 2.59731e-05
+xU.norm() 6.86958 xV.norm() 6.86958 xU-xV.norm() 1.76153e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 16900, kkt_error: 514.428
+gap: 2.14753e-05
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.70779e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 17000, kkt_error: 514.428
+gap: 2.11893e-05
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.6407e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 17100, kkt_error: 514.428
+gap: 2.51151e-05
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.55145e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 17200, kkt_error: 514.428
+gap: 3.15314e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.44069e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 17300, kkt_error: 514.428
+gap: 3.90203e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.30954e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 17400, kkt_error: 514.428
+gap: 4.68499e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.15888e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 17408
+Iteration 17408, kkt_error: 514.428
+gap: 4.74785e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.14628e-05
+obj: 332.566
+Iterations take 0.012 s
+
+Iteration 17500, kkt_error: 514.428
+gap: 5.53216e-05
+xU.norm() 6.86957 xV.norm() 6.86957 xU-xV.norm() 1.56052e-05
+obj: 332.566
+Iterations take 0.141 s
+
+Iteration 17600, kkt_error: 514.428
+gap: 6.39001e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.46929e-05
+obj: 332.566
+Iterations take 0.155 s
+
+Iteration 17700, kkt_error: 514.428
+gap: 7.22464e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.36692e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 17800, kkt_error: 514.428
+gap: 8.02987e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.24532e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 17900, kkt_error: 514.428
+gap: 8.79765e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 1.10558e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 18000, kkt_error: 514.428
+gap: 9.51992e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 9.50206e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 18100, kkt_error: 514.427
+gap: 0.00010192
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 7.81497e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 18200, kkt_error: 514.427
+gap: 0.000108084
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 6.01706e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 18300, kkt_error: 514.427
+gap: 0.00011364
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.13859e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 18400, kkt_error: 514.427
+gap: 0.000118549
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.21151e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 18432
+Iteration 18432, kkt_error: 514.427
+gap: 0.000119978
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.60072e-06
+obj: 332.566
+Iterations take 0.049 s
+
+Iteration 18500, kkt_error: 514.428
+gap: 0.000124049
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 9.09786e-06
+obj: 332.566
+Iterations take 0.104 s
+
+Iteration 18600, kkt_error: 514.427
+gap: 0.000129202
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 7.52733e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 18700, kkt_error: 514.427
+gap: 0.000133773
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 5.84616e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 18800, kkt_error: 514.427
+gap: 0.000137704
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.09338e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 18900, kkt_error: 514.427
+gap: 0.000140955
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.27647e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 19000, kkt_error: 514.427
+gap: 0.000143521
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.6308e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 19100, kkt_error: 514.427
+gap: 0.000145376
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.47075e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 19200, kkt_error: 514.427
+gap: 0.000146508
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.31874e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 19300, kkt_error: 514.427
+gap: 0.000146905
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.1215e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 19400, kkt_error: 514.427
+gap: 0.000146581
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.84683e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 19456
+Iteration 19456, kkt_error: 514.427
+gap: 0.000146091
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.77019e-06
+obj: 332.566
+Iterations take 0.086 s
+
+Iteration 19500, kkt_error: 514.427
+gap: 0.000146544
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.85199e-07
+obj: 332.566
+Iterations take 0.066 s
+
+Iteration 19600, kkt_error: 514.427
+gap: 0.000146662
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.16476e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 19700, kkt_error: 514.427
+gap: 0.000146098
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.8987e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 19800, kkt_error: 514.427
+gap: 0.000144826
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.60613e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 19900, kkt_error: 514.427
+gap: 0.000142851
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.23133e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 20000, kkt_error: 514.427
+gap: 0.000140224
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.77328e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 20100, kkt_error: 514.428
+gap: 0.000136973
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.20192e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 20200, kkt_error: 514.428
+gap: 0.000133117
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.0498e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 20300, kkt_error: 514.428
+gap: 0.000128689
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.16438e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 20400, kkt_error: 514.428
+gap: 0.000123729
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.26191e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 20480
+Iteration 20480, kkt_error: 514.428
+gap: 0.000119405
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.32711e-05
+obj: 332.566
+Iterations take 0.124 s
+
+Iteration 20500, kkt_error: 514.427
+gap: 0.000118789
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.11854e-06
+obj: 332.566
+Iterations take 0.029 s
+
+Iteration 20600, kkt_error: 514.428
+gap: 0.000114193
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.47581e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 20700, kkt_error: 514.428
+gap: 0.000109178
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 9.70846e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 20800, kkt_error: 514.428
+gap: 0.000103695
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.08007e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 20900, kkt_error: 514.428
+gap: 9.77722e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.17381e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 21000, kkt_error: 514.428
+gap: 9.1455e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.25039e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 21100, kkt_error: 514.428
+gap: 8.47912e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.30843e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 21200, kkt_error: 514.428
+gap: 7.78325e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.34848e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 21300, kkt_error: 514.428
+gap: 7.06431e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.36872e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 21400, kkt_error: 514.428
+gap: 6.32873e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.3698e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 21500, kkt_error: 514.428
+gap: 5.58286e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.35107e-05
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 21504
+Iteration 21504, kkt_error: 514.428
+gap: 5.55291e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.34991e-05
+obj: 332.566
+Iterations take 0.006 s
+
+Iteration 21600, kkt_error: 514.428
+gap: 4.90438e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.22327e-05
+obj: 332.566
+Iterations take 0.147 s
+
+Iteration 21700, kkt_error: 514.428
+gap: 4.20297e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.26199e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 21800, kkt_error: 514.428
+gap: 3.49956e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.28329e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 21900, kkt_error: 514.428
+gap: 2.80858e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.28636e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 22000, kkt_error: 514.428
+gap: 2.15634e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.27099e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 22100, kkt_error: 514.428
+gap: 1.60183e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.2371e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 22200, kkt_error: 514.428
+gap: 1.27923e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.17528e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 22300, kkt_error: 514.428
+gap: 1.34971e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.10536e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 22400, kkt_error: 514.428
+gap: 1.74549e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.02156e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 22500, kkt_error: 514.428
+gap: 2.28128e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.22029e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 22528
+Iteration 22528, kkt_error: 514.428
+gap: 2.44107e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 8.90807e-06
+obj: 332.566
+Iterations take 0.043 s
+
+Iteration 22600, kkt_error: 514.428
+gap: 2.8975e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.16605e-05
+obj: 332.566
+Iterations take 0.109 s
+
+Iteration 22700, kkt_error: 514.428
+gap: 3.53842e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.11942e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 22800, kkt_error: 514.428
+gap: 4.18013e-05
+xU.norm() 6.86953 xV.norm() 6.86953 xU-xV.norm() 1.04801e-05
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 22900, kkt_error: 514.428
+gap: 4.80065e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.69151e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 23000, kkt_error: 514.428
+gap: 5.39558e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.77268e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 23100, kkt_error: 514.427
+gap: 5.9587e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.72149e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 23200, kkt_error: 514.427
+gap: 6.48559e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.58396e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 23300, kkt_error: 514.427
+gap: 6.97345e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.36842e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 23400, kkt_error: 514.427
+gap: 7.41952e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.07736e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 23500, kkt_error: 514.427
+gap: 7.82143e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.73216e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 23552
+Iteration 23552, kkt_error: 514.427
+gap: 8.01221e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.03799e-06
+obj: 332.566
+Iterations take 0.08 s
+
+Iteration 23600, kkt_error: 514.427
+gap: 8.26134e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.44481e-06
+obj: 332.566
+Iterations take 0.073 s
+
+Iteration 23700, kkt_error: 514.427
+gap: 8.68165e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.35825e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 23800, kkt_error: 514.427
+gap: 9.06073e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.18644e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 23900, kkt_error: 514.427
+gap: 9.39425e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.97913e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 24000, kkt_error: 514.427
+gap: 9.68073e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.71657e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 24100, kkt_error: 514.427
+gap: 9.91864e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.43519e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 24200, kkt_error: 514.427
+gap: 0.000101069
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.82546e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 24300, kkt_error: 514.427
+gap: 0.000102446
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.28544e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 24400, kkt_error: 514.427
+gap: 0.000103312
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.59985e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 24500, kkt_error: 514.427
+gap: 0.000103662
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.88387e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 24576
+Iteration 24576, kkt_error: 514.427
+gap: 0.000103586
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.82513e-06
+obj: 332.566
+Iterations take 0.118 s
+
+Iteration 24600, kkt_error: 514.427
+gap: 0.000103973
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.52905e-06
+obj: 332.566
+Iterations take 0.035 s
+
+Iteration 24700, kkt_error: 514.427
+gap: 0.000104624
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.00622e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 24800, kkt_error: 514.427
+gap: 0.000104809
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.0449e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 24900, kkt_error: 514.427
+gap: 0.000104492
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.28711e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 25000, kkt_error: 514.427
+gap: 0.000103674
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.50257e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 25100, kkt_error: 514.427
+gap: 0.000102362
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.66916e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 25200, kkt_error: 514.427
+gap: 0.000100568
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 5.76917e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 25300, kkt_error: 514.427
+gap: 9.83005e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 6.782e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 25400, kkt_error: 514.427
+gap: 9.55743e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 7.69575e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 25500, kkt_error: 514.428
+gap: 9.24116e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 8.49639e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 25600, kkt_error: 514.428
+gap: 8.88478e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.17193e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 25600
+Iteration 25600, kkt_error: 514.428
+gap: 8.88478e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.17193e-06
+obj: 332.566
+Iterations take 0 s
+
+Iteration 25700, kkt_error: 514.427
+gap: 8.62797e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 5.28568e-06
+obj: 332.566
+Iterations take 0.153 s
+
+Iteration 25800, kkt_error: 514.427
+gap: 8.30889e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 6.24807e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 25900, kkt_error: 514.427
+gap: 7.94918e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 7.11909e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 26000, kkt_error: 514.427
+gap: 7.55175e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 7.88456e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 26100, kkt_error: 514.428
+gap: 7.1224e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 8.53428e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 26200, kkt_error: 514.428
+gap: 6.66661e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.05799e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 26300, kkt_error: 514.428
+gap: 6.18874e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.4494e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 26400, kkt_error: 514.428
+gap: 5.69183e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.70666e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 26500, kkt_error: 514.428
+gap: 5.17966e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.82448e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 26600, kkt_error: 514.428
+gap: 4.65602e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.80009e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 26624
+Iteration 26624, kkt_error: 514.428
+gap: 4.52906e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.77306e-06
+obj: 332.566
+Iterations take 0.037 s
+
+Iteration 26700, kkt_error: 514.427
+gap: 4.18985e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 8.44432e-06
+obj: 332.566
+Iterations take 0.116 s
+
+Iteration 26800, kkt_error: 514.428
+gap: 3.68891e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 8.82851e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 26900, kkt_error: 514.428
+gap: 3.18044e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.08516e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 27000, kkt_error: 514.428
+gap: 2.67159e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.21168e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 27100, kkt_error: 514.428
+gap: 2.17012e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.20517e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 27200, kkt_error: 514.428
+gap: 1.6898e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 9.06477e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 27300, kkt_error: 514.428
+gap: 1.26142e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 8.79078e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 27400, kkt_error: 514.427
+gap: 9.57183e-06
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 8.38652e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 27500, kkt_error: 514.427
+gap: 9.02138e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 7.85127e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 27600, kkt_error: 514.427
+gap: 1.11968e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 7.21082e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 27648
+Iteration 27648, kkt_error: 514.427
+gap: 1.2822e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 6.86869e-06
+obj: 332.566
+Iterations take 0.074 s
+
+Iteration 27700, kkt_error: 514.428
+gap: 1.48831e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 8.52439e-06
+obj: 332.566
+Iterations take 0.079 s
+
+Iteration 27800, kkt_error: 514.427
+gap: 1.92446e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 8.28361e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 27900, kkt_error: 514.427
+gap: 2.3802e-05
+xU.norm() 6.86956 xV.norm() 6.86956 xU-xV.norm() 7.92101e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 28000, kkt_error: 514.427
+gap: 2.837e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 7.42897e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 28100, kkt_error: 514.427
+gap: 3.28422e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 6.8455e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 28200, kkt_error: 514.427
+gap: 3.71494e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 6.15827e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 28300, kkt_error: 514.427
+gap: 4.12476e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 5.38871e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 28400, kkt_error: 514.427
+gap: 4.51016e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.54036e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 28500, kkt_error: 514.427
+gap: 4.86783e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.62898e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 28600, kkt_error: 514.427
+gap: 5.19519e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.66899e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 28672
+Iteration 28672, kkt_error: 514.427
+gap: 5.41083e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.95199e-06
+obj: 332.566
+Iterations take 0.111 s
+
+Iteration 28700, kkt_error: 514.427
+gap: 5.5159e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 5.88315e-06
+obj: 332.566
+Iterations take 0.042 s
+
+Iteration 28800, kkt_error: 514.427
+gap: 5.85247e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 5.1541e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 28900, kkt_error: 514.427
+gap: 6.16069e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.36373e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 29000, kkt_error: 514.427
+gap: 6.43766e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.51137e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 29100, kkt_error: 514.427
+gap: 6.68163e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.61358e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 29200, kkt_error: 514.427
+gap: 6.89106e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.6815e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 29300, kkt_error: 514.427
+gap: 7.06473e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.31596e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 29400, kkt_error: 514.427
+gap: 7.20173e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.08658e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 29500, kkt_error: 514.427
+gap: 7.30121e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.23636e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 29600, kkt_error: 514.427
+gap: 7.36298e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.18547e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 29696
+Iteration 29696, kkt_error: 514.427
+gap: 7.38683e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.06834e-06
+obj: 332.566
+Iterations take 0.148 s
+
+Iteration 29700, kkt_error: 514.427
+gap: 7.4013e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.70703e-06
+obj: 332.566
+Iterations take 0.005 s
+
+Iteration 29800, kkt_error: 514.427
+gap: 7.47692e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.86051e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 29900, kkt_error: 514.427
+gap: 7.52314e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.53928e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 30000, kkt_error: 514.427
+gap: 7.53292e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.04735e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 30100, kkt_error: 514.427
+gap: 7.5061e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.94085e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 30200, kkt_error: 514.427
+gap: 7.44342e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.80855e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 30300, kkt_error: 514.427
+gap: 7.34547e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.63546e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 30400, kkt_error: 514.427
+gap: 7.21305e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.40899e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 30500, kkt_error: 514.427
+gap: 7.04726e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.11803e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 30600, kkt_error: 514.427
+gap: 6.84987e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.75262e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 30700, kkt_error: 514.427
+gap: 6.62284e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.30219e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 30720
+Iteration 30720, kkt_error: 514.427
+gap: 6.57407e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.40139e-06
+obj: 332.566
+Iterations take 0.031 s
+
+Iteration 30800, kkt_error: 514.427
+gap: 6.43782e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.3169e-06
+obj: 332.566
+Iterations take 0.122 s
+
+Iteration 30900, kkt_error: 514.427
+gap: 6.23523e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.0491e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 31000, kkt_error: 514.427
+gap: 6.00369e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.72222e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 31100, kkt_error: 514.427
+gap: 5.74465e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.32598e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 31200, kkt_error: 514.427
+gap: 5.46069e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.85207e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 31300, kkt_error: 514.427
+gap: 5.1541e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.2925e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 31400, kkt_error: 514.427
+gap: 4.82769e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.64154e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 31500, kkt_error: 514.427
+gap: 4.48403e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.89405e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 31600, kkt_error: 514.427
+gap: 4.12589e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.04608e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 31700, kkt_error: 514.427
+gap: 3.75618e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.09607e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 31744
+Iteration 31744, kkt_error: 514.427
+gap: 3.59063e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.08535e-06
+obj: 332.566
+Iterations take 0.068 s
+
+Iteration 31800, kkt_error: 514.427
+gap: 3.40647e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.85507e-06
+obj: 332.566
+Iterations take 0.085 s
+
+Iteration 31900, kkt_error: 514.427
+gap: 3.05756e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.19336e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 32000, kkt_error: 514.427
+gap: 2.69843e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.44137e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 32100, kkt_error: 514.427
+gap: 2.33261e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.59544e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 32200, kkt_error: 514.427
+gap: 1.96455e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.65394e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 32300, kkt_error: 514.427
+gap: 1.60038e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.6157e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 32400, kkt_error: 514.427
+gap: 1.25019e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.48109e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 32500, kkt_error: 514.427
+gap: 9.34295e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.25198e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 32600, kkt_error: 514.427
+gap: 7.00122e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.93197e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 32700, kkt_error: 514.427
+gap: 6.3654e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.52561e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 32768
+Iteration 32768, kkt_error: 514.427
+gap: 7.13336e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.20252e-06
+obj: 332.566
+Iterations take 0.105 s
+
+Iteration 32800, kkt_error: 514.427
+gap: 7.77319e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.21267e-06
+obj: 332.566
+Iterations take 0.048 s
+
+Iteration 32900, kkt_error: 514.427
+gap: 1.04225e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.09705e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 33000, kkt_error: 514.427
+gap: 1.35326e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.89288e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 33100, kkt_error: 514.427
+gap: 1.6791e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.60279e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 33200, kkt_error: 514.427
+gap: 2.00587e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.23126e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 33300, kkt_error: 514.427
+gap: 2.32597e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.78321e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 33400, kkt_error: 514.427
+gap: 2.6344e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.26596e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 33500, kkt_error: 514.427
+gap: 2.92757e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.68662e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 33600, kkt_error: 514.427
+gap: 3.20265e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.05373e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 33700, kkt_error: 514.427
+gap: 3.4574e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.37633e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 33792
+Iteration 33792, kkt_error: 514.427
+gap: 3.67217e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.72243e-06
+obj: 332.566
+Iterations take 0.142 s
+
+Iteration 33800, kkt_error: 514.427
+gap: 3.69854e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.53949e-06
+obj: 332.566
+Iterations take 0.011 s
+
+Iteration 33900, kkt_error: 514.427
+gap: 3.95884e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.06188e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 34000, kkt_error: 514.427
+gap: 4.20029e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.52502e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 34100, kkt_error: 514.427
+gap: 4.42066e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.93718e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 34200, kkt_error: 514.427
+gap: 4.61834e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.3067e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 34300, kkt_error: 514.427
+gap: 4.79195e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.64263e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 34400, kkt_error: 514.427
+gap: 4.94026e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.54873e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 34500, kkt_error: 514.427
+gap: 5.06233e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.53355e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 34600, kkt_error: 514.427
+gap: 5.15749e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.52054e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 34700, kkt_error: 514.427
+gap: 5.22537e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.15072e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 34800, kkt_error: 514.427
+gap: 5.26583e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.83254e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 34816
+Iteration 34816, kkt_error: 514.427
+gap: 5.26976e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.9394e-06
+obj: 332.566
+Iterations take 0.025 s
+
+Iteration 34900, kkt_error: 514.427
+gap: 5.33766e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.74068e-07
+obj: 332.566
+Iterations take 0.128 s
+
+Iteration 35000, kkt_error: 514.427
+gap: 5.39312e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.17276e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 35100, kkt_error: 514.427
+gap: 5.42237e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.44181e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 35200, kkt_error: 514.427
+gap: 5.42526e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.00054e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 35300, kkt_error: 514.427
+gap: 5.40189e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.64224e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 35400, kkt_error: 514.427
+gap: 5.35261e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.25991e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 35500, kkt_error: 514.427
+gap: 5.27797e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.84457e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 35600, kkt_error: 514.427
+gap: 5.17875e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.38769e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 35700, kkt_error: 514.427
+gap: 5.05595e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.88137e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 35800, kkt_error: 514.427
+gap: 4.91077e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.31843e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 35840
+Iteration 35840, kkt_error: 514.427
+gap: 4.84673e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.47594e-06
+obj: 332.566
+Iterations take 0.062 s
+
+Iteration 35900, kkt_error: 514.427
+gap: 4.7812e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.05046e-06
+obj: 332.566
+Iterations take 0.091 s
+
+Iteration 36000, kkt_error: 514.427
+gap: 4.65377e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.60279e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 36100, kkt_error: 514.427
+gap: 4.5045e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.11712e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 36200, kkt_error: 514.427
+gap: 4.33451e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.58596e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 36300, kkt_error: 514.427
+gap: 4.14502e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.00247e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 36400, kkt_error: 514.427
+gap: 3.93745e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.36061e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 36500, kkt_error: 514.427
+gap: 3.71351e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.65515e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 36600, kkt_error: 514.427
+gap: 3.47528e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.88183e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 36700, kkt_error: 514.427
+gap: 3.22474e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 5.03733e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 36800, kkt_error: 514.427
+gap: 2.96411e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 5.11942e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 36864
+Iteration 36864, kkt_error: 514.427
+gap: 2.79309e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 5.13274e-06
+obj: 332.566
+Iterations take 0.099 s
+
+Iteration 36900, kkt_error: 514.427
+gap: 2.71316e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.051e-06
+obj: 332.566
+Iterations take 0.054 s
+
+Iteration 37000, kkt_error: 514.427
+gap: 2.46986e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.33458e-06
+obj: 332.566
+Iterations take 0.155 s
+
+Iteration 37100, kkt_error: 514.427
+gap: 2.21654e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.55497e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 37200, kkt_error: 514.427
+gap: 1.95553e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.70895e-06
+obj: 332.566
+Iterations take 0.155 s
+
+Iteration 37300, kkt_error: 514.427
+gap: 1.68972e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.7943e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 37400, kkt_error: 514.427
+gap: 1.42261e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.80969e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 37500, kkt_error: 514.427
+gap: 1.15872e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.75508e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 37600, kkt_error: 514.427
+gap: 9.05278e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.6312e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 37700, kkt_error: 514.427
+gap: 6.76453e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.43963e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 37800, kkt_error: 514.427
+gap: 5.0505e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.18364e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 37888
+Iteration 37888, kkt_error: 514.427
+gap: 4.51829e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.90784e-06
+obj: 332.566
+Iterations take 0.136 s
+
+Iteration 37900, kkt_error: 514.427
+gap: 4.54715e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.51132e-06
+obj: 332.566
+Iterations take 0.017 s
+
+Iteration 38000, kkt_error: 514.427
+gap: 5.56856e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.46802e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 38100, kkt_error: 514.427
+gap: 7.46034e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.35957e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 38200, kkt_error: 514.427
+gap: 9.69056e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 4.18747e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 38300, kkt_error: 514.427
+gap: 1.20272e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.95459e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 38400, kkt_error: 514.427
+gap: 1.43676e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.66415e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 38500, kkt_error: 514.427
+gap: 1.66567e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.32036e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 38600, kkt_error: 514.427
+gap: 1.88594e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.92788e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 38700, kkt_error: 514.427
+gap: 2.095e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.49271e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 38800, kkt_error: 514.427
+gap: 2.29082e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.02192e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 38900, kkt_error: 514.427
+gap: 2.47176e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.52181e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 38912
+Iteration 38912, kkt_error: 514.427
+gap: 2.49241e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.46015e-06
+obj: 332.566
+Iterations take 0.018 s
+
+Iteration 39000, kkt_error: 514.427
+gap: 2.6674e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 3.15457e-06
+obj: 332.566
+Iterations take 0.134 s
+
+Iteration 39100, kkt_error: 514.427
+gap: 2.85332e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.79213e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 39200, kkt_error: 514.427
+gap: 3.02503e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.38878e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 39300, kkt_error: 514.427
+gap: 3.18122e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.9506e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 39400, kkt_error: 514.427
+gap: 3.32076e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.4846e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 39500, kkt_error: 514.427
+gap: 3.44267e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.9711e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 39600, kkt_error: 514.427
+gap: 3.54616e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.95231e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 39700, kkt_error: 514.427
+gap: 3.63063e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.76657e-08
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 39800, kkt_error: 514.427
+gap: 3.69567e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.2315e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 39900, kkt_error: 514.427
+gap: 3.74101e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.02444e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 39936
+Iteration 39936, kkt_error: 514.427
+gap: 3.75249e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.20161e-06
+obj: 332.566
+Iterations take 0.056 s
+
+Iteration 40000, kkt_error: 514.427
+gap: 3.798e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.91258e-07
+obj: 332.566
+Iterations take 0.097 s
+
+Iteration 40100, kkt_error: 514.427
+gap: 3.85343e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.21637e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 40200, kkt_error: 514.427
+gap: 3.89008e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.4799e-08
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 40300, kkt_error: 514.427
+gap: 3.90775e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.33117e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 40400, kkt_error: 514.427
+gap: 3.90637e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.04425e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 40500, kkt_error: 514.427
+gap: 3.88609e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.36249e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 40600, kkt_error: 514.427
+gap: 3.84717e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.80064e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 40700, kkt_error: 514.427
+gap: 3.79009e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.21249e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 40800, kkt_error: 514.427
+gap: 3.71544e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.59205e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 40900, kkt_error: 514.427
+gap: 3.62398e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.93378e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 40960
+Iteration 40960, kkt_error: 514.427
+gap: 3.56141e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.11856e-06
+obj: 332.566
+Iterations take 0.093 s
+
+Iteration 41000, kkt_error: 514.427
+gap: 3.53468e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.2265e-06
+obj: 332.566
+Iterations take 0.06 s
+
+Iteration 41100, kkt_error: 514.427
+gap: 3.45602e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.63988e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 41200, kkt_error: 514.427
+gap: 3.36102e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.02931e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 41300, kkt_error: 514.427
+gap: 3.25044e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.38911e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 41400, kkt_error: 514.427
+gap: 3.12516e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.71405e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 41500, kkt_error: 514.427
+gap: 2.98611e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.99939e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 41600, kkt_error: 514.427
+gap: 2.83442e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.24099e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 41700, kkt_error: 514.427
+gap: 2.67145e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.43533e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 41800, kkt_error: 514.427
+gap: 2.49852e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.57958e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 41900, kkt_error: 514.427
+gap: 2.3171e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.67165e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 41984
+Iteration 41984, kkt_error: 514.427
+gap: 2.15928e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.70767e-06
+obj: 332.566
+Iterations take 0.13 s
+
+Iteration 42000, kkt_error: 514.427
+gap: 2.13402e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.78201e-06
+obj: 332.566
+Iterations take 0.023 s
+
+Iteration 42100, kkt_error: 514.427
+gap: 1.96498e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.01366e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 42200, kkt_error: 514.427
+gap: 1.78764e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.20137e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 42300, kkt_error: 514.427
+gap: 1.60339e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.3424e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 42400, kkt_error: 514.427
+gap: 1.41404e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.43471e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 42500, kkt_error: 514.427
+gap: 1.22161e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.47696e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 42600, kkt_error: 514.427
+gap: 1.02845e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.46854e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 42700, kkt_error: 514.427
+gap: 8.37793e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.40959e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 42800, kkt_error: 514.427
+gap: 6.54698e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.30095e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 42900, kkt_error: 514.427
+gap: 4.89088e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.14424e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 43000, kkt_error: 514.427
+gap: 3.64e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.94173e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 43008
+Iteration 43008, kkt_error: 514.427
+gap: 3.56993e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.92364e-06
+obj: 332.566
+Iterations take 0.012 s
+
+Iteration 43100, kkt_error: 514.427
+gap: 3.28008e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.25552e-06
+obj: 332.566
+Iterations take 0.14 s
+
+Iteration 43200, kkt_error: 514.427
+gap: 3.99003e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.20593e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 43300, kkt_error: 514.427
+gap: 5.33989e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.10964e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 43400, kkt_error: 514.427
+gap: 6.93773e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.96804e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 43500, kkt_error: 514.427
+gap: 8.61178e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.78322e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 43600, kkt_error: 514.427
+gap: 1.02866e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.55787e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 43700, kkt_error: 514.427
+gap: 1.19221e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.29529e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 43800, kkt_error: 514.427
+gap: 1.34926e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.99928e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 43900, kkt_error: 514.427
+gap: 1.49796e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.6742e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 44000, kkt_error: 514.427
+gap: 1.63686e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.32477e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 44032
+Iteration 44032, kkt_error: 514.427
+gap: 1.67904e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.20864e-06
+obj: 332.566
+Iterations take 0.049 s
+
+Iteration 44100, kkt_error: 514.427
+gap: 1.78078e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.42563e-06
+obj: 332.566
+Iterations take 0.104 s
+
+Iteration 44200, kkt_error: 514.427
+gap: 1.92273e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.18347e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 44300, kkt_error: 514.427
+gap: 2.0552e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.90952e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 44400, kkt_error: 514.427
+gap: 2.17717e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.60778e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 44500, kkt_error: 514.427
+gap: 2.28773e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.28267e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 44600, kkt_error: 514.427
+gap: 2.38611e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.38917e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 44700, kkt_error: 514.427
+gap: 2.47164e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.81535e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 44800, kkt_error: 514.427
+gap: 2.54378e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.15732e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 44900, kkt_error: 514.427
+gap: 2.60212e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.53165e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 45000, kkt_error: 514.427
+gap: 2.64637e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.19775e-07
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 45056
+Iteration 45056, kkt_error: 514.427
+gap: 2.66493e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.22084e-07
+obj: 332.566
+Iterations take 0.086 s
+
+Iteration 45100, kkt_error: 514.427
+gap: 2.69156e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.1998e-07
+obj: 332.566
+Iterations take 0.066 s
+
+Iteration 45200, kkt_error: 514.427
+gap: 2.74252e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.86182e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 45300, kkt_error: 514.427
+gap: 2.78011e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.43899e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 45400, kkt_error: 514.427
+gap: 2.80408e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.01889e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 45500, kkt_error: 514.427
+gap: 2.81431e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.46144e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 45600, kkt_error: 514.427
+gap: 2.8108e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.83847e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 45700, kkt_error: 514.427
+gap: 2.79368e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.11008e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 45800, kkt_error: 514.427
+gap: 2.76318e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.42009e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 45900, kkt_error: 514.427
+gap: 2.71966e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.70936e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 46000, kkt_error: 514.427
+gap: 2.6636e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.97369e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 46080
+Iteration 46080, kkt_error: 514.427
+gap: 2.61011e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.16458e-06
+obj: 332.566
+Iterations take 0.124 s
+
+Iteration 46100, kkt_error: 514.427
+gap: 2.60227e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.97201e-07
+obj: 332.566
+Iterations take 0.029 s
+
+Iteration 46200, kkt_error: 514.427
+gap: 2.55535e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.00461e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 46300, kkt_error: 514.427
+gap: 2.4963e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.29734e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 46400, kkt_error: 514.427
+gap: 2.42558e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.57112e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 46500, kkt_error: 514.427
+gap: 2.34373e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.82196e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 46600, kkt_error: 514.427
+gap: 2.25144e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.04622e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 46700, kkt_error: 514.427
+gap: 2.14947e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.24064e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 46800, kkt_error: 514.427
+gap: 2.03864e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.40238e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 46900, kkt_error: 514.427
+gap: 1.91987e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.52908e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 47000, kkt_error: 514.427
+gap: 1.79415e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.61892e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 47100, kkt_error: 514.427
+gap: 1.6625e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.67059e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 47104
+Iteration 47104, kkt_error: 514.427
+gap: 1.65713e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.67185e-06
+obj: 332.566
+Iterations take 0.006 s
+
+Iteration 47200, kkt_error: 514.427
+gap: 1.54528e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.08037e-06
+obj: 332.566
+Iterations take 0.146 s
+
+Iteration 47300, kkt_error: 514.427
+gap: 1.42187e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.23584e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 47400, kkt_error: 514.427
+gap: 1.29267e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.3587e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 47500, kkt_error: 514.427
+gap: 1.15877e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.44718e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 47600, kkt_error: 514.427
+gap: 1.02143e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.49998e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 47700, kkt_error: 514.427
+gap: 8.82064e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.51635e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 47800, kkt_error: 514.427
+gap: 7.42378e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.49606e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 47900, kkt_error: 514.427
+gap: 6.04677e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.43939e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 48000, kkt_error: 514.427
+gap: 4.72555e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.34719e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 48100, kkt_error: 514.427
+gap: 3.52978e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.2208e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 48128
+Iteration 48128, kkt_error: 514.427
+gap: 3.23551e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.17953e-06
+obj: 332.566
+Iterations take 0.043 s
+
+Iteration 48200, kkt_error: 514.427
+gap: 2.64452e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.35926e-06
+obj: 332.566
+Iterations take 0.109 s
+
+Iteration 48300, kkt_error: 514.427
+gap: 2.36545e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.34438e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 48400, kkt_error: 514.427
+gap: 2.85892e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.29533e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 48500, kkt_error: 514.427
+gap: 3.82177e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.21285e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 48600, kkt_error: 514.427
+gap: 4.96588e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 2.09813e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 48700, kkt_error: 514.427
+gap: 6.16437e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.95286e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 48800, kkt_error: 514.427
+gap: 7.36186e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.77916e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 48900, kkt_error: 514.427
+gap: 8.52913e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.57956e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 49000, kkt_error: 514.427
+gap: 9.64779e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.35697e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 49100, kkt_error: 514.427
+gap: 1.07047e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.11464e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 49152
+Iteration 49152, kkt_error: 514.427
+gap: 1.12264e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.81987e-07
+obj: 332.566
+Iterations take 0.08 s
+
+Iteration 49200, kkt_error: 514.427
+gap: 1.17627e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.84886e-06
+obj: 332.566
+Iterations take 0.073 s
+
+Iteration 49300, kkt_error: 514.427
+gap: 1.28379e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.6891e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 49400, kkt_error: 514.427
+gap: 1.3851e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.50475e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 49500, kkt_error: 514.427
+gap: 1.47938e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.29849e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 49600, kkt_error: 514.427
+gap: 1.56592e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.07335e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 49700, kkt_error: 514.427
+gap: 1.64408e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.32602e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 49800, kkt_error: 514.427
+gap: 1.71333e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.79756e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 49900, kkt_error: 514.427
+gap: 1.7732e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.18499e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 50000, kkt_error: 514.427
+gap: 1.82333e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.26389e-08
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 50100, kkt_error: 514.427
+gap: 1.86345e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.13949e-07
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 50176
+Iteration 50176, kkt_error: 514.427
+gap: 1.88713e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.14652e-07
+obj: 332.566
+Iterations take 0.117 s
+
+Iteration 50200, kkt_error: 514.427
+gap: 1.89922e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.08537e-07
+obj: 332.566
+Iterations take 0.035 s
+
+Iteration 50300, kkt_error: 514.427
+gap: 1.94377e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.7266e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 50400, kkt_error: 514.427
+gap: 1.97885e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.28473e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 50500, kkt_error: 514.427
+gap: 2.0042e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.95355e-08
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 50600, kkt_error: 514.427
+gap: 2.01969e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.70525e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 50700, kkt_error: 514.427
+gap: 2.02524e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.18063e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 50800, kkt_error: 514.427
+gap: 2.02089e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.59474e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 50900, kkt_error: 514.427
+gap: 2.00674e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.91241e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 51000, kkt_error: 514.427
+gap: 1.983e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.10999e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 51100, kkt_error: 514.427
+gap: 1.94995e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.31253e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 51200, kkt_error: 514.427
+gap: 1.90796e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.49591e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 51200
+Iteration 51200, kkt_error: 514.427
+gap: 1.90796e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.49591e-06
+obj: 332.566
+Iterations take 0 s
+
+Iteration 51300, kkt_error: 514.427
+gap: 1.88143e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.91419e-07
+obj: 332.566
+Iterations take 0.153 s
+
+Iteration 51400, kkt_error: 514.427
+gap: 1.84591e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.09982e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 51500, kkt_error: 514.427
+gap: 1.80169e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.01671e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 51600, kkt_error: 514.427
+gap: 1.74911e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.20859e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 51700, kkt_error: 514.427
+gap: 1.68862e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.38284e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 51800, kkt_error: 514.427
+gap: 1.62071e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.53691e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 51900, kkt_error: 514.427
+gap: 1.54595e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.66856e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 52000, kkt_error: 514.427
+gap: 1.46497e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.77589e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 52100, kkt_error: 514.427
+gap: 1.37845e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.85732e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 52200, kkt_error: 514.427
+gap: 1.28709e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.91167e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 52224
+Iteration 52224, kkt_error: 514.427
+gap: 1.26453e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.92059e-06
+obj: 332.566
+Iterations take 0.037 s
+
+Iteration 52300, kkt_error: 514.427
+gap: 1.20337e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.42463e-06
+obj: 332.566
+Iterations take 0.116 s
+
+Iteration 52400, kkt_error: 514.427
+gap: 1.11811e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.5507e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 52500, kkt_error: 514.427
+gap: 1.02807e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.65416e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 52600, kkt_error: 514.427
+gap: 9.34004e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.73351e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 52700, kkt_error: 514.427
+gap: 8.36734e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.78758e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 52800, kkt_error: 514.427
+gap: 7.37159e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.8156e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 52900, kkt_error: 514.427
+gap: 6.36294e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.81715e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 53000, kkt_error: 514.427
+gap: 5.35373e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.79223e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 53100, kkt_error: 514.427
+gap: 4.36025e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.7412e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 53200, kkt_error: 514.427
+gap: 3.40782e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.66481e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 53248
+Iteration 53248, kkt_error: 514.427
+gap: 2.97786e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.61944e-06
+obj: 332.566
+Iterations take 0.074 s
+
+Iteration 53300, kkt_error: 514.427
+gap: 2.56221e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.70042e-06
+obj: 332.566
+Iterations take 0.078 s
+
+Iteration 53400, kkt_error: 514.427
+gap: 1.92185e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.70488e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 53500, kkt_error: 514.427
+gap: 1.7049e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.6845e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 53600, kkt_error: 514.427
+gap: 2.04698e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.63957e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 53700, kkt_error: 514.427
+gap: 2.73306e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.57077e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 53800, kkt_error: 514.427
+gap: 3.55158e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.47908e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 53900, kkt_error: 514.427
+gap: 4.4089e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.36586e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 54000, kkt_error: 514.427
+gap: 5.26438e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.23275e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 54100, kkt_error: 514.427
+gap: 6.0968e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.0817e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 54200, kkt_error: 514.427
+gap: 6.8929e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.1491e-07
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 54272
+Iteration 54272, kkt_error: 514.427
+gap: 7.4382e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.86433e-07
+obj: 332.566
+Iterations take 0.111 s
+
+Iteration 54300, kkt_error: 514.427
+gap: 7.67084e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.39823e-06
+obj: 332.566
+Iterations take 0.042 s
+
+Iteration 54400, kkt_error: 514.427
+gap: 8.4792e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.29444e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 54500, kkt_error: 514.427
+gap: 9.2478e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.1718e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 54600, kkt_error: 514.427
+gap: 9.97015e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.0321e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 54700, kkt_error: 514.427
+gap: 1.06405e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.77381e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 54800, kkt_error: 514.427
+gap: 1.12539e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.09903e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 54900, kkt_error: 514.427
+gap: 1.18058e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.32104e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 55000, kkt_error: 514.427
+gap: 1.22925e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.46579e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 55100, kkt_error: 514.427
+gap: 1.27109e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.5603e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 55200, kkt_error: 514.427
+gap: 1.30584e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.67641e-08
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 55296
+Iteration 55296, kkt_error: 514.427
+gap: 1.33239e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.21352e-07
+obj: 332.566
+Iterations take 0.148 s
+
+Iteration 55300, kkt_error: 514.427
+gap: 1.33477e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.85099e-07
+obj: 332.566
+Iterations take 0.005 s
+
+Iteration 55400, kkt_error: 514.427
+gap: 1.37168e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.19439e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 55500, kkt_error: 514.427
+gap: 1.40264e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.46234e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 55600, kkt_error: 514.427
+gap: 1.4267e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.6801e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 55700, kkt_error: 514.427
+gap: 1.44371e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.26368e-08
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 55800, kkt_error: 514.427
+gap: 1.45356e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.93073e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 55900, kkt_error: 514.427
+gap: 1.45625e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.70669e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 56000, kkt_error: 514.427
+gap: 1.4518e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.42839e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 56100, kkt_error: 514.427
+gap: 1.44031e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.07073e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 56200, kkt_error: 514.427
+gap: 1.42194e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.60981e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 56300, kkt_error: 514.427
+gap: 1.39693e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.00232e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 56320
+Iteration 56320, kkt_error: 514.427
+gap: 1.39115e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.0289e-06
+obj: 332.566
+Iterations take 0.031 s
+
+Iteration 56400, kkt_error: 514.427
+gap: 1.37961e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.27666e-07
+obj: 332.566
+Iterations take 0.121 s
+
+Iteration 56500, kkt_error: 514.427
+gap: 1.35923e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.8983e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 56600, kkt_error: 514.427
+gap: 1.3324e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.44833e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 56700, kkt_error: 514.427
+gap: 1.29933e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.90417e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 56800, kkt_error: 514.427
+gap: 1.26031e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.24463e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 56900, kkt_error: 514.427
+gap: 1.21565e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.04502e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 57000, kkt_error: 514.427
+gap: 1.16574e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.15033e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 57100, kkt_error: 514.427
+gap: 1.11099e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.23887e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 57200, kkt_error: 514.427
+gap: 1.05187e-05
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.30934e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 57300, kkt_error: 514.427
+gap: 9.88873e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.36072e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 57344
+Iteration 57344, kkt_error: 514.427
+gap: 9.60064e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.37707e-06
+obj: 332.566
+Iterations take 0.068 s
+
+Iteration 57400, kkt_error: 514.427
+gap: 9.29172e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.66883e-07
+obj: 332.566
+Iterations take 0.085 s
+
+Iteration 57500, kkt_error: 514.427
+gap: 8.70698e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.06743e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 57600, kkt_error: 514.427
+gap: 8.08388e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.1524e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 57700, kkt_error: 514.427
+gap: 7.42746e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.22057e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 57800, kkt_error: 514.427
+gap: 6.74321e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.27095e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 57900, kkt_error: 514.427
+gap: 6.03708e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.3028e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 58000, kkt_error: 514.427
+gap: 5.31563e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.31566e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 58100, kkt_error: 514.427
+gap: 4.58621e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.30935e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 58200, kkt_error: 514.427
+gap: 3.8576e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.28396e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 58300, kkt_error: 514.427
+gap: 3.14135e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.23987e-06
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 58368
+Iteration 58368, kkt_error: 514.427
+gap: 2.66999e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.19952e-06
+obj: 332.566
+Iterations take 0.105 s
+
+Iteration 58400, kkt_error: 514.427
+gap: 2.46535e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.21882e-06
+obj: 332.566
+Iterations take 0.047 s
+
+Iteration 58500, kkt_error: 514.427
+gap: 1.8648e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.23304e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 58600, kkt_error: 514.427
+gap: 1.39572e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.22929e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 58700, kkt_error: 514.427
+gap: 1.22811e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.20763e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 58800, kkt_error: 514.427
+gap: 1.46455e-06
+xU.norm() 6.86955 xV.norm() 6.86955 xU-xV.norm() 1.16838e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 58900, kkt_error: 514.427
+gap: 1.95289e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.11211e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 59000, kkt_error: 514.427
+gap: 2.53797e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.03964e-06
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 59100, kkt_error: 514.427
+gap: 3.15074e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.52038e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 59200, kkt_error: 514.427
+gap: 3.76137e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.50573e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 59300, kkt_error: 514.427
+gap: 4.35443e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.36729e-07
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 59392
+Iteration 59392, kkt_error: 514.427
+gap: 4.87627e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.22485e-07
+obj: 332.566
+Iterations take 0.142 s
+
+Iteration 59400, kkt_error: 514.427
+gap: 4.92592e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.04989e-06
+obj: 332.566
+Iterations take 0.011 s
+
+Iteration 59500, kkt_error: 514.427
+gap: 5.52874e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.83725e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 59600, kkt_error: 514.427
+gap: 6.10746e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.0324e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 59700, kkt_error: 514.427
+gap: 6.65641e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.09606e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 59800, kkt_error: 514.427
+gap: 7.171e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.04189e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 59900, kkt_error: 514.427
+gap: 7.6472e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.88526e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 60000, kkt_error: 514.427
+gap: 8.08144e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.64305e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 60100, kkt_error: 514.427
+gap: 8.47066e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.33336e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 60200, kkt_error: 514.427
+gap: 8.81224e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.9753e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 60300, kkt_error: 514.427
+gap: 9.10407e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.88646e-08
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 60400, kkt_error: 514.427
+gap: 9.3445e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.06378e-08
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 60416
+Iteration 60416, kkt_error: 514.427
+gap: 9.37811e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.029e-07
+obj: 332.566
+Iterations take 0.025 s
+
+Iteration 60500, kkt_error: 514.427
+gap: 9.63569e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.49747e-07
+obj: 332.566
+Iterations take 0.128 s
+
+Iteration 60600, kkt_error: 514.427
+gap: 9.89906e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.27622e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 60700, kkt_error: 514.427
+gap: 1.01137e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.00742e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 60800, kkt_error: 514.427
+gap: 1.02781e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.09554e-08
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 60900, kkt_error: 514.427
+gap: 1.03914e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.98464e-08
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 61000, kkt_error: 514.427
+gap: 1.04529e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.89757e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 61100, kkt_error: 514.427
+gap: 1.04627e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.16884e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 61200, kkt_error: 514.427
+gap: 1.04212e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 4.39375e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 61300, kkt_error: 514.427
+gap: 1.03291e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.55446e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 61400, kkt_error: 514.427
+gap: 1.01878e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.63406e-07
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 61440
+Iteration 61440, kkt_error: 514.427
+gap: 1.01179e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.03963e-07
+obj: 332.566
+Iterations take 0.062 s
+
+Iteration 61500, kkt_error: 514.427
+gap: 1.00762e-05
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 1.63321e-07
+obj: 332.566
+Iterations take 0.091 s
+
+Iteration 61600, kkt_error: 514.427
+gap: 9.96787e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 2.82921e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 61700, kkt_error: 514.427
+gap: 9.81199e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 3.98381e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 61800, kkt_error: 514.427
+gap: 9.60982e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 5.0802e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 61900, kkt_error: 514.427
+gap: 9.36308e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.1024e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 62000, kkt_error: 514.427
+gap: 9.07384e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.03554e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 62100, kkt_error: 514.427
+gap: 8.74458e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.86602e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 62200, kkt_error: 514.427
+gap: 8.37811e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.58177e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 62300, kkt_error: 514.427
+gap: 7.97754e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.17236e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 62400, kkt_error: 514.427
+gap: 7.54629e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.62922e-07
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 62464
+Iteration 62464, kkt_error: 514.427
+gap: 7.25587e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.84828e-07
+obj: 332.566
+Iterations take 0.099 s
+
+Iteration 62500, kkt_error: 514.427
+gap: 7.12076e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 6.49571e-07
+obj: 332.566
+Iterations take 0.054 s
+
+Iteration 62600, kkt_error: 514.427
+gap: 6.72301e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.2866e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 62700, kkt_error: 514.427
+gap: 6.29497e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 7.97121e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 62800, kkt_error: 514.427
+gap: 5.84002e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.53956e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 62900, kkt_error: 514.427
+gap: 5.36186e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.9834e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 63000, kkt_error: 514.427
+gap: 4.86451e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.29628e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 63100, kkt_error: 514.427
+gap: 4.35229e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.47366e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 63200, kkt_error: 514.427
+gap: 3.82996e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.51296e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 63300, kkt_error: 514.427
+gap: 3.30281e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.41365e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 63400, kkt_error: 514.427
+gap: 2.77713e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 9.17719e-07
+obj: 332.566
+Iterations take 0.154 s
+
+restart at 63488
+Iteration 63488, kkt_error: 514.427
+gap: 2.32219e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.85836e-07
+obj: 332.566
+Iterations take 0.136 s
+
+Iteration 63500, kkt_error: 514.427
+gap: 2.26467e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.68732e-07
+obj: 332.566
+Iterations take 0.017 s
+
+Iteration 63600, kkt_error: 514.427
+gap: 1.79286e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.86912e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 63700, kkt_error: 514.427
+gap: 1.35615e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.92166e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration 63800, kkt_error: 514.427
+gap: 1.01294e-06
+xU.norm() 6.86954 xV.norm() 6.86954 xU-xV.norm() 8.84419e-07
+obj: 332.566
+Iterations take 0.154 s
+
+Iteration terminates at 63840, takes 98.924 s
+
+save Convergeinfo done
+all done

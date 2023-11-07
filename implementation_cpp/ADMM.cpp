@@ -48,13 +48,14 @@ RecordIterates *ADMM(Params &p)
 		if (iter.terminate || iter.count > p.max_iter)
 			break;
 	}
+
 	std::string file_name{"foo"};
 	if (p.restart)
 	{
 		if (p.fixed_restart_length == -1)
 		{
 			file_name = "adaptive_restarts";
-			record->saveRestart_idx(__func__, p.data_name, file_name);
+			// record->saveRestart_idx(__func__, p.data_name, file_name);
 		}
 		else
 		{
@@ -77,39 +78,11 @@ void ADMMStep(Iterates &iter, const Params &p, RecordIterates &record,
 	Eigen::VectorXd xV_prev = iter.xV;
 	Eigen::VectorXd y_prev = iter.y;
 
-	iter.xU = p.A.transpose() * solver.solve(p.b +
-											 p.A * (-xV_prev - (1.0 / p.eta) * y_prev)) -
+	iter.xU = p.K.transpose() * solver.solve(p.q +
+											 p.K * (-xV_prev - (1.0 / p.eta) * y_prev)) -
 			  (-xV_prev - (1.0 / p.eta) * y_prev);
-
-	// step by step
-	// Timer timer;
-	// Eigen::VectorXd xU = p.b + p.A * (-xV_prev - (1.0 / p.eta) * y_prev);
-	// // print xU.norm()
-	// std::cout << "xU1.norm(): " << xU.norm() << std::endl;
-	// timer.timing();
-
-	// xU = solver.solve(xU);
-	// // print xU.norm()
-	// std::cout << "xU2.norm(): " << xU.norm() << std::endl;
-	// // print first 5 elements of xU
-	// // std::cout << "xU2.head(5): " << xU.tail(5).transpose() << std::endl;
-	// timer.timing();
-
-	// xU = p.A.transpose() * xU;
-	// // print xU.norm()
-	// std::cout << "xU3.norm(): " << xU.norm() << std::endl;
-	// // print first 5 elements of xU
-	// // std::cout << "xU3.head(5): " << xU.tail(5).transpose() << std::endl;
-	// timer.timing();
-
-	// iter.xU = xU - (-xV_prev - (1.0 / p.eta) * y_prev);
-	// // print xU.norm()
-	// // std::cout << "xU4.norm(): " << xU.Norm() << std::endl;
-	// timer.timing();
-
-	// timer.save(__func__, p, iter.count);
-	// if (p.verbose && (iter.count - 1) % p.print_every == 0)
-	// 	std::cout << "solver.solve() takes " << duration << " milliseconds" << std::endl;
+	// print xU.norm()
+	// std::cout << "xU norm: " << iter.xU.norm() << std::endl;
 
 	iter.xV = ((iter.xU - (1.0 / p.eta) * y_prev) - (1.0 / p.eta) * p.c).cwiseMax(0);
 	iter.y = y_prev - p.eta * (iter.xU - iter.xV);

@@ -202,26 +202,46 @@ void Iterates::restart(const Eigen::VectorXd &x_c, const Eigen::VectorXd &y_c)
 }
 Convergeinfo Iterates::compute_convergence_information(const Params &p)
 {
-	Eigen::VectorXd mutiplier, temp;
+	Eigen::VectorXd mutiplier, temp, x;
+	if (use_ADMM == false)
+	{
+		this->convergeinfo.duality_gap = std::abs(p.q.dot(y) - p.c.dot(x)) / (1 + std::abs(p.q.dot(y)) + std::abs(p.c.dot(x)));
 
-	this->convergeinfo.duality_gap = std::abs(p.q.dot(y) - p.c.dot(x)) / (1 + std::abs(p.q.dot(y)) + std::abs(p.c.dot(x)));
+		temp = p.q - p.K * x;
+		temp.segment(0, p.m1) = temp.segment(0, p.m1).cwiseMax(0);
+		this->convergeinfo.primal_feasibility = temp.norm() / (1 + p.q.norm());
 
-	temp = p.q - p.K * x;
-	temp.segment(0, p.m1) = temp.segment(0, p.m1).cwiseMax(0);
-	this->convergeinfo.primal_feasibility = temp.norm() / (1 + p.q.norm());
-
-	temp = p.c - p.K.transpose() * y;
-	mutiplier = temp.cwiseMax(0);
-	this->convergeinfo.dual_feasibility = (temp - mutiplier).norm() / (1 + p.c.norm());
+		temp = p.c - p.K.transpose() * y;
+		mutiplier = temp.cwiseMax(0);
+		this->convergeinfo.dual_feasibility = (temp - mutiplier).norm() / (1 + p.c.norm());
+	}
+	else
+	{
+		Eigen::VectorXd kkt_error_vec(3 * size_x + 2 * p.b.rows());
+		kkt_error_vec << -xV, p.A * xU - p.b, p.b - p.A * xU, xU - xV, xV - xU;
+		this->convergeinfo.kkt_error = (kkt_error_vec.cwiseMax(0)).lpNorm<1>();
+		double r{1};
+		if (p.restart)
+		{
+			double r = std::sqrt((xV_bar - cache.xV_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
+			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->xV_bar, this->y_bar, -(y_bar + p.c), (xV_bar - xU_bar), r, p);
+		}
+		else
+		{
+			double r = std::sqrt((xV - cache.xV_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
+			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->xV, this->y, -(y + p.c), (xV - xU), r, p);
+		}
+	}
 
 	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
-	if (this->convergeinfo.duality_gap < p.eps && this->convergeinfo.primal_feasibility < p.eps && this->convergeinfo.dual_feasibility < p.eps)
+	if ((use_ADMM == false && this->convergeinfo.duality_gap < p.eps && this->convergeinfo.primal_feasibility < p.eps && this->convergeinfo.dual_feasibility < p.eps) ||
+		(use_ADMM == true && this->convergeinfo.normalized_duality_gap < p.eps))
 	{
 		this->terminate = true;
 		auto duration = this->end();
-		std::cout << "Iteration terminates at " << this->count - 1 << ", takes " << duration << "s" << std::endl;
+		std::cout << "Iteration terminates at " << this->count - 1 << ", takes " << duration << " s" << std::endl;
 		// print first 10 elements of x, set precision
-		std::cout << std::setprecision(8) << "x: " << x.head(10).transpose() << std::endl;
+		// std::cout << std::setprecision(8) << "x: " << x.head(10).transpose() << std::endl;
 		std::cout << std::endl;
 	}
 	return this->convergeinfo;
@@ -230,25 +250,27 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 void Iterates::print_iteration_information(const Params &p)
 {
 	std::cout << "Iteration " << count - 1 << ", ";
-	std::cout << "duality_gap: " << this->convergeinfo.duality_gap << std::endl;
-	std::cout << "primal_feasibility: " << this->convergeinfo.primal_feasibility << std::endl;
-	std::cout << "dual_feasibility: " << this->convergeinfo.dual_feasibility << std::endl;
-	std::cout << "x.sum " << x.sum() << std::endl;
-	std::cout << "x_org.sum " << (p.D2_cache * x).sum() << std::endl;
 	// std::cout << x.norm() << " " << y.norm() << std::endl;
 	// std::cout << p.eta << " " << p.eta_hat << std::endl;
 
 	if (use_ADMM == false)
 	{
+		std::cout << "duality_gap: " << this->convergeinfo.duality_gap << std::endl;
+		std::cout << "primal_feasibility: " << this->convergeinfo.primal_feasibility << std::endl;
+		std::cout << "dual_feasibility: " << this->convergeinfo.dual_feasibility << std::endl;
 		std::cout << "obj: " << p.c.dot(x) + p.q.dot(y) - y.transpose() * p.K * x << std::endl;
+		std::cout << "x.sum " << x.sum() << std::endl;
+		std::cout << "x_org.sum " << (p.D2_cache * x).sum() << std::endl;
 	}
 	else
 	{
-		// std::cout << xU.norm() << " " << xV.norm() << " " << (xU - xV).norm() << " " << y.norm() << std::endl;
+		std::cout << "kkt_error: " << this->convergeinfo.kkt_error << std::endl;
+		std::cout << "gap: " << this->convergeinfo.normalized_duality_gap << std::endl;
+		std::cout << "xU.norm() " << xU.norm() << " xV.norm() " << xV.norm() << " xU-xV.norm() " << (xU - xV).norm() << std::endl;
 		std::cout << "obj: " << p.c.dot(xV) - y.dot(xU - xV) << std::endl;
 	}
 
-	std::cout << "Iterations take " << this->timing() << "s" << std::endl;
+	std::cout << "Iterations take " << this->timing() << " s" << std::endl;
 	std::cout << std::endl;
 }
 
@@ -267,9 +289,9 @@ RecordIterates::RecordIterates(const int &Repeat_x, const int &Size_x, const int
 	: end_idx(0)
 {
 	Iterates iter(Repeat_x, Size_x, Size_y);
-	std::vector<Iterates> aIteratesList(Size_record, iter);
+	// std::vector<Iterates> aIteratesList(Size_record, iter);
 	std::vector<Convergeinfo> aConvergeinfoList(Size_record);
-	IteratesList = aIteratesList;
+	// IteratesList = aIteratesList;
 	ConvergeinfoList = aConvergeinfoList;
 	this->use_ADMM = true;
 }
@@ -297,12 +319,17 @@ void RecordIterates::saveConvergeinfo(const std::string method, const std::strin
 	std::ofstream ofs(path + filename + cachesuffix);
 	if (ofs.is_open())
 	{
-		/*boost::archive::xml_oarchive xml_output_archive(ofs);
-		xml_output_archive& BOOST_SERIALIZATION_NVP(this->ConvergeinfoList);*/
 		for (int i = 0; i < end_idx; i++)
 		{
 			auto &obj = ConvergeinfoList[i];
-			ofs << std::setprecision(10) << obj.duality_gap << " " << obj.primal_feasibility << " " << obj.dual_feasibility << std::endl;
+			if (use_ADMM == false)
+			{
+				ofs << std::setprecision(10) << obj.duality_gap << " " << obj.primal_feasibility << " " << obj.dual_feasibility << std::endl;
+			}
+			else
+			{
+				ofs << std::setprecision(10) << obj.normalized_duality_gap << " " << obj.kkt_error << std::endl;
+			}
 		}
 		std::cout << "save Convergeinfo done" << std::endl;
 		ofs.close();
@@ -485,9 +512,13 @@ void Params::scaling()
 	this->D1_cache = D1cache;
 	this->D2_cache = D2cache;
 
+	std::cout << "c norm: " << c.norm() << " ";
+	std::cout << "q norm: " << q.norm() << std::endl;
 	K = D1 * K * D2;
 	c = D2 * c;
 	q = D1 * q;
+	std::cout << "scaled c norm: " << c.norm() << " ";
+	std::cout << "scaled q norm: " << q.norm() << std::endl;
 }
 
 void Params::load_model()
@@ -868,7 +899,7 @@ void AdaptiveRestarts(Iterates &iter, Params &p,
 	}
 }
 
-void FixedFrequencyRestart(Iterates &iter, const Params &p,
+void FixedFrequencyRestart(Iterates &iter, Params &p,
 						   RecordIterates &record)
 {
 	if ((iter.count - 1) % p.fixed_restart_length == 0)
@@ -879,7 +910,7 @@ void FixedFrequencyRestart(Iterates &iter, const Params &p,
 			std::cout << "restart at " << iter.count - 1 << std::endl;
 			iter.print_iteration_information(p);
 		}
-		// iter.restart();
+		iter.restart(iter.x, iter.y_bar);
 		if ((iter.count - 1) % p.record_every == 0)
 			record.append(iter, p);
 	}

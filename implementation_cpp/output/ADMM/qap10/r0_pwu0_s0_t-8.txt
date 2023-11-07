@@ -1,7 +1,0 @@
-Loading model...
-Model loaded.
-Power Iteration Converged in 47 iterations.
-sigma_max 7.90414
-K rows: 1820 K cols: 4150
-KKT number of nonzeros: 72220
-factorize done, takes 215746 milliseconds
