@@ -19,6 +19,12 @@ log/
 # data folder
 data/
 
+# output
+output/
+
+# cache
+cache/
+
 # files
 *.exe
 test*

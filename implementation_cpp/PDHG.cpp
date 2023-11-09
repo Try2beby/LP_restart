@@ -4,8 +4,10 @@ void AdaptivePDHGStep(Iterates &iter, Params &p, RecordIterates &record);
 
 RecordIterates *PDHG(Params &p)
 {
+	std::cout << "using PDHG: " << std::endl;
 	int size_x = (int)p.c.rows();
 	int size_y = (int)p.q.rows();
+	// std::cout << "size_x: " << size_x << " size_y: " << size_y << std::endl;
 	auto record = new RecordIterates(size_x, size_y, p.max_iter / p.record_every);
 	Iterates iter(size_x, size_y);
 	while (true)
@@ -113,11 +115,13 @@ void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 	Eigen::VectorXd x_new = (iter.x - (p.eta / p.w) * (p.c - p.K.transpose() * iter.y)).cwiseMax(0);
 	Eigen::VectorXd y_new = iter.y - (p.eta * p.w) * (-p.q + p.K * (2 * x_new - iter.x));
 	// std::cout << eta << " " << p.w << " " << p.q(p.m1) << std::endl;
-	y_new.segment(0, p.m1) = y_new.segment(0, p.m1).cwiseMax(0);
+	// choose idx by sense_vec, if sense_vec(i) == 1, then y(i) = max(0, y(i))
+	y_new = p.sense_vec.select(y_new.cwiseMax(0), y_new);
 
 	iter.x = x_new;
 	iter.y = y_new;
 	// std::cout << iter.x.norm() << " " << iter.y.norm() << std::endl;
+	// std::cout << iter.x.size() << " " << iter.y.size() << std::endl;
 
 	iter.x_hat = x_new;
 	iter.y_hat = y_new;

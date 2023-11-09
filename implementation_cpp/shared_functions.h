@@ -11,6 +11,7 @@
 #include <gurobi_c++.h>
 #include "config.h"
 #include "eigen3/Eigen/Core"
+#include "eigen3/Eigen/Dense"
 #include "eigen3/Eigen/Sparse"
 
 // #define EIGEN_USE_MKL_ALL
@@ -77,10 +78,12 @@ class Params
 public:
 	float eta, eta_hat, w, eps, eps_0, theta;
 	Beta beta;
-	int dataidx, max_iter, tau0, record_every, print_every, evaluate_every, fixed_restart_length;
+	int dataidx, tau0, record_every, print_every, evaluate_every, fixed_restart_length;
+	unsigned long long max_iter;
 	int m1, m2, n;
 	std::string data_name, outfile_name;
-	Eigen::VectorXd c, b, q;
+	Eigen::VectorXd c, b, q, lb, ub;
+	Eigen::VectorXi sense_vec;
 	SpMat A, K, D2_cache, D1_cache;
 	bool verbose, restart, save2file, print_timing, adaptive_step_size, primal_weight_update, precondition, use_ADMM;
 	GRBEnv env;

@@ -202,18 +202,31 @@ void Iterates::restart(const Eigen::VectorXd &x_c, const Eigen::VectorXd &y_c)
 }
 Convergeinfo Iterates::compute_convergence_information(const Params &p)
 {
-	Eigen::VectorXd mutiplier, temp, x;
+	Eigen::VectorXd multiplier, multiplier_pos, multiplier_neg, temp, x;
+	Eigen::VectorXd lb = p.lb, ub = p.ub;
 	if (use_ADMM == false)
 	{
-		this->convergeinfo.duality_gap = std::abs(p.q.dot(y) - p.c.dot(x)) / (1 + std::abs(p.q.dot(y)) + std::abs(p.c.dot(x)));
+		x = this->x;
 
 		temp = p.q - p.K * x;
-		temp.segment(0, p.m1) = temp.segment(0, p.m1).cwiseMax(0);
+		temp = p.sense_vec.select(temp.cwiseMax(0), temp);
 		this->convergeinfo.primal_feasibility = temp.norm() / (1 + p.q.norm());
 
-		temp = p.c - p.K.transpose() * y;
-		mutiplier = temp.cwiseMax(0);
-		this->convergeinfo.dual_feasibility = (temp - mutiplier).norm() / (1 + p.c.norm());
+		multiplier = p.c - p.K.transpose() * y;
+		multiplier = (lb.array() == -GRB_INFINITY && ub.array() == GRB_INFINITY).select(0, multiplier);
+		multiplier = (lb.array() == -GRB_INFINITY && ub.array() < GRB_INFINITY).select(multiplier.cwiseMin(0), multiplier);
+		multiplier = (lb.array() > -GRB_INFINITY && ub.array() == GRB_INFINITY).select(multiplier.cwiseMax(0), multiplier);
+
+		multiplier_pos = multiplier.cwiseMax(0);
+		multiplier_neg = multiplier.cwiseMin(0);
+
+		// std::cout << lb.dot(multiplier_pos) << " " << ub.dot(multiplier_neg) << std::endl;
+		// std::cout << multiplier_neg.norm() << std::endl;
+		this->convergeinfo.duality_gap = std::abs(p.q.dot(y) + lb.dot(multiplier_pos) - ub.dot(multiplier_neg) - p.c.dot(x)) /
+										 (1 + std::abs(p.q.dot(y) + lb.dot(multiplier_pos) - ub.dot(multiplier_neg)) + std::abs(p.c.dot(x)));
+
+		// std::cout << (p.c - p.K.transpose() * y - multiplier).norm() << std::endl;
+		this->convergeinfo.dual_feasibility = (p.c - p.K.transpose() * y - multiplier).norm() / (1 + p.c.norm());
 	}
 	else
 	{
@@ -233,12 +246,12 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 		}
 	}
 
+	auto duration = this->end();
 	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
 	if ((use_ADMM == false && this->convergeinfo.duality_gap < p.eps && this->convergeinfo.primal_feasibility < p.eps && this->convergeinfo.dual_feasibility < p.eps) ||
-		(use_ADMM == true && this->convergeinfo.normalized_duality_gap < p.eps))
+		(use_ADMM == true && this->convergeinfo.normalized_duality_gap < p.eps) || duration / 3600.0 > 8)
 	{
 		this->terminate = true;
-		auto duration = this->end();
 		std::cout << "Iteration terminates at " << this->count - 1 << ", takes " << duration << " s" << std::endl;
 		// print first 10 elements of x, set precision
 		// std::cout << std::setprecision(8) << "x: " << x.head(10).transpose() << std::endl;
@@ -571,8 +584,29 @@ void Params::load_model()
 	// Get the object coefficients from the model.
 	c = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_Obj, Vars, numVars), numVars);
 
-	// Get the matrix A, use sparse representation.
-	SpMat A_tmp(numConstraints, numVars);
+	// get the lower and upper bounds
+	lb = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_LB, Vars, numVars), numVars);
+	ub = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_UB, Vars, numVars), numVars);
+	// std::cout << "lb size " << lb.size() << " ub size " << ub.size() << std::endl;
+	// print min of lb and max of ub
+	std::cout << "lb min " << lb.minCoeff() << " ub max " << ub.maxCoeff() << std::endl;
+
+	// get sense of constraints as char array, then map to Eigen::VectorXi
+	char *sense = model.get(GRB_CharAttr_Sense, Constrs, numConstraints);
+	// std::cout << "sense: " << sense << std::endl;
+	// defind a map from char to int
+	std::map<char, int> sense_map = {{'=', 0}, {'<', -1}, {'>', 1}};
+	// map sense to a eigen vector
+	Eigen::VectorXi sense_vec(numConstraints);
+	for (int i = 0; i < numConstraints; i++)
+	{
+		sense_vec(i) = sense_map[sense[i]];
+	}
+	Eigen::VectorXi idx = (sense_vec.array() == -1).select(sense_vec, 1);
+	this->sense_vec = sense_vec.cwiseAbs();
+
+	// Get the matrix K, use sparse representation.
+	SpMat K_tmp(numConstraints, numVars);
 	std::vector<Eigen::Triplet<double>> triplets;
 
 	for (int i = 0; i < numConstraints; i++)
@@ -582,26 +616,26 @@ void Params::load_model()
 			double tmp = model.getCoeff(Constrs[i], Vars[j]);
 			if (tmp != 0.0)
 			{
-				triplets.push_back(Eigen::Triplet<double>(i, j, tmp));
+				triplets.push_back(Eigen::Triplet<double>(i, j, tmp * idx(i)));
 			}
 		}
 	}
 
-	A_tmp.setFromTriplets(triplets.begin(), triplets.end());
-	A = A_tmp;
+	K_tmp.setFromTriplets(triplets.begin(), triplets.end());
+	K = K_tmp;
 
 	// Get the right-hand side vector from the model.
-	b = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_RHS,
+	q = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_RHS,
 											  model.getConstrs(), numConstraints),
 									numConstraints);
+	this->q = q.cwiseProduct(idx.cast<double>());
 
 	n = numVars;
-	m1 = 0;
-	m2 = numConstraints;
-	K = A;
-	q = b;
 
-	std::cout << "Model loaded." << std::endl;
+	std::cout << "Model loaded: " << numVars << " variables, " << numConstraints << " constraints." << std::endl;
+	// print shape and nnz of K
+	std::cout << "K shape: " << K.rows() << " " << K.cols() << std::endl;
+	std::cout << "K nnz: " << K.nonZeros() << std::endl;
 }
 
 Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eigen::VectorXd &L,
