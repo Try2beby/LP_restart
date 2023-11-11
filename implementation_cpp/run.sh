@@ -4,16 +4,27 @@
 # eg: ./build/LP_restart method ADMM restart 1 primal_weight_update 1 scaling 0 adaptive_step_size 0 tol -8 data_name n15-3
 
 presolved_path=./data/cache/presolved/
-# find all files in presolved_path and save file name without extension into array
-declare -a data_name_array=($(find $presolved_path -type f -printf "%f\n" | cut -d. -f1))
+# find all files in presolved_path end with .mps and save file name without extension into array
+declare -a data_name_array=($(find $presolved_path -type f -name "*.mps" -printf "%f\n" | sed 's/.mps//g'))
+
 method=PDHG
 
 max_parallel_jobs=10
 count=0
 
+# This function will be called when the script is terminated
+terminate_script() {
+    echo "Terminating script..."
+    kill $(jobs -p) 2>/dev/null
+    exit
+}
+
+# Catch the SIGINT and SIGTERM signals and call the terminate_script function
+trap terminate_script SIGINT SIGTERM
+
 for i in "${data_name_array[@]}"
 do
-    ./build/LP_restart method $method restart 1 primal_weight_update 1 scaling 0 adaptive_step_size 0 tol -8 data_name $i &
+    ./build/LP_restart method $method restart 1 primal_weight_update 1 scaling 1 adaptive_step_size 0 tol -8 data_name $i &
     ((count++))
     if ((count == max_parallel_jobs)); then
         wait

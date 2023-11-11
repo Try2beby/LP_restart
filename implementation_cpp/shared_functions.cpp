@@ -466,11 +466,11 @@ void Params::load_pagerank()
 void Params::scaling()
 {
 	// Ruiz scaling
-	SpMat D1(m1 + m2, m1 + m2), D2(n, n), temp;
-	SpMat D1cache(m1 + m2, m1 + m2), D2cache(n, n);
+	SpMat D1(m, m), D2(n, n), D2_inv(n, n), temp;
+	SpMat D1cache(m, m), D2cache(n, n);
 	double eps = 1e-8;
 
-	for (int i = 0; i < m1 + m2; i++)
+	for (int i = 0; i < m; i++)
 	{
 		D1cache.insert(i, i) = 1;
 	}
@@ -490,6 +490,7 @@ void Params::scaling()
 				max_norm = std::max(max_norm, std::abs(it.value()));
 			}
 			D2.coeffRef(j, j) = 1.0 / (std::sqrt(max_norm) + eps);
+			D2_inv.coeffRef(j, j) = std::sqrt(max_norm);
 			D2cache.coeffRef(j, j) *= 1.0 / (std::sqrt(max_norm) + eps);
 		}
 		temp = K.transpose();
@@ -506,6 +507,8 @@ void Params::scaling()
 		K = D1 * K * D2;
 		c = D2 * c;
 		q = D1 * q;
+		lb = D2_inv * lb;
+		ub = D2_inv * ub;
 	}
 
 	// Pock Chambolle scaling
@@ -519,6 +522,7 @@ void Params::scaling()
 	for (int i = 0; i < temp_vec.size(); i++)
 	{
 		D2.coeffRef(i, i) = 1.0 / (std::sqrt(temp_vec(i)) + eps);
+		D2_inv.coeffRef(i, i) = std::sqrt(temp_vec(i));
 		D2cache.coeffRef(i, i) *= 1.0 / (std::sqrt(temp_vec(i)) + eps);
 	}
 
@@ -530,6 +534,8 @@ void Params::scaling()
 	K = D1 * K * D2;
 	c = D2 * c;
 	q = D1 * q;
+	lb = D2_inv * lb;
+	ub = D2_inv * ub;
 	std::cout << "scaled c norm: " << c.norm() << " ";
 	std::cout << "scaled q norm: " << q.norm() << std::endl;
 }
@@ -630,6 +636,7 @@ void Params::load_model()
 									numConstraints);
 	this->q = q.cwiseProduct(idx.cast<double>());
 
+	m = numConstraints;
 	n = numVars;
 
 	std::cout << "Model loaded: " << numVars << " variables, " << numConstraints << " constraints." << std::endl;
@@ -753,7 +760,7 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	double constant = p.c.dot(x0) - p.q.dot(y0);
 
 	Eigen::VectorXd g(size_x + size_y);
-	g << p.c - p.K.transpose() * y0, p.K * x0 - p.q;
+	g << (p.c - p.K.transpose() * y0) / std::sqrt(p.w), (p.K * x0 - p.q) * std::sqrt(p.w);
 
 	Eigen::VectorXd l = Eigen::VectorXd::Zero(size_x + size_y);
 	// set last size_y entries to -inf

@@ -80,7 +80,7 @@ public:
 	Beta beta;
 	int dataidx, tau0, record_every, print_every, evaluate_every, fixed_restart_length;
 	unsigned long long max_iter;
-	int m1, m2, n;
+	int m, m1, m2, n;
 	std::string data_name, outfile_name;
 	Eigen::VectorXd c, b, q, lb, ub;
 	Eigen::VectorXi sense_vec;

@@ -75,14 +75,14 @@ void AdaptivePDHGStep(Iterates &iter, Params &p, RecordIterates &record)
 				  std::abs(2 * (y_prime - iter.y).transpose() * p.K * (x_prime - iter.x));
 		eta_prime = std::min((1 - std::pow(iter.count + 1, -0.3)) * eta_bar,
 							 (1 + std::pow(iter.count + 1, -0.6)) * eta);
-		std::cout << "eta: " << eta << std::endl;
-		std::cout << "eta_bar: " << eta_bar << std::endl;
-		std::cout << std::abs(2 * (y_prime - iter.y).transpose() * p.K * (x_prime - iter.x)) << std::endl;
-		std::cout << (y_prime - iter.y).norm() << " " << (x_prime - iter.x).norm() << std::endl;
-		std::cout << "eta_prime: " << eta_prime << std::endl;
+		// std::cout << "eta: " << eta << std::endl;
+		// std::cout << "eta_bar: " << eta_bar << std::endl;
+		// std::cout << std::abs(2 * (y_prime - iter.y).transpose() * p.K * (x_prime - iter.x)) << std::endl;
+		// std::cout << (y_prime - iter.y).norm() << " " << (x_prime - iter.x).norm() << std::endl;
+		// std::cout << "eta_prime: " << eta_prime << std::endl;
 		if (eta <= eta_bar)
 		{
-			std::cout << "break" << std::endl;
+			// std::cout << "break" << std::endl;
 			iter.x = x_prime;
 			iter.y = y_prime;
 			p.eta = eta;
