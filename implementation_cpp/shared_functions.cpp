@@ -382,7 +382,7 @@ Params::Params() : env(GRBEnv()), eta(0), eta_hat{1e-1}, w(1), eps(1e-8), eps_0(
 				   beta(0.9, 0.1, 0.5), theta(0.5),
 				   max_iter(static_cast<int>(5e5)), tau0(1), verbose(false), restart(true),
 				   record_every(40), print_every(100), evaluate_every(40), dataidx(0),
-				   save2file(true), print_timing(false), fixed_restart_length(-1)
+				   save2file(true), print_timing(false), fixed_restart_length(-1), max_time(3600 * 5)
 {
 	env.set(GRB_IntParam_OutputFlag, verbose);
 	this->init_w();

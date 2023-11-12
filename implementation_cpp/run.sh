@@ -22,14 +22,23 @@ terminate_script() {
 # Catch the SIGINT and SIGTERM signals and call the terminate_script function
 trap terminate_script SIGINT SIGTERM
 
-for i in "${data_name_array[@]}"
+declare -a primal_weight_update_array=(1 0)
+declare -a scaling_array=(1 0)
+
+for pau in "${primal_weight_update_array[@]}"
 do
-    ./build/LP_restart method $method restart 1 primal_weight_update 1 scaling 0 adaptive_step_size 0 tol -8 data_name $i &
-    ((count++))
-    if ((count == max_parallel_jobs)); then
-        wait
-        count=0
-    fi
+    for sc in "${scaling_array[@]}"
+    do
+        for i in "${data_name_array[@]}"
+        do
+            ./build/LP_restart method $method restart 1 primal_weight_update $pau scaling $sc adaptive_step_size 0 tol -8 data_name $i &
+            ((count++))
+            if ((count == max_parallel_jobs)); then
+                wait
+                count=0
+            fi
+        done
+    done
 done
 
 # Wait for any remaining jobs

@@ -2,6 +2,8 @@
 
 RecordIterates *ADMM(Params &p)
 {
+	std::cout << "using ADMM: " << std::endl;
+	std::cout << "eta: " << p.eta << std::endl;
 	auto size_x = (int)p.c.rows();
 	auto size_y = size_x;
 	Iterates iter(2, size_x, size_y);

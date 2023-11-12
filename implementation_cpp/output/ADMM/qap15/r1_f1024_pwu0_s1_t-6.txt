@@ -1,9 +1,0 @@
-Loading model...
-Model loaded.
-c norm: 3509.03 q norm: 5.47723
-scaled c norm: 1754.51 scaled q norm: 1.41421
-Power Iteration Converged in 55 iterations.
-sigma_max 1
-K rows: 6330 K cols: 22275
-KKT number of nonzeros: 378480
-factorize failed

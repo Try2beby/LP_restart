@@ -79,7 +79,7 @@ public:
 	float eta, eta_hat, w, eps, eps_0, theta;
 	Beta beta;
 	int dataidx, tau0, record_every, print_every, evaluate_every, fixed_restart_length;
-	unsigned long long max_iter;
+	unsigned long long max_iter, max_time;
 	int m, m1, m2, n;
 	std::string data_name, outfile_name;
 	Eigen::VectorXd c, b, q, lb, ub;
