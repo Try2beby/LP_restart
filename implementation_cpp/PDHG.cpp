@@ -7,7 +7,6 @@ RecordIterates *PDHG(Params &p)
 	std::cout << "using PDHG: " << std::endl;
 	int size_x = (int)p.c.rows();
 	int size_y = (int)p.q.rows();
-	// std::cout << "size_x: " << size_x << " size_y: " << size_y << std::endl;
 	auto record = new RecordIterates(size_x, size_y, p.max_iter / p.record_every);
 	Iterates iter(size_x, size_y);
 	while (true)
@@ -22,7 +21,10 @@ RecordIterates *PDHG(Params &p)
 		}
 		if (p.restart)
 		{
-			AdaptiveRestarts(iter, p, *record);
+			if (p.fixed_restart_length == -1)
+			{
+				AdaptiveRestarts(iter, p, *record);
+			}
 		}
 
 		if (iter.terminate || iter.count > p.max_iter)
@@ -62,19 +64,19 @@ void AdaptivePDHGStep(Iterates &iter, Params &p, RecordIterates &record)
 {
 	Eigen::VectorXd x_prime, y_prime;
 	double eta = p.eta_hat, eta_bar, eta_prime;
-	std::cout << iter.count << std::endl;
+
 	for (int i = 0; i < INFINITY; i++)
 	{
 		// check size of K, c, q
-		x_prime = (iter.x - (eta / p.w) * (p.c - p.K.transpose() * iter.y)).cwiseMax(0);
+		x_prime = (iter.x - (eta / p.w) * (p.c - p.K.transpose() * iter.y));
+		x_prime = x_prime.cwiseMin(p.ub).cwiseMax(p.lb);
 		y_prime = iter.y - (eta * p.w) * (-p.q + p.K * (2 * x_prime - iter.x));
-		// std::cout << eta << " " << p.w << " " << p.q(p.m1) << std::endl;
-		y_prime.segment(0, p.m1) = y_prime.segment(0, p.m1).cwiseMax(0);
-		// std::cout << y_prime.size() << " " << y_prime(p.m1) << std::endl;
+		y_prime = p.sense_vec.select(y_prime.cwiseMax(0), y_prime);
+
 		eta_bar = std::pow(PDHGnorm(iter.x - x_prime, iter.y - y_prime, p.w), 2.0) /
 				  std::abs(2 * (y_prime - iter.y).transpose() * p.K * (x_prime - iter.x));
 		eta_prime = std::min((1 - std::pow(iter.count + 1, -0.3)) * eta_bar,
-							 (1 + std::pow(iter.count + 1, -0.6)) * eta);
+							 (1 - std::pow(iter.count + 1, -0.6)) * eta);
 		// std::cout << "eta: " << eta << std::endl;
 		// std::cout << "eta_bar: " << eta_bar << std::endl;
 		// std::cout << std::abs(2 * (y_prime - iter.y).transpose() * p.K * (x_prime - iter.x)) << std::endl;
@@ -112,7 +114,8 @@ void AdaptivePDHGStep(Iterates &iter, Params &p, RecordIterates &record)
 
 void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 {
-	Eigen::VectorXd x_new = (iter.x - (p.eta / p.w) * (p.c - p.K.transpose() * iter.y)).cwiseMax(0);
+	Eigen::VectorXd x_new = (iter.x - (p.eta / p.w) * (p.c - p.K.transpose() * iter.y));
+	x_new = x_new.cwiseMax(p.lb).cwiseMin(p.ub);
 	Eigen::VectorXd y_new = iter.y - (p.eta * p.w) * (-p.q + p.K * (2 * x_new - iter.x));
 	// std::cout << eta << " " << p.w << " " << p.q(p.m1) << std::endl;
 	// choose idx by sense_vec, if sense_vec(i) == 1, then y(i) = max(0, y(i))
@@ -120,11 +123,7 @@ void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 
 	iter.x = x_new;
 	iter.y = y_new;
-	// std::cout << iter.x.norm() << " " << iter.y.norm() << std::endl;
-	// std::cout << iter.x.size() << " " << iter.y.size() << std::endl;
 
-	iter.x_hat = x_new;
-	iter.y_hat = y_new;
 	iter.update(p);
 
 	auto count = iter.count;

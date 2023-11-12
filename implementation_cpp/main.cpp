@@ -90,7 +90,8 @@ void process_argument(int argc, char *argv[], Params &p, Method &m)
 	p.eps = std::pow(10, std::stoi(arg_map["tol"]));
 	p.data_name = arg_map["data_name"];
 	// set output file name as restart+primal_weight_update+scaling+tol
-	p.outfile_name = abr_map["restart"] + arg_map["restart"] +
+	p.outfile_name = abr_map["adaptive_step_size"] + arg_map["adaptive_step_size"] +
+					 "_" + abr_map["restart"] + arg_map["restart"] +
 					 "_" + abr_map["fixed_restart_length"] + arg_map["fixed_restart_length"] +
 					 "_" + abr_map["primal_weight_update"] + arg_map["primal_weight_update"] +
 					 "_" + abr_map["scaling"] + arg_map["scaling"] +

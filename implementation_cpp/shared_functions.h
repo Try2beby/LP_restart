@@ -90,7 +90,6 @@ public:
 	Params();
 	void init_w();
 	void update_w(const Cache &);
-	void load_example();
 	void load_pagerank();
 	void scaling();
 	void load_model();

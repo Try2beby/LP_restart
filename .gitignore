@@ -25,6 +25,9 @@ output/
 # cache
 cache/
 
+scripts/
+table/
+
 # files
 *.exe
 test*

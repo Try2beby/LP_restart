@@ -24,7 +24,7 @@ trap terminate_script SIGINT SIGTERM
 
 for i in "${data_name_array[@]}"
 do
-    ./build/LP_restart method $method restart 1 primal_weight_update 1 scaling 1 adaptive_step_size 0 tol -8 data_name $i &
+    ./build/LP_restart method $method restart 1 primal_weight_update 1 scaling 0 adaptive_step_size 0 tol -8 data_name $i &
     ((count++))
     if ((count == max_parallel_jobs)); then
         wait

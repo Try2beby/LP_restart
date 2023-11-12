@@ -143,9 +143,18 @@ void Iterates::update(const Params &p)
 {
 	if (use_ADMM == false)
 	{
-		cache.eta_sum += p.eta;
-		// x_bar = 1.0 / cache.eta_sum * (x_bar + p.eta * x);
-		x_bar = t * 1.0 / (t + 1) * x_bar + 1.0 / (t + 1) * x_hat;
+		if (p.adaptive_step_size)
+		{
+			auto temp = cache.eta_sum;
+			cache.eta_sum += p.eta;
+			x_bar = (temp / cache.eta_sum) * x_bar + (p.eta / cache.eta_sum) * x;
+			y_bar = (temp / cache.eta_sum) * y_bar + (p.eta / cache.eta_sum) * y;
+		}
+		else
+		{
+			x_bar = t * 1.0 / (t + 1) * x_bar + 1.0 / (t + 1) * x;
+			y_bar = t * 1.0 / (t + 1) * y_bar + 1.0 / (t + 1) * y;
+		}
 
 		if (not p.restart)
 		{
@@ -164,9 +173,9 @@ void Iterates::update(const Params &p)
 			cache.xV_prev_start = cache.xV_cur_start;
 			cache.xV_cur_start = this->xV;
 		}
+		y_bar = t * 1.0 / (t + 1) * y_bar + 1.0 / (t + 1) * y_hat;
 	}
-	// y_bar = 1.0 / cache.eta_sum * (y_bar + p.eta * y);
-	y_bar = t * 1.0 / (t + 1) * y_bar + 1.0 / (t + 1) * y_hat;
+
 	if (not p.restart)
 	{
 		cache.y_prev_start = cache.y_cur_start;
@@ -268,9 +277,9 @@ void Iterates::print_iteration_information(const Params &p)
 
 	if (use_ADMM == false)
 	{
-		std::cout << "duality_gap: " << this->convergeinfo.duality_gap << std::endl;
-		std::cout << "primal_feasibility: " << this->convergeinfo.primal_feasibility << std::endl;
-		std::cout << "dual_feasibility: " << this->convergeinfo.dual_feasibility << std::endl;
+		std::cout << "gap: " << this->convergeinfo.duality_gap << std::endl;
+		std::cout << "p.f.: " << this->convergeinfo.primal_feasibility << std::endl;
+		std::cout << "d.f.: " << this->convergeinfo.dual_feasibility << std::endl;
 		std::cout << "obj: " << p.c.dot(x) + p.q.dot(y) - y.transpose() * p.K * x << std::endl;
 		std::cout << "x.sum " << x.sum() << std::endl;
 		std::cout << "x_org.sum " << (p.D2_cache * x).sum() << std::endl;
@@ -402,23 +411,6 @@ void Params::set_verbose(const bool &Verbose, const bool &gbVerbose)
 {
 	verbose = Verbose;
 	env.set(GRB_IntParam_OutputFlag, gbVerbose);
-}
-
-void Params::load_example()
-{
-	Eigen::VectorXd c_tmp(5);
-	c_tmp << -4, -3, 0, 0, 0;
-	c = c_tmp;
-	Eigen::VectorXd b_tmp(2);
-	b_tmp << 4, 5;
-	b = b_tmp;
-	Eigen::SparseMatrix<double> A_tmp(2, 5);
-	A_tmp.insert(0, 0) = 1;
-	A_tmp.insert(0, 2) = 1;
-	A_tmp.insert(1, 0) = 1;
-	A_tmp.insert(1, 1) = 1;
-	A = A_tmp;
-	// solution is (4, 1, 0, 0, 0)
 }
 
 // load LP problem in form:
@@ -594,8 +586,6 @@ void Params::load_model()
 	lb = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_LB, Vars, numVars), numVars);
 	ub = Eigen::Map<Eigen::VectorXd>(model.get(GRB_DoubleAttr_UB, Vars, numVars), numVars);
 	// std::cout << "lb size " << lb.size() << " ub size " << ub.size() << std::endl;
-	// print min of lb and max of ub
-	std::cout << "lb min " << lb.minCoeff() << " ub max " << ub.maxCoeff() << std::endl;
 
 	// get sense of constraints as char array, then map to Eigen::VectorXi
 	char *sense = model.get(GRB_CharAttr_Sense, Constrs, numConstraints);
@@ -638,6 +628,15 @@ void Params::load_model()
 
 	m = numConstraints;
 	n = numVars;
+
+	// std::cout << "testing on qap10, lb-=0.5, ub-=0.5" << std::endl;
+	// lb = lb.array() - 0.5;
+	// ub = ub.array() - 0.5;
+	// // q = q - K.dot(0.5 * Eigen::VectorXd::Ones(n));
+	// q = q - K * (0.5 * Eigen::VectorXd::Ones(n));
+
+	// print min of lb and max of ub
+	std::cout << "lb min " << lb.minCoeff() << " ub max " << ub.maxCoeff() << std::endl;
 
 	std::cout << "Model loaded: " << numVars << " variables, " << numConstraints << " constraints." << std::endl;
 	// print shape and nnz of K
@@ -904,13 +903,9 @@ void AdaptiveRestarts(Iterates &iter, Params &p,
 	if (iter.n >= 1)
 	{
 		r3 = PDHGnorm(iter.cache.x_prev_start - iter.cache.x_cur_start, iter.cache.y_prev_start - iter.cache.y_cur_start, p.w);
-		// mu_3 = std::pow(compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p), 1.0 * iter.n);
 		mu_3 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p);
 	}
 
-	// ||z_c - z^n,0||
-	// r4 = PDHGnorm(iter.cache.x_c - iter.cache.x_cur_start, iter.cache.y_c - iter.cache.y_cur_start, p.w);
-	// mu_4 = std::pow(compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p), 1.0 * iter.n);
 	if (mu_c <= p.beta.sufficent * mu_3)
 	{
 		restart = true;

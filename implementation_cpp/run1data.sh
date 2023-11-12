@@ -17,7 +17,7 @@ count=0
 
 for i in "${fixed_restart_length_array[@]}"
 do
-    ./build/LP_restart method $method restart 1 fixed_restart_length $i primal_weight_update 0 scaling 1 adaptive_step_size 0 tol -6 data_name $data_name &
+    ./build/LP_restart method $method restart 1 fixed_restart_length $i primal_weight_update 0 scaling 1 adaptive_step_size 1 tol -6 data_name $data_name &
     ((count++))
     if ((count == max_parallel_jobs)); then
         wait
