@@ -29,8 +29,8 @@ int main(int argc, char *argv[])
 	p.save2file = 0;
 	p.print_timing = false;
 	p.set_verbose(1, 0);
-	p.load_pagerank();
-	// p.load_model();
+	// p.load_pagerank();
+	p.load_model();
 
 	if (p.precondition)
 	{

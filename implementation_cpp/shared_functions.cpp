@@ -424,7 +424,7 @@ void Params::set_verbose(const bool &Verbose, const bool &gbVerbose)
 
 void Params::load_pagerank()
 {
-	n = 1e5;
+	n = 2e5;
 	double lambda = 0.85;
 	SpMat A_tmp(n + 1, n);
 	utils::read_txt(A_tmp, projectpath + datapath + pagerankpath + this->data_name);

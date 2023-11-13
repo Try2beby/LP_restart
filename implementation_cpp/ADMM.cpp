@@ -14,9 +14,6 @@ RecordIterates *ADMM(Params &p)
 	Eigen::SparseMatrix<double> KKT = p.K * p.K.transpose();
 	if (p.verbose)
 	{
-		// print K rows and cols
-		std::cout << "K rows: " << p.K.rows() << " K cols: " << p.K.cols() << std::endl;
-		// print nnz of KKT
 		std::cout << "KKT number of nonzeros: " << KKT.nonZeros() << std::endl;
 	}
 	Solver solver;
