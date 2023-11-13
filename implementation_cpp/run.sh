@@ -8,7 +8,9 @@ pgrk_path=./data/pagerank/
 # find all files in presolved_path end with .mps and save file name without extension into array
 # declare -a data_name_array=($(find $presolved_path -type f -name "*.mps" -printf "%f\n" | sed 's/.mps//g'))
 # find all files in pgrk_path end with txt and save file name without extension into array
-declare -a data_name_array=($(find $pgrk_path -type f -name "graph_2*.txt" -printf "%f\n" | sed 's/.txt//g'))
+# declare -a data_name_array=($(find $pgrk_path -type f -name "graph_2*.txt" -printf "%f\n" | sed 's/.txt//g'))
+# find all files in presolved_path end with .mps but not begin with pgrk and save file name without extension into array
+declare -a data_name_array=($(find $presolved_path -type f -name "*.mps" -printf "%f\n" | sed 's/.mps//g' | grep -v "^pgrk"))
 
 method=PDHG
 

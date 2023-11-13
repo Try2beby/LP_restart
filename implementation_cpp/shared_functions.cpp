@@ -236,6 +236,9 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 
 		// std::cout << (p.c - p.K.transpose() * y - multiplier).norm() << std::endl;
 		this->convergeinfo.dual_feasibility = (p.c - p.K.transpose() * y - multiplier).norm() / (1 + p.c.norm());
+
+		double r = PDHGnorm(x - cache.x_cur_start, y - cache.y_cur_start, 1);
+		this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(x, y, r, p);
 	}
 	else
 	{
@@ -245,12 +248,12 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 		double r{1};
 		if (p.restart)
 		{
-			double r = std::sqrt((xV_bar - cache.xV_cur_start).squaredNorm() + (y_bar - cache.y_cur_start).squaredNorm());
+			double r = std::sqrt(p.eta * (xV_bar - cache.xV_cur_start).squaredNorm() + (1.0 / p.eta) * (y_bar - cache.y_cur_start).squaredNorm());
 			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->xV_bar, this->y_bar, -(y_bar + p.c), (xV_bar - xU_bar), r, p);
 		}
 		else
 		{
-			double r = std::sqrt((xV - cache.xV_prev_start).squaredNorm() + (y - cache.y_prev_start).squaredNorm());
+			double r = std::sqrt(p.eta * (xV - cache.xV_prev_start).squaredNorm() + (1.0 / p.eta) * (y - cache.y_prev_start).squaredNorm());
 			this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(this->xV, this->y, -(y + p.c), (xV - xU), r, p);
 		}
 	}
@@ -281,6 +284,7 @@ void Iterates::print_iteration_information(const Params &p)
 		std::cout << "p.f.: " << this->convergeinfo.primal_feasibility << std::endl;
 		std::cout << "d.f.: " << this->convergeinfo.dual_feasibility << std::endl;
 		std::cout << "obj: " << p.c.dot(x) + p.q.dot(y) - y.transpose() * p.K * x << std::endl;
+		std::cout << "ngp: " << this->convergeinfo.normalized_duality_gap << std::endl;
 		std::cout << "x.sum " << x.sum() << std::endl;
 		std::cout << "x_org.sum " << (p.D2_cache * x).sum() << std::endl;
 	}
@@ -671,12 +675,12 @@ void Params::load_model()
 	std::cout << "K nnz: " << K.nonZeros() << std::endl;
 }
 
-Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eigen::VectorXd &L,
+Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eigen::VectorXd &L, const Eigen::VectorXd &U,
 											const Eigen::VectorXd &Z, const double &r)
 {
 	// set l_i to -inf if g_i <= 0
 	auto g_idx = G.array() <= 0;
-	auto l = g_idx.select(-INFINITY, L);
+	auto l = g_idx.select(-U, L);
 	auto &z = Z;
 	// set g > 0
 	auto g = G.cwiseAbs();
@@ -764,15 +768,17 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	double constant = -x_coeff.dot(x0) - y_coeff.dot(y0);
 
 	Eigen::VectorXd g(size_x + size_y);
-	g << -x_coeff, -y_coeff;
+	g << -x_coeff / std::pow(p.eta, 0.5), -y_coeff * std::pow(p.eta, 0.5);
 
 	Eigen::VectorXd l = Eigen::VectorXd::Zero(size_x + size_y);
 	// set last size_y entries to -inf
 	l.tail(size_y) = Eigen::VectorXd::Constant(size_y, -std::numeric_limits<double>::infinity());
 
+	Eigen::VectorXd u = Eigen::VectorXd::Constant(size_x + size_y, std::numeric_limits<double>::infinity());
+
 	Eigen::VectorXd z0(size_x + size_y);
-	z0 << x0, y0;
-	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
+	z0 << x0 * std::pow(p.eta, 0.5), y0 / std::pow(p.eta, 0.5);
+	auto &z_hat = LinearObjectiveTrustRegion(g, l, u, z0, r);
 
 	return (-g.dot(z_hat) + constant) / r;
 }
@@ -786,16 +792,20 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	double constant = p.c.dot(x0) - p.q.dot(y0);
 
 	Eigen::VectorXd g(size_x + size_y);
-	g << (p.c - p.K.transpose() * y0) / std::sqrt(p.w), (p.K * x0 - p.q) * std::sqrt(p.w);
+	g << (p.c - p.K.transpose() * y0), (p.K * x0 - p.q);
 
-	Eigen::VectorXd l = Eigen::VectorXd::Zero(size_x + size_y);
+	Eigen::VectorXd l(size_x + size_y);
 	Eigen::VectorXd ly = Eigen::VectorXd::Zero(size_y);
 	ly = p.sense_vec.select(ly, -std::numeric_limits<double>::infinity());
-	l.tail(size_y) = ly;
+	l << p.lb, ly;
+
+	Eigen::VectorXd u(size_x + size_y);
+	Eigen::VectorXd uy = Eigen::VectorXd::Constant(size_y, std::numeric_limits<double>::infinity());
+	u << p.ub, uy;
 
 	Eigen::VectorXd z0(size_x + size_y);
 	z0 << x0, y0;
-	auto &z_hat = LinearObjectiveTrustRegion(g, l, z0, r);
+	auto &z_hat = LinearObjectiveTrustRegion(g, l, u, z0, r);
 	// std::cout << std::setprecision(8) << "Trust  gap obj:" << (-z_hat.dot(g) + constant) / r << " ";
 	// std::cout << "cons vio: ||min(x,0)|| " << z_hat.head(size_x).cwiseMin(0).norm() << " ";
 	// std::cout << "||z-z0||-r " << (z_hat - z0).norm() - r << " ";
@@ -905,12 +915,12 @@ void AdaptiveRestarts(Iterates &iter, Params &p,
 	double r1, r2, mu_1, mu_2, mu_c;
 	Eigen::VectorXd x_c, y_c;
 	// ||z^n,t-z^n,0||
-	r1 = PDHGnorm(iter.x - iter.cache.x_cur_start, iter.y - iter.cache.y_cur_start, p.w);
+	r1 = PDHGnorm(iter.x - iter.cache.x_cur_start, iter.y - iter.cache.y_cur_start, 1);
 	// mu_1 = std::pow(compute_normalized_duality_gap(iter.x, iter.y, r1, p), 1.0 * iter.n);
 	mu_1 = compute_normalized_duality_gap(iter.x, iter.y, r1, p);
 
 	// ||z_bar^n,t-z^n,0||
-	r2 = PDHGnorm(iter.x_bar - iter.cache.x_cur_start, iter.y_bar - iter.cache.y_cur_start, p.w);
+	r2 = PDHGnorm(iter.x_bar - iter.cache.x_cur_start, iter.y_bar - iter.cache.y_cur_start, 1);
 	// mu_2 = std::pow(compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r2, p), 1.0 * iter.n);
 	mu_2 = compute_normalized_duality_gap(iter.x_bar, iter.y_bar, r2, p);
 
@@ -930,7 +940,7 @@ void AdaptiveRestarts(Iterates &iter, Params &p,
 	// ||z^n,0-z^n-1,0||
 	if (iter.n >= 1)
 	{
-		r3 = PDHGnorm(iter.cache.x_prev_start - iter.cache.x_cur_start, iter.cache.y_prev_start - iter.cache.y_cur_start, p.w);
+		r3 = PDHGnorm(iter.cache.x_prev_start - iter.cache.x_cur_start, iter.cache.y_prev_start - iter.cache.y_cur_start, 1);
 		mu_3 = compute_normalized_duality_gap(iter.cache.x_cur_start, iter.cache.y_cur_start, r3, p);
 	}
 
@@ -974,6 +984,7 @@ void FixedFrequencyRestart(Iterates &iter, Params &p,
 			std::cout << "restart at " << iter.count - 1 << std::endl;
 			iter.print_iteration_information(p);
 		}
+		// for ADMM, the parameters for restart are not important
 		iter.restart(iter.x, iter.y_bar);
 		if ((iter.count - 1) % p.record_every == 0)
 			record.append(iter, p);
