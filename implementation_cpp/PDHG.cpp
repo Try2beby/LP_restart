@@ -39,7 +39,7 @@ RecordIterates *PDHG(Params &p)
 		if (p.fixed_restart_length == -1)
 		{
 			file_name = "adaptive_restarts";
-			record->saveRestart_idx(__func__, p.data_name, file_name);
+			// record->saveRestart_idx(__func__, p.data_name, file_name);
 		}
 		else
 		{
@@ -50,7 +50,7 @@ RecordIterates *PDHG(Params &p)
 	{
 		file_name = "no_restarts";
 	}
-	record->saveConvergeinfo(__func__, p.data_name, file_name);
+	// record->saveConvergeinfo(__func__, p.data_name, file_name);
 
 	return record;
 }

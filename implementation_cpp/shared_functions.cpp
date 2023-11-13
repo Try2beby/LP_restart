@@ -5,7 +5,7 @@ namespace utils
 	void read_txt(SpMat &A, const std::string filename)
 	{
 		// read a eigen matrix from txt file
-		std::ifstream in(filename);
+		std::ifstream in(filename + ".txt");
 		std::vector<Eigen::Triplet<double>> triplets;
 
 		if (in.is_open())
@@ -301,9 +301,9 @@ RecordIterates::RecordIterates(const int &Size_x, const int &Size_y, const int &
 {
 	Iterates iter(Size_x, Size_y);
 	// std::vector<Iterates> aIteratesList(Size_record, iter);
-	std::vector<Convergeinfo> aConvergeinfoList(Size_record);
+	// std::vector<Convergeinfo> aConvergeinfoList(Size_record);
 	// IteratesList = aIteratesList;
-	ConvergeinfoList = aConvergeinfoList;
+	// ConvergeinfoList = aConvergeinfoList;
 	this->use_ADMM = false;
 }
 
@@ -312,16 +312,16 @@ RecordIterates::RecordIterates(const int &Repeat_x, const int &Size_x, const int
 {
 	Iterates iter(Repeat_x, Size_x, Size_y);
 	// std::vector<Iterates> aIteratesList(Size_record, iter);
-	std::vector<Convergeinfo> aConvergeinfoList(Size_record);
+	// std::vector<Convergeinfo> aConvergeinfoList(Size_record);
 	// IteratesList = aIteratesList;
-	ConvergeinfoList = aConvergeinfoList;
+	// ConvergeinfoList = aConvergeinfoList;
 	this->use_ADMM = true;
 }
 
 void RecordIterates::append(const Iterates &iter, const Params &p)
 {
 	// IteratesList[end_idx] = iter;
-	ConvergeinfoList[end_idx] = iter.convergeinfo;
+	// ConvergeinfoList[end_idx] = iter.convergeinfo;
 	end_idx++;
 }
 
@@ -444,15 +444,21 @@ void Params::load_pagerank()
 	{
 		K_tmp.insert(n, i) = 1;
 	}
-	K = K_tmp;
+	this->K = K_tmp;
+	this->lb = Eigen::VectorXd::Zero(n);
+	this->ub = Eigen::VectorXd::Constant(n, GRB_INFINITY);
+	this->m = n + 1;
+	this->n = n;
+	sense_vec = Eigen::VectorXi::Ones(n + 1);
+	this->sense_vec[n] = 0;
 
-	this->m1 = n;
-	this->m2 = 1;
+	// print min of lb and max of ub
+	std::cout << "lb min " << lb.minCoeff() << " ub max " << ub.maxCoeff() << std::endl;
 
 	// print shape and nnz of K
+	std::cout << "PageRank model loaded." << std::endl;
 	std::cout << "K shape: " << K.rows() << " " << K.cols() << std::endl;
 	std::cout << "K nnz: " << K.nonZeros() << std::endl;
-	std::cout << "PageRank model loaded." << std::endl;
 }
 
 void Params::scaling()
@@ -499,8 +505,18 @@ void Params::scaling()
 		K = D1 * K * D2;
 		c = D2 * c;
 		q = D1 * q;
-		lb = D2_inv * lb;
-		ub = D2_inv * ub;
+
+		for (int i = 0; i < n; i++)
+		{
+			if (lb(i) != -GRB_INFINITY)
+			{
+				lb(i) *= D2_inv.coeffRef(i, i);
+			}
+			if (ub(i) != GRB_INFINITY)
+			{
+				ub(i) *= D2_inv.coeffRef(i, i);
+			}
+		}
 	}
 
 	// Pock Chambolle scaling
@@ -526,10 +542,21 @@ void Params::scaling()
 	K = D1 * K * D2;
 	c = D2 * c;
 	q = D1 * q;
-	lb = D2_inv * lb;
-	ub = D2_inv * ub;
+	for (int i = 0; i < n; i++)
+	{
+		if (lb(i) != -GRB_INFINITY)
+		{
+			lb(i) *= D2_inv.coeffRef(i, i);
+		}
+		if (ub(i) != GRB_INFINITY)
+		{
+			ub(i) *= D2_inv.coeffRef(i, i);
+		}
+	}
 	std::cout << "scaled c norm: " << c.norm() << " ";
 	std::cout << "scaled q norm: " << q.norm() << std::endl;
+	std::cout << "scaled lb min: " << lb.minCoeff() << " ";
+	std::cout << "scaled ub max: " << ub.maxCoeff() << std::endl;
 }
 
 void Params::load_model()
@@ -762,8 +789,9 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	g << (p.c - p.K.transpose() * y0) / std::sqrt(p.w), (p.K * x0 - p.q) * std::sqrt(p.w);
 
 	Eigen::VectorXd l = Eigen::VectorXd::Zero(size_x + size_y);
-	// set last size_y entries to -inf
-	l.tail(size_y) = Eigen::VectorXd::Constant(size_y, -std::numeric_limits<double>::infinity());
+	Eigen::VectorXd ly = Eigen::VectorXd::Zero(size_y);
+	ly = p.sense_vec.select(ly, -std::numeric_limits<double>::infinity());
+	l.tail(size_y) = ly;
 
 	Eigen::VectorXd z0(size_x + size_y);
 	z0 << x0, y0;
