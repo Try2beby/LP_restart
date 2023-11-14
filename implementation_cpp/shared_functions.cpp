@@ -681,7 +681,7 @@ Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eige
 	// set l_i to -inf if g_i <= 0
 	auto g_idx = G.array() <= 0;
 	auto l = g_idx.select(-U, L);
-	auto &z = Z;
+	Eigen::VectorXd z = g_idx.select(-Z, Z);
 	// set g > 0
 	auto g = G.cwiseAbs();
 
