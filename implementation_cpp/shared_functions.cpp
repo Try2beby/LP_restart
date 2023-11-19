@@ -236,6 +236,8 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 
 		// std::cout << (p.c - p.K.transpose() * y - multiplier).norm() << std::endl;
 		this->convergeinfo.dual_feasibility = (p.c - p.K.transpose() * y - multiplier).norm() / (1 + p.c.norm());
+		double r = PDHGnorm(x - cache.x_cur_start, y - cache.y_cur_start, 1);
+		this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(x, y, r, p);
 	}
 	else
 	{
@@ -281,6 +283,7 @@ void Iterates::print_iteration_information(const Params &p)
 		std::cout << "p.f.: " << this->convergeinfo.primal_feasibility << std::endl;
 		std::cout << "d.f.: " << this->convergeinfo.dual_feasibility << std::endl;
 		std::cout << "obj: " << p.c.dot(x) + p.q.dot(y) - y.transpose() * p.K * x << std::endl;
+		std::cout << "ngp: " << this->convergeinfo.normalized_duality_gap << std::endl;
 		std::cout << "x.sum " << x.sum() << std::endl;
 		std::cout << "x_org.sum " << (p.D2_cache * x).sum() << std::endl;
 	}
@@ -625,6 +628,12 @@ void Params::load_model()
 	{
 		sense_vec(i) = sense_map[sense[i]];
 	}
+	// count number of each sense
+	int count_1 = (sense_vec.array() == 1).count();
+	int count_minus_1 = (sense_vec.array() == -1).count();
+	int count_0 = (sense_vec.array() == 0).count();
+	std::cout << "# >: " << count_1 << " # <: " << count_minus_1 << " # =: " << count_0 << std::endl;
+
 	Eigen::VectorXi idx = (sense_vec.array() == -1).select(sense_vec, 1);
 	this->sense_vec = sense_vec.cwiseAbs();
 
@@ -792,6 +801,8 @@ double compute_normalized_duality_gap(const Eigen::VectorXd &x0, const Eigen::Ve
 	Eigen::VectorXd ly = Eigen::VectorXd::Zero(size_y);
 	ly = p.sense_vec.select(ly, -std::numeric_limits<double>::infinity());
 	l.tail(size_y) = ly;
+	// set last size_y entries to -inf
+	// l.tail(size_y) = Eigen::VectorXd::Constant(size_y, -std::numeric_limits<double>::infinity());
 
 	Eigen::VectorXd z0(size_x + size_y);
 	z0 << x0, y0;
