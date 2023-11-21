@@ -86,7 +86,7 @@ Iterates::Iterates(const int &Size_x, const int &Size_y) : n(0), t(0), count(1),
 	size_y = Size_y;
 	size_z = size_x + size_y;
 	x = Eigen::VectorXd::Zero(size_x);
-	y = (1.0 / size_y) * Eigen::VectorXd::Ones(size_y);
+	y = Eigen::VectorXd::Zero(size_y);
 	x_hat = Eigen::VectorXd::Zero(size_x);
 	y_hat = Eigen::VectorXd::Zero(size_y);
 	x_bar = Eigen::VectorXd::Zero(size_x);
@@ -287,6 +287,8 @@ void Iterates::print_iteration_information(const Params &p)
 		std::cout << "ngp: " << this->convergeinfo.normalized_duality_gap << std::endl;
 		std::cout << "x.sum " << x.sum() << std::endl;
 		std::cout << "x_org.sum " << (p.D2_cache * x).sum() << std::endl;
+		// std::cout << "x " << x.transpose() << std::endl;
+		// std::cout << "x_org " << (p.D2_cache * x).transpose() << std::endl;
 	}
 	else
 	{
@@ -629,6 +631,12 @@ void Params::load_model()
 	{
 		sense_vec(i) = sense_map[sense[i]];
 	}
+	// count number of each sense
+	int count_1 = (sense_vec.array() == 1).count();
+	int count_minus_1 = (sense_vec.array() == -1).count();
+	int count_0 = (sense_vec.array() == 0).count();
+	std::cout << "# >: " << count_1 << " # <: " << count_minus_1 << " # =: " << count_0 << std::endl;
+
 	Eigen::VectorXi idx = (sense_vec.array() == -1).select(sense_vec, 1);
 	this->sense_vec = sense_vec.cwiseAbs();
 
@@ -681,7 +689,8 @@ Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eige
 	// set l_i to -inf if g_i <= 0
 	auto g_idx = G.array() <= 0;
 	auto l = g_idx.select(-U, L);
-	Eigen::VectorXd z = g_idx.select(-Z, Z);
+	// Eigen::VectorXd z = g_idx.select(-Z, Z);
+	auto z = Z;
 	// set g > 0
 	auto g = G.cwiseAbs();
 

@@ -23,12 +23,13 @@ int main(int argc, char *argv[])
 	std::ofstream out(path + p.outfile_name);
 	std::cout.rdbuf(out.rdbuf()); // redirect std::cout to out.txt!
 
-	p.max_iter = 5e12;
-	p.max_time = 3600 * 5;
-	p.print_every = 100;
+	p.max_iter = 10;
+	p.max_time = 3600 * 2;
 	p.save2file = 0;
 	p.print_timing = false;
+	p.print_every = 1;
 	p.set_verbose(1, 0);
+	// p.w = std::pow(4, 2);
 	// p.load_pagerank();
 	p.load_model();
 
