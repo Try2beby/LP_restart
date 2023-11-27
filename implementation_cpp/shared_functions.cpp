@@ -209,6 +209,7 @@ void Iterates::restart(const Eigen::VectorXd &x_c, const Eigen::VectorXd &y_c)
 	cache.y_prev_start = cache.y_cur_start;
 	cache.y_cur_start = this->y;
 }
+
 Convergeinfo Iterates::compute_convergence_information(const Params &p)
 {
 	Eigen::VectorXd multiplier, multiplier_pos, multiplier_neg, temp, x;

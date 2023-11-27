@@ -117,12 +117,14 @@ void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 	Eigen::VectorXd x_new = (iter.x - (p.eta / p.w) * (p.c - p.K.transpose() * iter.y));
 	x_new = x_new.cwiseMax(p.lb).cwiseMin(p.ub);
 	Eigen::VectorXd y_new = iter.y - (p.eta * p.w) * (-p.q + p.K * (2 * x_new - iter.x));
-	// std::cout << eta << " " << p.w << " " << p.q(p.m1) << std::endl;
 	// choose idx by sense_vec, if sense_vec(i) == 1, then y(i) = max(0, y(i))
 	y_new = p.sense_vec.select(y_new.cwiseMax(0), y_new);
 
 	iter.x = x_new;
 	iter.y = y_new;
+
+	std::cout << iter.x.norm() << " " << iter.y.norm() << " " << (p.c - p.K.transpose() * iter.y).norm() << " " << p.c.norm() << std::endl;
+	std::cout << iter.x.transpose() << std::endl;
 
 	iter.update(p);
 

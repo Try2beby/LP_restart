@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	std::ofstream out(path + p.outfile_name);
 	std::cout.rdbuf(out.rdbuf()); // redirect std::cout to out.txt!
 
-	p.max_iter = 10;
+	p.max_iter = 5;
 	p.max_time = 3600 * 2;
 	p.save2file = 0;
 	p.print_timing = false;
@@ -32,6 +32,12 @@ int main(int argc, char *argv[])
 	// p.w = std::pow(4, 2);
 	// p.load_pagerank();
 	p.load_model();
+
+	std::cout << p.c.transpose() << std::endl;
+	std::cout << p.K << std::endl;
+	std::cout << p.q.transpose() << std::endl;
+	std::cout << p.lb.transpose() << std::endl;
+	std::cout << p.ub.transpose() << std::endl;
 
 	if (p.precondition)
 	{
@@ -45,6 +51,7 @@ int main(int argc, char *argv[])
 	{
 		p.eta = 0.9 / sigma_max;
 	}
+	p.eta = 0.3023715784073818;
 	p.eta_hat = 1 / (p.K.cwiseAbs() * Eigen::VectorXd::Ones(p.K.cols())).maxCoeff();
 	std::cout << "eta_hat " << p.eta_hat << std::endl;
 	// p.eta_hat = 5e-4;
