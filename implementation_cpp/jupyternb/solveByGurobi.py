@@ -7,7 +7,9 @@ presolvedDir = "/home/twh/data_manage/cache/presolved"
 logDir = "/home/twh/work/PDLP/implementation_cpp/log/gurobi"
 # find all files in presolvedDir end with .mps and not start with pgrk_
 mpsFiles = [
-    f for f in os.listdir(presolvedDir) if f.endswith(".mps") and f.startswith("pgrk_")
+    f
+    for f in os.listdir(presolvedDir)
+    if f.endswith(".mps") and not f.startswith("pgrk_")
 ]
 
 # # find all files in presolvedDir end with .mps
@@ -25,22 +27,25 @@ mpsFiles = [
 # ]
 # mpsFiles = [f + ".mps" for f in lis]
 
+print("Solve " + str(len(mpsFiles)) + " mps files by gurobi.")
+print(mpsFiles)
+
 for mps in mpsFiles:
     m = gp.read(os.path.join(presolvedDir, mps))
     # set barrier algorithm
     m.Params.method = 2
     # set time limit
-    m.Params.TimeLimit = 3600 * 3
+    m.Params.TimeLimit = 3600
     # set log file
     m.Params.LogFile = os.path.join(logDir, mps.replace(".mps", ".log"))
     # disable crossover
-    m.Params.Crossover = 0
+    m.setParam("Crossover", 0)
     m.optimize()
     # m.write(os.path.join(logDir, mps.replace(".mps", ".sol")))
     print(
         "Successfully solve "
         + mps
         + " by gurobi, write to "
-        + mps.replace(".mps", ".sol")
+        + mps.replace(".mps", ".log")
         + "."
     )

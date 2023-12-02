@@ -29,7 +29,7 @@ RecordIterates *PDHG(Params &p)
 
 		if (iter.terminate || iter.count > p.max_iter)
 		{
-			iter.print_iteration_information(p);
+			// iter.print_iteration_information(p);
 			break;
 		}
 	}
@@ -123,8 +123,8 @@ void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 	iter.x = x_new;
 	iter.y = y_new;
 
-	std::cout << iter.x.norm() << " " << iter.y.norm() << " " << (p.c - p.K.transpose() * iter.y).norm() << " " << p.c.norm() << std::endl;
-	std::cout << iter.x.transpose() << std::endl;
+	// std::cout << iter.x.norm() << " " << iter.y.norm() << " " << (p.c - p.K.transpose() * iter.y).norm() << " " << p.c.norm() << std::endl;
+	// std::cout << iter.x.transpose() << std::endl;
 
 	iter.update(p);
 
@@ -136,9 +136,6 @@ void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)
 		{
 			record.append(iter, p);
 		}
-		if ((count - 1) % p.print_every == 0 && p.verbose)
-		{
-			iter.print_iteration_information(p);
-		}
 	}
+	iter.print_iteration_information(p);
 }

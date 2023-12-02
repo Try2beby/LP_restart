@@ -3,16 +3,12 @@
 # This script is used to run the program
 # eg: ./build/LP_restart method ADMM restart 1 primal_weight_update 1 scaling 0 adaptive_step_size 0 tol -8 data_name n15-3
 
-presolved_path=./data/cache/presolved/
-pgrk_path=./data/pagerank/
-# find all files in presolved_path end with .mps and save file name without extension into array
-# declare -a data_name_array=($(find $presolved_path -type f -name "*.mps" -printf "%f\n" | sed 's/.mps//g'))
+presolved_path=~/data_manage/cache/presolved/
+pgrk_path=~/data_manage/pagerank/
 # find all files in pgrk_path end with txt and save file name without extension into array
 # declare -a data_name_array=($(find $pgrk_path -type f -name "graph_2*.txt" -printf "%f\n" | sed 's/.txt//g'))
 # find all files in presolved_path end with .mps but not begin with pgrk and save file name without extension into array
-# declare -a data_name_array=($(find $presolved_path -type f -name "*.mps" -printf "%f\n" | sed 's/.mps//g' | grep -v "^pgrk"))
-# ['rail507', 'neos-933638', 'satellites3-40-f', 'ns1952667', 'neos-4300652-rahue', 'app1-2', 'triptim1', 'uccase9', 'ns1696083', 'lectsched-3']
-declare -a data_name_array=("rail507" "neos-933638" "satellites3-40-fs" "ns1952667" "neos-4300652-rahue" "app1-2" "triptim1" "uccase9" "ns1696083" "lectsched-3")
+declare -a data_name_array=($(find $presolved_path -type f -name "*.mps" -printf "%f\n" | sed 's/.mps//g' | grep -v "^pgrk"))
 
 method=PDHG
 
@@ -35,8 +31,10 @@ terminate_script() {
 # Catch the SIGINT and SIGTERM signals and call the terminate_script function
 trap terminate_script SIGINT SIGTERM
 
-declare -a primal_weight_update_array=(1 0)
-declare -a scaling_array=(1 0)
+# declare -a primal_weight_update_array=(1 0)
+# declare -a scaling_array=(1 0)
+declare -a primal_weight_update_array=(1)
+declare -a scaling_array=(1)
 
 printf "%s\n" "${primal_weight_update_array[@]}" | while read pau; do
     printf "%s\n" "${scaling_array[@]}" | while read sc; do

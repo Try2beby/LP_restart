@@ -210,17 +210,68 @@ void Iterates::restart(const Eigen::VectorXd &x_c, const Eigen::VectorXd &y_c)
 	cache.y_cur_start = this->y;
 }
 
-Convergeinfo Iterates::compute_convergence_information(const Params &p)
+void Iterates::compute_primal_objective(const Params &p)
 {
-	Eigen::VectorXd multiplier, multiplier_pos, multiplier_neg, temp, x;
-	Eigen::VectorXd lb = p.lb, ub = p.ub;
 	if (use_ADMM == false)
 	{
-		x = this->x;
+		this->convergeinfo.primal_objective = p.c.dot(this->x_bar);
+	}
+	else
+	{
+	}
+}
+
+void Iterates::compute_dual_objective(const Params &p)
+{
+	if (use_ADMM == false)
+	{
+		Eigen::VectorXd primal_gradient = p.c - p.K.transpose() * this->y_bar;
+		auto idx1 = primal_gradient.array() > 0;
+		Eigen::VectorXd bound_value = idx1.select(p.lb, p.ub);
+		auto idx2 = bound_value.cwiseAbs().array() < GRB_INFINITY;
+		Eigen::VectorXd reduced_cost = idx2.select(primal_gradient, 0);
+		Eigen::VectorXd reduced_cost_violation = primal_gradient - reduced_cost;
+		auto idx3 = reduced_cost.array() > 0;
+		auto idx4 = reduced_cost.array() < 0;
+		bound_value = Eigen::VectorXd::Zero(p.n);
+		bound_value = idx3.select(p.lb, bound_value);
+		bound_value = idx4.select(p.ub, bound_value);
+		// check if any element of bound_value is infinity
+		bool flag = (bound_value.cwiseAbs().array() == GRB_INFINITY).any();
+		if (flag)
+		{
+			this->convergeinfo.dual_objective = -GRB_INFINITY;
+		}
+		else
+		{
+			this->convergeinfo.dual_objective = p.q.dot(this->y_bar) + bound_value.dot(reduced_cost);
+		}
+	}
+	else
+	{
+	}
+}
+
+Convergeinfo Iterates::compute_convergence_information(const Params &p)
+{
+	Eigen::VectorXd multiplier, multiplier_pos, multiplier_neg, temp, temp_eq, temp_ineq, x, y;
+	Eigen::VectorXd lb = p.lb, ub = p.ub;
+
+	this->compute_primal_objective(p);
+	this->compute_dual_objective(p);
+	this->convergeinfo.duality_gap = std::abs(this->convergeinfo.primal_objective - this->convergeinfo.dual_objective) /
+									 (1 + std::abs(this->convergeinfo.primal_objective) + std::abs(this->convergeinfo.dual_objective));
+
+	if (use_ADMM == false)
+	{
+		x = this->x_bar;
+		y = this->y_bar;
 
 		temp = p.q - p.K * x;
-		temp = p.sense_vec.select(temp.cwiseMax(0), temp);
-		this->convergeinfo.primal_feasibility = temp.norm() / (1 + p.q.norm());
+		temp_ineq = p.sense_vec.select(temp.cwiseMax(0), 0);
+		temp_eq = p.sense_vec.select(0, temp);
+		this->convergeinfo.primal_feasibility_eq = temp_eq.norm() / (1 + p.q.norm());
+		this->convergeinfo.primal_feasibility_ineq = temp_ineq.norm() / (1 + p.q.norm());
 
 		multiplier = p.c - p.K.transpose() * y;
 		multiplier = (lb.array() == -GRB_INFINITY && ub.array() == GRB_INFINITY).select(0, multiplier);
@@ -232,14 +283,14 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 
 		// std::cout << lb.dot(multiplier_pos) << " " << ub.dot(multiplier_neg) << std::endl;
 		// std::cout << multiplier_neg.norm() << std::endl;
-		this->convergeinfo.duality_gap = std::abs(p.q.dot(y) + lb.dot(multiplier_pos) - ub.dot(multiplier_neg) - p.c.dot(x)) /
-										 (1 + std::abs(p.q.dot(y) + lb.dot(multiplier_pos) - ub.dot(multiplier_neg)) + std::abs(p.c.dot(x)));
+		// this->convergeinfo.duality_gap = std::abs(p.q.dot(y) + lb.dot(multiplier_pos) - ub.dot(multiplier_neg) - p.c.dot(x)) /
+		// 								 (1 + std::abs(p.q.dot(y) + lb.dot(multiplier_pos) - ub.dot(multiplier_neg)) + std::abs(p.c.dot(x)));
 
 		// std::cout << (p.c - p.K.transpose() * y - multiplier).norm() << std::endl;
 		this->convergeinfo.dual_feasibility = (p.c - p.K.transpose() * y - multiplier).norm() / (1 + p.c.norm());
 
 		double r = PDHGnorm(x - cache.x_cur_start, y - cache.y_cur_start, 1);
-		this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(x, y, r, p);
+		// this->convergeinfo.normalized_duality_gap = compute_normalized_duality_gap(x, y, r, p);
 	}
 	else
 	{
@@ -261,13 +312,11 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 
 	auto duration = this->end();
 	// if (std::abs(this->convergeinfo.normalized_duality_gap) < p.tol || this->convergeinfo.kkt_error < p.tol)
-	if ((use_ADMM == false && this->convergeinfo.duality_gap < p.eps && this->convergeinfo.primal_feasibility < p.eps && this->convergeinfo.dual_feasibility < p.eps) ||
-		(use_ADMM == true && this->convergeinfo.normalized_duality_gap < p.eps) || duration / 3600.0 > 8)
+	if ((use_ADMM == false && this->convergeinfo.duality_gap < p.eps && std::max(this->convergeinfo.primal_feasibility_eq, this->convergeinfo.primal_feasibility_ineq) < p.eps && this->convergeinfo.dual_feasibility < p.eps) ||
+		(use_ADMM == true && this->convergeinfo.normalized_duality_gap < p.eps) || duration / 3600.0 > 2)
 	{
 		this->terminate = true;
 		std::cout << "Iteration terminates at " << this->count - 1 << ", takes " << duration << " s" << std::endl;
-		// print first 10 elements of x, set precision
-		// std::cout << std::setprecision(8) << "x: " << x.head(10).transpose() << std::endl;
 		std::cout << std::endl;
 	}
 	return this->convergeinfo;
@@ -275,32 +324,60 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 
 void Iterates::print_iteration_information(const Params &p)
 {
-	std::cout << "Iteration " << count - 1 << ", ";
-	// std::cout << x.norm() << " " << y.norm() << std::endl;
-	// std::cout << p.eta << " " << p.eta_hat << std::endl;
+	int width = 10;
+	if (this->count - 1 == 1)
+	{
+		// print the header
+		std::cout << std::right << std::setw(4) << "iter"
+				  << std::right << std::setw(width) << "primal"
+				  << std::right << std::setw(width) << "dual"
+				  << std::right << std::setw(width) << "gap"
+				  << std::right << std::setw(width) << "p.f.eq"
+				  << std::right << std::setw(width) << "p.f.ineq"
+				  << std::right << std::setw(width) << "d.f."
+				  << std::right << std::setw(width) << "pr norm"
+				  << std::right << std::setw(width) << "du norm"
+				  << std::right << std::setw(width) << "time"
+				  << std::endl;
+	}
+
+	if (this->terminate)
+	{
+		// int precision = 2;
+		std::cout << "iter: " << this->count - 1 << std::endl
+				  << "primal objective: " << std::setprecision(6) << this->convergeinfo.primal_objective << std::endl
+				  << "dual objective: " << std::setprecision(6) << this->convergeinfo.dual_objective << std::endl
+				  << "duality gap: " << std::setprecision(2) << this->convergeinfo.duality_gap << std::endl
+				  << "primal feasibility eq: " << std::setprecision(2) << this->convergeinfo.primal_feasibility_eq << std::endl
+				  << "primal feasibility ineq: " << std::setprecision(2) << this->convergeinfo.primal_feasibility_ineq << std::endl
+				  << "dual feasibility: " << std::setprecision(2) << this->convergeinfo.dual_feasibility << std::endl
+				  << "primal norm: " << std::setprecision(2) << this->x_bar.norm() << std::endl
+				  << "dual norm: " << std::setprecision(2) << this->y_bar.norm() << std::endl;
+	}
+
+	if (!((count - 1) % p.print_every == 0) || !p.verbose)
+	{
+		return;
+	}
 
 	if (use_ADMM == false)
 	{
-		std::cout << "gap: " << this->convergeinfo.duality_gap << std::endl;
-		std::cout << "p.f.: " << this->convergeinfo.primal_feasibility << std::endl;
-		std::cout << "d.f.: " << this->convergeinfo.dual_feasibility << std::endl;
-		std::cout << "obj: " << p.c.dot(x) + p.q.dot(y) - y.transpose() * p.K * x << std::endl;
-		std::cout << "ngp: " << this->convergeinfo.normalized_duality_gap << std::endl;
-		std::cout << "x.sum " << x.sum() << std::endl;
-		std::cout << "x_org.sum " << (p.D2_cache * x).sum() << std::endl;
-		// std::cout << "x " << x.transpose() << std::endl;
-		// std::cout << "x_org " << (p.D2_cache * x).transpose() << std::endl;
+		std::cout << std::right << std::setw(4) << std::scientific << std::setprecision(2) << this->count - 1
+				  << std::right << std::setw(width) << std::scientific << std::setprecision(2) << this->convergeinfo.primal_objective
+				  << std::right << std::setw(width) << std::scientific << std::setprecision(2) << this->convergeinfo.dual_objective
+				  << std::right << std::setw(width) << std::scientific << std::setprecision(2) << this->convergeinfo.duality_gap
+				  << std::right << std::setw(width) << std::scientific << std::setprecision(2) << this->convergeinfo.primal_feasibility_eq
+				  << std::right << std::setw(width) << std::scientific << std::setprecision(2) << this->convergeinfo.primal_feasibility_ineq
+				  << std::right << std::setw(width) << std::scientific << std::setprecision(2) << this->convergeinfo.dual_feasibility
+				  << std::right << std::setw(width) << std::scientific << std::setprecision(2) << this->x_bar.norm()
+				  << std::right << std::setw(width) << std::scientific << std::setprecision(2) << this->y_bar.norm()
+				  << std::right << std::setw(width) << std::scientific << std::setprecision(2) << this->timing()
+				  << std::endl;
 	}
 	else
 	{
-		std::cout << "kkt_error: " << this->convergeinfo.kkt_error << std::endl;
-		std::cout << "gap: " << this->convergeinfo.normalized_duality_gap << std::endl;
-		std::cout << "xU.norm() " << xU.norm() << " xV.norm() " << xV.norm() << " xU-xV.norm() " << (xU - xV).norm() << std::endl;
-		std::cout << "obj: " << p.c.dot(xV) - y.dot(xU - xV) << std::endl;
+		;
 	}
-
-	std::cout << "Iterations take " << this->timing() << " s" << std::endl;
-	std::cout << std::endl;
 }
 
 RecordIterates::RecordIterates(const int &Size_x, const int &Size_y, const int &Size_record)
@@ -353,7 +430,7 @@ void RecordIterates::saveConvergeinfo(const std::string method, const std::strin
 			auto &obj = ConvergeinfoList[i];
 			if (use_ADMM == false)
 			{
-				ofs << std::setprecision(10) << obj.duality_gap << " " << obj.primal_feasibility << " " << obj.dual_feasibility << std::endl;
+				// ofs << std::setprecision(10) << obj.duality_gap << " " << obj.primal_feasibility << " " << obj.dual_feasibility << std::endl;
 			}
 			else
 			{
@@ -570,8 +647,9 @@ void Params::load_model()
 {
 	std::cout << "Loading model..." << std::endl;
 
-	auto full_path = projectpath + datapath + cachepath + presolvedpath;
-	auto _full_path = projectpath + datapath;
+	auto full_path = datapath + cachepath + presolvedpath;
+	auto _full_path = datapath;
+	std::cout << "Reading from " << full_path << " or " << _full_path << std::endl;
 	auto path = full_path;
 	if (utils::endsWith(this->data_name, datasuffix))
 	{
@@ -958,10 +1036,10 @@ void AdaptiveRestarts(Iterates &iter, Params &p,
 	{
 		restart = true;
 	}
-	// else if (mu_c <= p.beta.necessary * mu_3 && mu_c > iter.cache.mu_c)
-	// {
-	// 	restart = true;
-	// }
+	else if (mu_c <= p.beta.necessary * mu_3 && mu_c > iter.cache.mu_c)
+	{
+		restart = true;
+	}
 	iter.cache.mu_c = mu_c;
 
 	if (restart == true)
@@ -970,7 +1048,7 @@ void AdaptiveRestarts(Iterates &iter, Params &p,
 		if (p.verbose)
 		{
 			std::cout << "restart at " << iter.count - 1 << std::endl;
-			iter.print_iteration_information(p);
+			// iter.print_iteration_information(p);
 		}
 		// if ((iter.count - 1) % p.record_every == 0) record.append(iter, p);
 

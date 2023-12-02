@@ -21,23 +21,23 @@ int main(int argc, char *argv[])
 	}
 	// redirect output to file
 	std::ofstream out(path + p.outfile_name);
-	std::cout.rdbuf(out.rdbuf()); // redirect std::cout to out.txt!
-
-	p.max_iter = 5;
+	std::cout.rdbuf(out.rdbuf());
+	p.max_iter = 1e12;
 	p.max_time = 3600 * 2;
 	p.save2file = 0;
 	p.print_timing = false;
-	p.print_every = 1;
+	p.print_every = 100;
+	// p.w = std::pow(4, 2);
 	p.set_verbose(1, 0);
 	// p.w = std::pow(4, 2);
 	// p.load_pagerank();
 	p.load_model();
 
-	std::cout << p.c.transpose() << std::endl;
-	std::cout << p.K << std::endl;
-	std::cout << p.q.transpose() << std::endl;
-	std::cout << p.lb.transpose() << std::endl;
-	std::cout << p.ub.transpose() << std::endl;
+	// std::cout << p.c.transpose() << std::endl;
+	// std::cout << p.K << std::endl;
+	// std::cout << p.q.transpose() << std::endl;
+	// std::cout << p.lb.transpose() << std::endl;
+	// std::cout << p.ub.transpose() << std::endl;
 
 	if (p.precondition)
 	{
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 	{
 		p.eta = 0.9 / sigma_max;
 	}
-	p.eta = 0.3023715784073818;
+	std::cout << "eta " << p.eta << std::endl;
 	p.eta_hat = 1 / (p.K.cwiseAbs() * Eigen::VectorXd::Ones(p.K.cols())).maxCoeff();
 	std::cout << "eta_hat " << p.eta_hat << std::endl;
 	// p.eta_hat = 5e-4;

@@ -34,7 +34,7 @@ const std::string projectpath = PROJECT;
 const std::vector<std::string> Data = {"qap10", "qap15", "nug08-3rd", "nug20"};
 const std::string cachepath = "cache/";
 const std::string cachesuffix = ".txt";
-const std::string datapath = "data/";
+const std::string datapath = "/home/twh/data_manage/";
 const std::string pagerankpath = "pagerank/";
 const std::string datasuffix = ".mps";
 const std::string logpath = "log/";
@@ -54,7 +54,7 @@ using namespace std::chrono;
 
 struct Beta
 {
-	double sufficent{0.9}, necessary{0.1}, artificial{0.5};
+	double sufficent{0.1}, necessary{0.9}, artificial{0.5};
 	Beta(const double beta_s, const double beta_n, const double beta_a)
 		: sufficent(beta_s), necessary(beta_n), artificial(beta_a)
 	{
@@ -75,7 +75,8 @@ struct ADMMmodel
 
 struct Convergeinfo
 {
-	double duality_gap, primal_feasibility, dual_feasibility, kkt_error, normalized_duality_gap;
+	double duality_gap, primal_feasibility_eq, primal_feasibility_ineq, kkt_error, normalized_duality_gap,
+		primal_objective, dual_objective, dual_feasibility;
 };
 
 class Params
@@ -129,6 +130,8 @@ public:
 	float timing();
 	float end();
 	Convergeinfo compute_convergence_information(const Params &);
+	void compute_primal_objective(const Params &);
+	void compute_dual_objective(const Params &);
 	Convergeinfo convergeinfo;
 	void print_iteration_information(const Params &);
 };
