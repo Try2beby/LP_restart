@@ -4,7 +4,6 @@
 # eg: ./build/LP_restart method ADMM restart 1 primal_weight_update 1 scaling 0 adaptive_step_size 0 tol -8 data_name n15-3
 
 presolved_path=~/data_manage/cache/presolved/
-pgrk_path=~/data_manage/pagerank/
 # find all files in pgrk_path end with txt and save file name without extension into array
 # declare -a data_name_array=($(find $pgrk_path -type f -name "graph_2*.txt" -printf "%f\n" | sed 's/.txt//g'))
 # find all files in presolved_path end with .mps but not begin with pgrk and save file name without extension into array

@@ -64,8 +64,9 @@ void AdaptivePDHGStep(Iterates &iter, Params &p, RecordIterates &record)
 {
 	Eigen::VectorXd x_prime, y_prime;
 	double eta = p.eta_hat, eta_bar, eta_prime;
+	double interaction, movement;
 
-	for (int i = 0; i < INFINITY; i++)
+	for (int i = 0; i < GRB_INFINITY; i++)
 	{
 		// check size of K, c, q
 		x_prime = (iter.x - (eta / p.w) * (p.c - p.K.transpose() * iter.y));
@@ -73,10 +74,24 @@ void AdaptivePDHGStep(Iterates &iter, Params &p, RecordIterates &record)
 		y_prime = iter.y - (eta * p.w) * (-p.q + p.K * (2 * x_prime - iter.x));
 		y_prime = p.sense_vec.select(y_prime.cwiseMax(0), y_prime);
 
-		eta_bar = std::pow(PDHGnorm(iter.x - x_prime, iter.y - y_prime, p.w), 2.0) /
-				  std::abs(2 * (y_prime - iter.y).transpose() * p.K * (x_prime - iter.x));
+		interaction = std::abs((y_prime - iter.y).transpose() * p.K * (x_prime - iter.x));
+		movement = 0.5 * std::pow(PDHGnorm(iter.x - x_prime, iter.y - y_prime, p.w), 2.0);
+		if (movement == 0.0)
+		{
+			std::cout << "numerical error" << std::endl;
+			break;
+		}
+		if (interaction > 0.0)
+		{
+			eta_bar = movement / interaction;
+		}
+		else
+		{
+			eta_bar = GRB_INFINITY;
+		}
+
 		eta_prime = std::min((1 - std::pow(iter.count + 1, -0.3)) * eta_bar,
-							 (1 - std::pow(iter.count + 1, -0.6)) * eta);
+							 (1 + std::pow(iter.count + 1, -0.6)) * eta);
 		// std::cout << "eta: " << eta << std::endl;
 		// std::cout << "eta_bar: " << eta_bar << std::endl;
 		// std::cout << std::abs(2 * (y_prime - iter.y).transpose() * p.K * (x_prime - iter.x)) << std::endl;
@@ -105,11 +120,8 @@ void AdaptivePDHGStep(Iterates &iter, Params &p, RecordIterates &record)
 		{
 			record.append(iter, p);
 		}
-		if ((count - 1) % p.print_every == 0 && p.verbose)
-		{
-			iter.print_iteration_information(p);
-		}
 	}
+	iter.print_iteration_information(p);
 }
 
 void PDHGStep(Iterates &iter, const Params &p, RecordIterates &record)

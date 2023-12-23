@@ -258,9 +258,9 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 	Eigen::VectorXd lb = p.lb, ub = p.ub;
 
 	this->compute_primal_objective(p);
-	this->compute_dual_objective(p);
-	this->convergeinfo.duality_gap = std::abs(this->convergeinfo.primal_objective - this->convergeinfo.dual_objective) /
-									 (1 + std::abs(this->convergeinfo.primal_objective) + std::abs(this->convergeinfo.dual_objective));
+	// this->compute_dual_objective(p);
+	// this->convergeinfo.duality_gap = std::abs(this->convergeinfo.primal_objective - this->convergeinfo.dual_objective) /
+	// 								 (1 + std::abs(this->convergeinfo.primal_objective) + std::abs(this->convergeinfo.dual_objective));
 
 	if (use_ADMM == false)
 	{
@@ -283,8 +283,9 @@ Convergeinfo Iterates::compute_convergence_information(const Params &p)
 
 		// std::cout << lb.dot(multiplier_pos) << " " << ub.dot(multiplier_neg) << std::endl;
 		// std::cout << multiplier_neg.norm() << std::endl;
-		// this->convergeinfo.duality_gap = std::abs(p.q.dot(y) + lb.dot(multiplier_pos) - ub.dot(multiplier_neg) - p.c.dot(x)) /
-		// 								 (1 + std::abs(p.q.dot(y) + lb.dot(multiplier_pos) - ub.dot(multiplier_neg)) + std::abs(p.c.dot(x)));
+		this->convergeinfo.dual_objective = p.q.dot(y) + lb.dot(multiplier_pos) + ub.dot(multiplier_neg);
+		this->convergeinfo.duality_gap = std::abs(p.q.dot(y) + lb.dot(multiplier_pos) + ub.dot(multiplier_neg) - p.c.dot(x)) /
+										 (1 + std::abs(p.q.dot(y) + lb.dot(multiplier_pos) + ub.dot(multiplier_neg)) + std::abs(p.c.dot(x)));
 
 		// std::cout << (p.c - p.K.transpose() * y - multiplier).norm() << std::endl;
 		this->convergeinfo.dual_feasibility = (p.c - p.K.transpose() * y - multiplier).norm() / (1 + p.c.norm());
@@ -765,7 +766,7 @@ void Params::load_model()
 Eigen::VectorXd &LinearObjectiveTrustRegion(const Eigen::VectorXd &G, const Eigen::VectorXd &L, const Eigen::VectorXd &U,
 											const Eigen::VectorXd &Z, const double &r)
 {
-	// set l_i to -inf if g_i <= 0
+	// set l_i to -u_i if g_i <= 0
 	auto g_idx = G.array() <= 0;
 	auto l = g_idx.select(-U, L);
 	// Eigen::VectorXd z = g_idx.select(-Z, Z);
