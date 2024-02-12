@@ -6,18 +6,18 @@ import os
 presolvedDir = "/home/twh/data_manage/cache/presolved"
 logDir = "/home/twh/work/PDLP/implementation_cpp/log/gurobi"
 # find all files in presolvedDir end with .mps and not start with pgrk_
-# mpsFiles = [
-#     f
-#     for f in os.listdir(presolvedDir)
-#     if f.endswith(".mps") and not f.startswith("pgrk_")
-# ]
-
-# find all files in presolvedDir end with .mps and start with pgrk_
 mpsFiles = [
     f
     for f in os.listdir(presolvedDir)
-    if f.endswith(".mps") and f.startswith("pgrk_")
+    if f.endswith(".mps") and not f.startswith("pgrk_")
 ]
+
+# # find all files in presolvedDir end with .mps and start with pgrk_
+# mpsFiles = [
+#     f
+#     for f in os.listdir(presolvedDir)
+#     if f.endswith(".mps") and f.startswith("pgrk_")
+# ]
 
 # # find all files in presolvedDir end with .mps
 # lis = [
